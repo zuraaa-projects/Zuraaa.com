@@ -2,11 +2,17 @@ const express = require("express");
 const router = express.Router();
 const tags = require("../utils/tags");
 const bot = require("../utils/discordbot");
-const { userToString } = require("../utils/user");
+const { userToString, avatarFormat } = require("../utils/user");
 const md = require("markdown-it")();
 const libraries = require("../utils/libraries");
 const { captchaIsValid } = require("../utils/captcha");
+const Mongo = require("../modules/mongo");
 
+/**
+ * 
+ * @param {*} config 
+ * @param {Mongo} db 
+ */
 module.exports = (config, db) => {
   const dBot = bot(config);
   router.get("/", (req, res) => {

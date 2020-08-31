@@ -1,0 +1,15 @@
+extends layouts/layout
+
+block head
+    link(rel="stylesheet", href="/css/bot.css")
+
+block content
+    .container.main-container
+        #profile.has-text-centered
+            img#avatar.avatar(src=bot.avatar alt="Avatar" oncontextmenu="return false;" draggable="false")
+            h1.username.is-size-1.has-text-white
+                | #{bot.name}
+                span.is-size-4.has-text-grey-light ##{bot.tag}
+            p.about.is-size-5.has-text-grey-light #{bot.bio}
+        br
+        iframe.description(src=bot.content, sandbox, frameborder="0")

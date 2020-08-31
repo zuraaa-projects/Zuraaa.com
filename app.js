@@ -13,6 +13,7 @@ const botsRouter = require('./routes/bots');
 const discordRouter = require('./routes/discord');
 const oauth = require('./routes/oauth2');
 const user = require('./routes/user');
+const bot = require("./routes/bot");
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use('/bots', botsRouter(config, db));
 app.use('/discord', discordRouter(config));
 app.use('/oauth2', oauth(config, db));
 app.use('/user', user(db));
+app.use('/bot', bot(db));
 
 
 // catch 404 and forward to error handler

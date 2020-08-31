@@ -2,6 +2,8 @@
 
 Site que tem como objetivo divulgar aplicações (bots, servers e serviços) para Discord, atualmente focado no mercado brasileiro de desenvolvedores.
 
+Agradecimento especial ao [Naegin](https://github.com/naegin) pela base do Designer
+
 Acompanhe o desenvolvimento [clicando aqui](https://github.com/orgs/zuraaa-projects/projects/1)
 
 ## Baixar e inicializar a aplicação:
