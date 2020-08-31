@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 module.exports = (config) => {
-    router.get("/", (req, rest) => {
+    router.get("/", (req, res) => {
         res.redirect(config.discord.servers.support);
     });
 
