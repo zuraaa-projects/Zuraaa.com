@@ -5,9 +5,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require("express-session");
 const Mongo = require("./modules/mongo");
-
-const fs = require("fs");
-
 const indexRouter = require('./routes/index');
 const botsRouter = require('./routes/bots');
 const discordRouter = require('./routes/discord');
@@ -16,7 +13,7 @@ const user = require('./routes/user');
 
 const app = express();
 
-const config = JSON.parse(fs.readFileSync("./config.json"));
+const config = require("./config.json");
 const db = new Mongo(config);
 
 // view engine setup

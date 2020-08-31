@@ -25,10 +25,10 @@ block content
     //-           span
     //-           p VOTAR
     #tags
-      for tag in tags
-      a.tag(title="Anime" href="#")
-        span(style="background: linear-gradient(to bottom, blue, darkblue);")
-        p Anime
+      each tag, index in tags
+          a.tag(title=tag href="#")
+          span(style="background: linear-gradient(to bottom, blue, darkblue);")
+          p tag
       
       
     .bots
