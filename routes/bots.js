@@ -137,7 +137,7 @@ module.exports = (config, db) => {
                 shortDescription: b.shortdesc,
                 longDescription: b.longdesc,
                 htmlDescription: md.render(b.longdesc),
-                otherOwners: owners,
+                otherOwners: owners.filter(owner => owner != req.session.user.id),
                 website: b.website,
                 supportServer: b.server,
               },
