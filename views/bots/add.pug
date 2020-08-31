@@ -1,0 +1,98 @@
+extends ../layouts/layout
+
+block head
+    script(src="https://www.google.com/recaptcha/api.js" async defer)
+    script(src="/js/add.js")
+    link(rel="stylesheet", href="/css/add.css")
+
+block content
+    .container.main-container
+        p#addtitle.title.is-size-4 ADICIONAR BOT
+        p.subtitle.is-size-6 Preencha o formulário para submeter seu bot à aprovação.
+        
+        form#form(action="/bots/add" method="POST")
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label ID *
+                .field-body
+                    .field.is-narrow
+                        .control
+                            input.input#id(maxlength="18" name="id" placeholder="Insira o ID do seu bot." )
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Outros donos
+                .field-body
+                    .field
+                        .control
+                            #owners
+                                button.is-hidden.button#remOwner(type="button") -
+                                button.button#addOwner(type="button") +
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Biblioteca *
+                .field-body
+                    .field.has-addons
+                        .control
+                            .select
+                                select#library(name="library")
+                                    option(value="")="Escolha uma biblioteca..."
+                                    for lib in libraries
+                                        option=lib
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Servidor de suporte
+                .field-body
+                    .field.has-addons
+                        p.control
+                            a.button.is-static https://discord.gg/
+                        p.control
+                            input.input#support(maxlength="20" name="support" type="text")
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Convite customizado
+                .field-body
+                    .field
+                        .control
+                            input.input#invite(maxlength="2083" name="custominvite" type="text" placeholder="https://sitedomeubot.com.br/adicionar")
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Prefixo *
+                .field-body
+                    .field.is-narrow
+                        .control
+                            input.input#prefix(maxlength="15" name="prefix" type="text" placeholder="Insira o prefixo do seu bot.")
+                        p.help Digite até 15 caracteres
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Descrição curta *
+                .field-body
+                    .field
+                        .control
+                            textarea#shortdesc.textarea(maxlength="300" name="shortdesc" placeholder="Fale resumidamente sobre seu bot." rows="2")
+                        p.help Digite de 3 até 300 caracteres.
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Descrição longa
+                .field-body
+                    .field
+                        .control
+                            textarea#longdesc.textarea(maxlength="10000" name="longdesc" placeholder="Fale detalhadamente sobre seu bot." rows="8")
+                        p.help Digite até 10.000 caracteres. Markdown permitido.
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Tags *
+                .field-body
+                    .control
+                        .select.is-multiple
+                            select#tags(name="tags" multiple)
+                                for tag, key in tags
+                                    option(value=key)=tag
+                        p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Captcha *
+                .field-body
+                    .field
+                        .control
+                            .g-recaptcha(data-sitekey="6Ld6hsUZAAAAAPUV_NLQJdbod-zdUPY0QDy-l5mj")
+            button.button Enviar

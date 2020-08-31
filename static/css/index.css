@@ -1,0 +1,10 @@
+body {
+    background-color: #490e2d;
+    height: 380px;
+    margin-top: 0;
+}
+
+nav.navbar {
+    background: transparent;
+    box-shadow: none;
+}

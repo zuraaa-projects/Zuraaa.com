@@ -1,0 +1,69 @@
+doctype html
+html(lang="pt-BR")
+  head
+    title=title + " | Bots Para Discord"
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1")
+    meta(name="theme-color" content="#101113")
+    meta(name="description" content=description)
+    meta(name="keywords" content=keywords)
+    meta(name="author" content="Zuraaa!")
+    meta(name="twitter:card" content="summary")
+    meta(name="twitter:site" content="@BotsParaDiscord")
+    meta(property="og:description" content=description)
+    meta(property="og:keywords" content=keywords)
+    meta(property="og:site_name" content="Bots Para Discord")
+    meta(property="og:url" content="https://botsparadiscord.com")
+    meta(property="og:image" content="/img/icon.png")
+    link(rel="icon" href="/img/favicon.png" type="image/png" sizes="128x128")
+    link(rel="stylesheet" href="/lib/bulma/bulma.min.css")
+    link(rel="stylesheet" href="/css/style.css")
+    script(src="/lib/jquery.min.js")
+    script(src="/js/bpd.js")
+    block head
+  body
+    nav.navbar.is-transparent.is-fixed-top
+      .container
+        .navbar-brand
+          a.navbar-logo(href="/" oncontextmenu="return false;")
+          span.navbar-burger.burger(data-target="navbar-menu")
+            span
+            span
+            span
+        .navbar-menu#navbar-menu
+            .navbar-start
+            #navbar-mid
+              a.navbar-item.navbar-on(href="/") Início
+              a.navbar-item.navbar-on(href="/bots") Bots
+              a.navbar-item.navbar-on(href="/discord") Servidor
+              a.navbar-item.navbar-on(href="#") Documentação
+              a.navbar-item.navbar-on(href="#") Contribuidores
+              a.navbar-item#search-button Buscar
+            form.navbar-item#navbar-search(action="/bots")
+              input.input(name="q" type="text" placeholder="Qual tipo de bot você deseja encontrar hoje?")
+              a#search-close
+            .navbar-end.is-invisible#navuser
+                .navbar-item.has-dropdown.is-hoverable
+                  a.navbar-link
+                    img#navavatar(oncontextmenu="return false;")
+                    span#navusername
+                  .navbar-dropdown
+                    a.navbar-item(id="navprofile") Meu Perfil
+                    a.navbar-item(href="/bots/add") Adicionar Bot
+                    hr.navbar-divider
+                    a.navbar-item(href="/oauth2/logout") Deslogar
+                
+    block content
+    footer
+      nav.container.level
+        .level-left
+          .level-item
+            a(href="/discord")
+              img#discord(src="/img/icons/discord.png")
+              | Discord
+            a(href="https://twitter.com/botsparadiscord")
+              img#twitter(src="/img/icons/twitter.png")
+              | Twitter
+        .level-right
+          .level-item
+            a(href="#") Política de Privacidade

@@ -1,0 +1,12 @@
+#owners > .input {
+    width: max-content;
+    margin-right: 9px;
+}
+
+.input::placeholder, .textarea::placeholder {
+    color: #222;
+}
+
+#support {
+    max-width: 110px;
+}
