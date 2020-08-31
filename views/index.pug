@@ -25,10 +25,12 @@ block content
     //-           span
     //-           p VOTAR
     #tags
-      each tag, index in tags
-          a.tag(title=tag href="#")
-          span(style="background: linear-gradient(to bottom, blue, darkblue);")
-          p tag
+      - let i = 0;
+      each tag, key in tags
+          a.tag(title=tag href=key)
+            span(style="background:" + colors[i] + ";")
+            p=tag
+          - i++
       
       
     .bots

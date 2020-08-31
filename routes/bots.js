@@ -31,7 +31,8 @@ module.exports = (config, db) => {
       const botTags = [
         ...new Set(typeof b.tags == "string" ? [b.tags] : b.tags),
       ];
-      const owners = b.owners ? [...b.owners] : null;
+      const owners = typeof b.owners == "string" ? [b.owners] : b.owners;
+      console.log(owners)
       {
         if (!owners || owners.some((o) => isNaN(o) || o.length != 18))
           return res.render("message", {
