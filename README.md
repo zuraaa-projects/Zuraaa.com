@@ -2,7 +2,7 @@
 
 Site que tem como objetivo divulgar aplicações (bots, servers e serviços) para Discord, atualmente focado no mercado brasileiro de desenvolvedores.
 
-Acompanhe o desenvolvimento [Clicando Aqui](https://github.com/zuraaa-projects/Zuraaa.com/projects/1)
+Acompanhe o desenvolvimento [clicando aqui](https://github.com/orgs/zuraaa-projects/projects/1)
 
 **Baixar e Inicializar a Aplicação:**
 Baixe o codigo fonte usando o [Git](https://git-scm.com/downloads)
