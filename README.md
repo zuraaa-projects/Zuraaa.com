@@ -38,6 +38,7 @@ Na pasta da aplicação crie um arquivo chamado config.json
         }
     },
     "recaptcha": {
+        "enabled": false,
         "secret": "secret do recaptcha"
     },
     "discord": {
