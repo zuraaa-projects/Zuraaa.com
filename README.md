@@ -4,13 +4,13 @@ Site que tem como objetivo divulgar aplicações (bots, servers e serviços) par
 
 Acompanhe o desenvolvimento [clicando aqui](https://github.com/orgs/zuraaa-projects/projects/1)
 
-**Baixar e Inicializar a Aplicação:**
+## Baixar e inicializar a aplicação:
 Baixe o codigo fonte usando o [Git](https://git-scm.com/downloads)
 ```sh
 $ git clone https://github.com/zuraaa-projects/Zuraaa.com.git
 ```
 
-Na pasta da Aplicação Crie um Arquivo chamado config.json
+Na pasta da aplicação crie um arquivo chamado config.json
 ```js
 {
     "server": {
@@ -37,7 +37,9 @@ Na pasta da Aplicação Crie um Arquivo chamado config.json
             "secret": "secret da aplicação do discord"
         }
     },
-
+    "recaptcha": {
+        "secret": "secret do recaptcha"
+    },
     "discord": {
         "endpoints": {
             "userMe": "https://discord.com/api/users/@me"
