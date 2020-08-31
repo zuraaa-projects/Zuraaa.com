@@ -5,87 +5,31 @@ block head
 
 block content
   .container
-    nav#featured.level(oncontextmenu="return false;")
-      .level-item
-        img.avatar(title="Disco" alt="Disco" src="/img/icon.png" draggable="false")
+    //- nav#featured.level(oncontextmenu="return false;")
+    //-   .level-item
+    //-     img.avatar(title="Avatar" alt="Avatar" src=bot.img draggable="false")
 
-        .details
-          p.heading.has-text-grey-light Patrocinado
-          p.title.has-text-white Disco
-          p.subtitle.has-text-grey-lighter Música de alta qualidade | Volume | Bass Boost | Moderação | Diversão | Multilinguagem
+    //-     .details
+    //-       p.heading.has-text-grey-light Patrocinado
+    //-       p.title.has-text-white Disco
+    //-       p.subtitle.has-text-grey-lighter Música de alta qualidade | Volume | Bass Boost | Moderação | Diversão | Multilinguagem
 
-          .links
-            a(title="Adicionar" href="#")
-              span
-              p ADICIONAR
-            a(title="Página" href="#")
-              span
-              p PÁGINA
-            a(title="Votar" href="#")
-              span
-              p VOTAR
-      .level-item
-        .details
-          p.heading.has-text-grey-light Patrocinado
-          p.title.has-text-white Disco
-          p.subtitle.has-text-grey-lighter Música de alta qualidade | Volume | Bass Boost | Moderação | Diversão | Multilinguagem
-
-          .links
-            a(title="Adicionar" href="#")
-              span
-              p ADICIONAR
-            a(title="Página" href="#")
-              span
-              p PÁGINA
-            a(title="Votar" href="#")
-              span
-              p VOTAR
+    //-       .links
+    //-         a(title="Adicionar" href="#")
+    //-           span
+    //-           p ADICIONAR
+    //-         a(title="Página" href="#")
+    //-           span
+    //-           p PÁGINA
+    //-         a(title="Votar" href="#")
+    //-           span
+    //-           p VOTAR
     #tags
+      for tag in tags
       a.tag(title="Anime" href="#")
         span(style="background: linear-gradient(to bottom, blue, darkblue);")
         p Anime
-      a.tag(title="Diversão" href="#")
-        span(style="background: linear-gradient(to bottom, orange, orangered);")
-        p Diversão
-      a.tag(title="Moderação" href="#")
-        span(style="background: linear-gradient(to bottom, red, darkred);")
-        p Moderação
-      a.tag(title="Anime" href="#")
-        span(style="background: linear-gradient(to bottom, blue, darkblue);")
-        p Anime
-      a.tag(title="Diversão" href="#")
-        span(style="background: linear-gradient(to bottom, orange, orangered);")
-        p Diversão
-      a.tag(title="Moderação" href="#")
-        span(style="background: linear-gradient(to bottom, red, darkred);")
-        p Moderação
-      a.tag(title="Anime" href="#")
-        span(style="background: linear-gradient(to bottom, blue, darkblue);")
-        p Anime
-      a.tag(title="Diversão" href="#")
-        span(style="background: linear-gradient(to bottom, orange, orangered);")
-        p Diversão
-      a.tag(title="Moderação" href="#")
-        span(style="background: linear-gradient(to bottom, red, darkred);")
-        p Moderação
-      a.tag(title="Anime" href="#")
-        span(style="background: linear-gradient(to bottom, blue, darkblue);")
-        p Anime
-      a.tag(title="Diversão" href="#")
-        span(style="background: linear-gradient(to bottom, orange, orangered);")
-        p Diversão
-      a.tag(title="Moderação" href="#")
-        span(style="background: linear-gradient(to bottom, red, darkred);")
-        p Moderação
-      a.tag(title="Anime" href="#")
-        span(style="background: linear-gradient(to bottom, blue, darkblue);")
-        p Anime
-      a.tag(title="Diversão" href="#")
-        span(style="background: linear-gradient(to bottom, orange, orangered);")
-        p Diversão
-      a.tag(title="Moderação" href="#")
-        span(style="background: linear-gradient(to bottom, red, darkred);")
-        p Moderação
+      
       
     .bots
       p.title.is-size-4 BOTS MAIS VOTADOS DO MÊS
