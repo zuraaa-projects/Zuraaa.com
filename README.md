@@ -41,6 +41,12 @@ Na pasta da aplicação crie um arquivo chamado config.json
         "secret": "secret do recaptcha"
     },
     "discord": {
+        "bot": {
+            "token": "token do seu bot",
+            "channels": {
+                "botLogs": "ID do canal para enviar os logs"
+            }
+        },
         "endpoints": {
             "userMe": "https://discord.com/api/users/@me"
         },
