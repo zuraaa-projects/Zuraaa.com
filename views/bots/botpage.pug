@@ -1,0 +1,19 @@
+block head
+    link(rel="stylesheet", href="/css/bot.css")
+
+block content
+    #profile.has-text-centered
+        img#avatar.avatar(src=bot.avatar alt=bot.name oncontextmenu="return false;" draggable="false")
+        h1.username.is-size-1.has-text-white
+            | #{bot.name}
+            span.is-size-4.has-text-grey-light ##{bot.tag}
+        p.about.is-size-5.has-text-grey-light #{bot.bio}
+        .buttons.is-centered
+            a.button(href=bot.url + "add") Adicionar
+            a.button(href=bot.url + "votar") Votar
+            if bot.website
+                a.button(href=bot.website) Site
+            if bot.support
+                a.button(href="https://discord.gg/" + bot.support) Suporte
+    .container.main-container
+        .box.content !{bot.content}

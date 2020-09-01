@@ -7,6 +7,11 @@ const md = require("markdown-it")();
 const libraries = require("../utils/libraries");
 const { captchaIsValid } = require("../utils/captcha");
 const Mongo = require("../modules/mongo");
+const user = require("../utils/user");
+
+function defaultInvite(id) {
+    return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`
+}
 
 /**
  * 
@@ -19,11 +24,86 @@ module.exports = (config, db) => {
     res.render("index", { title: "Bots" });
   });
 
-  router.get("/add", (req, res) => {
-    if (!req.session.user) return res.redirect("/oauth2/login");
-    res.render("bots/add", { tags, title: "Adicionar Bot", libraries });
-  });
+  router.get("/:id", (req, res) => {
+    if (req.params.id == "add") {
+        if (!req.session.user) return res.redirect("/oauth2/login");
+        return res.render("bots/add", { tags, title: "Adicionar Bot", libraries });
+    }
+    db.Bots.findOne({
+        $or: [{_id: req.params.id}, {"details.customURL": req.params.id}]
+    }).exec().then(dbot => {
+        if(!dbot) {
+            if (!dbot)
+                return res.sendStatus(404); 
+        }
 
+        if(!dbot.details.htmlDescription){
+              dbot.details.htmlDescription = md.render(dbot.details.longDescription);
+             dbot.save();
+        }
+        res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
+            bot: {
+                avatar: user.avatarFormat(dbot),
+                name: dbot.username,
+                tag: dbot.discriminator,
+                bio: dbot.details.shortDescription,
+                content: dbot.details.htmlDescription,
+                url: `/bots/${dbot.details.customURL || dbot.id}/`,
+                support: dbot.details.supportServer,
+                website: dbot.details.website
+            },
+            title: dbot.username
+        });
+    })
+  });
+  router.get("/:id/:action", (req, res) => {
+    db.Bots.findOne({
+        $or: [{_id: req.params.id}, {"details.customURL": req.params.id}]
+    }).exec().then(dbot => {
+        if(!dbot)
+            return res.sendStatus(404);
+        switch (req.params.action) {
+            case "add":
+                res.redirect(dbot.details.customInviteLink || defaultInvite(dbot.id));
+                break;
+            case "votar":
+                if (!req.session.user) return res.redirect("/oauth2/login");
+                res.render("bots/votar", { title: `Vote em ${dbot.username}`, bot: { name: dbot.username, avatar: avatarFormat(dbot) }});
+                break;
+            default:
+                res.sendStatus(404);
+                break;
+        }
+    });
+  });
+  router.post("/:id/votar", async (req, res) => {
+    if (!req.session.user) return res.redirect("/oauth2/login");
+    if (!(await captchaIsValid(config.recaptcha, req.body["g-recaptcha-response"])))
+        return res.render("message", {
+            message: "O Captcha precisa ser validado.",
+            url: req.originalUrl,
+    });
+    const user = await db.Users.findById(req.session.user.id);
+    if (user) {
+        const next = user.dates.nextVote;
+        const now = new Date();
+        if (next && next > now) 
+            return res.render("message", {
+                message: `Você precisa esperar até ${next.getHours()}:${next.getMinutes()} para poder votar novamente.`
+            });
+        db.Bots.findOne({$or: [{_id: req.params.id}, {"details.customURL": req.params.id}]}).then(dot => {
+            if (!dot)
+                return res.sendStatus(404);
+            now.setHours(now.getHours() + 8);
+            user.dates.nextVote = now;
+            user.save();
+            res.render("message", {
+                title: "Sucesso",
+                message: `Você votou em ${dot.username} com sucesso.`
+            });
+    });    
+    }
+  });
   router.post("/add", async (req, res) => {
     try {
       if (!req.session.user) return res.redirect("/oauth2/login");

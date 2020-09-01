@@ -4,13 +4,13 @@ block head
     link(rel="stylesheet", href="/css/user.css")
 
 block content
+    #profile.has-text-centered
+        img#avatar.avatar(src=user.avatar alt="Avatar" oncontextmenu="return false;" draggable="false")
+        h1.username.is-size-1.has-text-white
+            | #{user.name}
+            span.is-size-4.has-text-grey-light ##{user.tag}
+        p.about.is-size-5.has-text-grey-light Esse usuário ainda não definiu uma biografia.
     .container.main-container
-        #profile.has-text-centered
-            img#avatar.avatar(src=user.avatar alt="Avatar" oncontextmenu="return false;" draggable="false")
-            h1.username.is-size-1.has-text-white
-                | #{user.name}
-                span.is-size-4.has-text-grey-light ##{user.tag}
-            p.about.is-size-5.has-text-grey-light Esse usuário ainda não definiu uma biografia.
         .bots
             h2.is-size-3 BOTS
             if bots.length != 0

@@ -1,14 +1,13 @@
-body {
+#profile {
     background-color: #490e2d;
-    height: 430px;
-    margin-top: 0;
+    top: 0;
+    position: relative;
 }
 
 nav.navbar {
-    background: transparent;
     box-shadow: none;
 }
 
 .main-container {
-    min-height: 82.55vh;
+    min-height: 48.9vh;
 }

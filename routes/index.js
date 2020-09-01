@@ -6,17 +6,16 @@ const colors = require("../utils/colors");
 
 module.exports = (mongo) => {
   router.get('/', async (req, res) => {
+    const filter = {"approvedBy": {$ne: null}};
     res.render('index', {
       title: 'Início',
       bots: {
-        top: (await mongo.Bots.find().limit(5).sort({"votes.current": -1})).map(partialBotObject),
-        recent: (await mongo.Bots.find().limit(6).sort({"dates.sent": -1})).map(partialBotObject),
-        random: (await mongo.Bots.aggregate([{$sample: {size: 12}}])).map(partialBotObject)
+        top: (await mongo.Bots.find(filter).limit(6).sort({"votes.current": -1})).map(partialBotObject),
+        recent: (await mongo.Bots.find(filter).limit(6).sort({"dates.sent": -1})).map(partialBotObject),
+        random: (await mongo.Bots.aggregate([{$match: filter}, {$sample: {size: 12}}])).map(partialBotObject)
       },
       tags,
-      colors,
-      description: "Encontre os bots perfeitos para divertir e elevar seu servidor para um outro nível, com a nossa extensa lista dos melhores bots brasileiros e em Português para Discord.",
-      keywords: "discord, bots, lista, melhores, brasileiros, português, música, economia, moderação"
+      colors
   })});
   
   router.get("/userdata", (req, res) => {

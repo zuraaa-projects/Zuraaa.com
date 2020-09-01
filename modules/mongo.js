@@ -14,7 +14,8 @@ module.exports = class Mongo{
             avatar: String,
             dates: {
                 firstSeen: Date,
-                lastBotAdd: Date
+                lastBotAdd: Date,
+                nextVote: Date
             },
             details: {
                 customURL: String,

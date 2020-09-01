@@ -1,7 +1,9 @@
 @import "user.css";
 
-iframe.description{
-    width: 100%;
-    height: 100vh;
-    position: relative;
+.buttons {
+    padding-top: 10px;
+}
+
+.main-container {
+    padding-top: 2vh;
 }

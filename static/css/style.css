@@ -37,11 +37,11 @@ nav.navbar {
 }
 
 .navbar-logo {
-  width: 77px;
+  width: 60px;
   height: 25px;
   margin-top: 15px;
   background-image: url('../img/logo.png');
-  background-size: cover;
+  background-size: contain;
 }
 
 a.navbar-item,
@@ -224,10 +224,6 @@ footer .level-item #twitter {
   #featured {
       height: 530px;
       padding-top: 80px;
-  }
-
-  body {
-      height: 530px !important;
   }
 }
 
@@ -585,7 +581,7 @@ a.page-option:not(:last-child) {
 
 #profile {
   padding-top: 90px;
-  height: 430px;
+  margin-top: -100px;
 }
 
 #profile .avatar {
@@ -598,11 +594,11 @@ a.page-option:not(:last-child) {
   margin-top: -12px;
 }
 
-#profile ~ .bots {
+.bots {
   margin-top: 10px;
 }
 
-#profile ~ .bots > h2 {
+.bots > h2 {
   font-weight: bolder;
 }
 

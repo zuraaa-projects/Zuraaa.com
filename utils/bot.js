@@ -9,6 +9,8 @@ function partialBotObject(bot) {
     status: bot.status,
     description: bot.details.shortDescription,
     votes: bot.votes ? bot.votes.current : -1,
+    guilds: bot.count.guilds,
+    baseUrl: `/bots/${bot.details.customURL || bot.id}/`
   };
 }
 
