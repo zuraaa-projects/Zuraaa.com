@@ -14,6 +14,7 @@ const user = require('./routes/user');
 const app = express();
 
 const config = require("./config");
+const tag = require('./routes/tag');
 const db = new Mongo(config);
 
 // view engine setup
@@ -37,6 +38,7 @@ app.use('/bots', botsRouter(config, db));
 app.use('/discord', discordRouter(config));
 app.use('/oauth2', oauth(config, db));
 app.use('/user', user(db));
+app.use('/tag', tag(db));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

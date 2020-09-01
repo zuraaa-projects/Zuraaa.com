@@ -116,6 +116,10 @@ a.navbar-item.is-active {
   display: none;
 }
 
+#search-close {
+  background: url("/svg/times-circle-solid.svg")
+}
+
 @media screen and (min-width: 1024px) {
   #navbar-mid {
       display: flex;
@@ -126,7 +130,6 @@ a.navbar-item.is-active {
   }
 
   #navbar-search #search-close {
-      background: linear-gradient(to bottom, #101113, 80%, white);
       position: absolute;
       width: 30px;
       height: 30px;

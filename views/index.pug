@@ -29,7 +29,7 @@ block content
     #tags
       - let i = 0;
       each tag, key in tags
-          a.tag(title=tag href=key)
+          a.tag(title=tag href="/tag/" + key)
             span(style="background:" + colors[i] + ";")
             p=tag
           - i++
