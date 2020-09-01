@@ -8,6 +8,8 @@ const libraries = require("../utils/libraries");
 const { captchaIsValid } = require("../utils/captcha");
 const Mongo = require("../modules/mongo");
 const user = require("../utils/user");
+const cache = require("../utils/imageCache");
+
 
 function defaultInvite(id) {
     return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`
@@ -39,11 +41,13 @@ module.exports = (config, db) => {
 
         if(!dbot.details.htmlDescription){
               dbot.details.htmlDescription = md.render(dbot.details.longDescription);
-             dbot.save();
         }
-        res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
+
+        cache(config).saveCached(dbot).then(element => {
+          element.save();
+          res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
             bot: {
-                avatar: user.avatarFormat(dbot),
+                avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
                 name: dbot.username,
                 tag: dbot.discriminator,
                 bio: dbot.details.shortDescription,
@@ -53,13 +57,16 @@ module.exports = (config, db) => {
                 website: dbot.details.website
             },
             title: dbot.username
+          });
         });
+        
     })
   });
   router.get("/:id/:action", (req, res) => {
     db.Bots.findOne({
         $or: [{_id: req.params.id}, {"details.customURL": req.params.id}]
     }).exec().then(dbot => {
+
         if(!dbot)
             return res.sendStatus(404);
         switch (req.params.action) {
@@ -67,8 +74,11 @@ module.exports = (config, db) => {
                 res.redirect(dbot.details.customInviteLink || defaultInvite(dbot.id));
                 break;
             case "votar":
-                if (!req.session.user) return res.redirect("/oauth2/login");
-                res.render("bots/votar", { title: `Vote em ${dbot.username}`, bot: { name: dbot.username, avatar: avatarFormat(dbot) }});
+                cache(config).saveCached(dbot).then(element => {
+                  element.save();
+                  if (!req.session.user) return res.redirect("/oauth2/login");
+                  res.render("bots/votar", { title: `Vote em ${dbot.username}`, bot: { name: dbot.username, avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}` }});
+                });
                 break;
             default:
                 res.sendStatus(404);

@@ -12,6 +12,10 @@ module.exports = class Mongo{
             username: String,
             discriminator: String,
             avatar: String,
+            avatarBuffer: {
+                data: Buffer,
+                contentType: String
+            },
             dates: {
                 firstSeen: Date,
                 lastBotAdd: Date,
@@ -29,6 +33,10 @@ module.exports = class Mongo{
             username: String,
             discriminator: String,
             avatar: String,
+            avatarBuffer: {
+                data: Buffer,
+                contentType: String
+            },
             status: String,
             owner: {
                 ref: "users",
