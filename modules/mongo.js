@@ -56,7 +56,12 @@ module.exports = class Mongo{
                 htmlDescription: String,
                 supportServer: String,
                 website: String,
-                otherOwners: Array,
+                otherOwners: [
+                    {
+                        ref: "users",
+                        type: String    
+                    }
+                ],
                 customURL: String
             },
             approvedBy: {

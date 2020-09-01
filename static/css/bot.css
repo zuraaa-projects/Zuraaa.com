@@ -27,3 +27,7 @@
 .align {
     vertical-align: top;
 }
+
+.buttons {
+    padding-bottom: 10px;
+}
