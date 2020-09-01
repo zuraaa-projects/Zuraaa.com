@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-module.exports = class Mongo{
-    constructor(config){
+module.exports = class Mongo {
+    constructor(config) {
         mongoose.connect(config.database.mongo.url, {
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -64,7 +64,8 @@ module.exports = class Mongo{
                 type: String
             },
             votes: {
-                current: Number
+                current: Number,
+                default: 0
             },
             count: {
                 guild: Number

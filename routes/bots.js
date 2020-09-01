@@ -11,9 +11,12 @@ const cache = require("../utils/imageCache");
 const colors = require("../utils/colors");
 
 const { partialBotObject } = require("../utils/bot");
+const controller = require("../api/websocket");
+const { payloadToJson, opcodes } = require("../api/websocket/util/payload");
+const { eventsCode } = require("../api/websocket/util/events");
 
 function defaultInvite(id) {
-    return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`
+  return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`
 }
 
 /**
@@ -25,114 +28,115 @@ module.exports = (config, db) => {
   const dBot = bot(config);
   router.get("/", (req, res) => {
     let page = req.query.page;
-    if (!page || isNaN(page) || page < 1) 
-        page = 1
+    if (!page || isNaN(page) || page < 1)
+      page = 1
     const params = {};
     const search = req.query.search;
     if (search) {
-      const regex = {$regex: search, $options: "i"};
-      params.$or = [{username: regex}, {"details.shortDescription": regex}];
+      const regex = { $regex: search, $options: "i" };
+      params.$or = [{ username: regex }, { "details.shortDescription": regex }];
     }
-    db.Bots.find(params).limit(18).skip((page-1) * 18).exec().then(bots => {
-        res.render("bots/bots", {title: "Bots", page, search, bots: (bots || []).map(partialBotObject)});
+    db.Bots.find(params).limit(18).skip((page - 1) * 18).exec().then(bots => {
+      res.render("bots/bots", { title: "Bots", page, search, bots: (bots || []).map(partialBotObject) });
     });
-});
+  });
 
   router.get("/:id", (req, res) => {
     if (req.params.id == "add") {
-        if (!req.session.user) return res.redirect("/oauth2/login");
-        return res.render("bots/add", { tags, title: "Adicionar Bot", libraries });
+      if (!req.session.user) return res.redirect("/oauth2/login");
+      return res.render("bots/add", { tags, title: "Adicionar Bot", libraries });
     }
     db.Bots.findOne({
-        $or: [{_id: req.params.id}, {"details.customURL": req.params.id}]
+      $or: [{ _id: req.params.id }, { "details.customURL": req.params.id }]
     }).populate("owner", "_id username discriminator avatarBuffer")
-    .populate("details.otherOwners", "_id username discriminator avatarBuffer").exec().then(dbot => {
-          if (!dbot)
-            return res.sendStatus(404); 
+      .populate("details.otherOwners", "_id username discriminator avatarBuffer").exec().then(dbot => {
+        if (!dbot)
+          return res.sendStatus(404);
 
-        if(!dbot.details.htmlDescription){
-              dbot.details.htmlDescription = md.render(dbot.details.longDescription);
+        if (!dbot.details.htmlDescription) {
+          dbot.details.htmlDescription = md.render(dbot.details.longDescription);
         }
 
         cache(config).saveCached(dbot).then(element => {
           element.save();
-          const botTags = Object.keys(tags).filter(k=>dbot.details.tags.includes(tags[k]));
+          const botTags = Object.keys(tags).filter(k => dbot.details.tags.includes(tags[k]));
           res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
             bot: {
-                avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
-                name: dbot.username,
-                tag: dbot.discriminator,
-                bio: dbot.details.shortDescription,
-                tags: botTags,
-                content: dbot.details.htmlDescription,
-                url: `/bots/${dbot.details.customURL || dbot.id}/`,
-                support: dbot.details.supportServer,
-                website: dbot.details.website,
-                owners: [...dbot.details.otherOwners, dbot.owner],
-                prefix: dbot.details.prefix,
-                library: dbot.details.library
+              avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
+              name: dbot.username,
+              tag: dbot.discriminator,
+              bio: dbot.details.shortDescription,
+              tags: botTags,
+              content: dbot.details.htmlDescription,
+              url: `/bots/${dbot.details.customURL || dbot.id}/`,
+              support: dbot.details.supportServer,
+              website: dbot.details.website,
+              owners: [...dbot.details.otherOwners, dbot.owner],
+              prefix: dbot.details.prefix,
+              library: dbot.details.library
             },
             title: dbot.username,
             colors,
             tags: tags
           });
         });
-        
-    })
+
+      })
   });
   router.get("/:id/:action", (req, res) => {
     db.Bots.findOne({
-        $or: [{_id: req.params.id}, {"details.customURL": req.params.id}]
+      $or: [{ _id: req.params.id }, { "details.customURL": req.params.id }]
     }).exec().then(dbot => {
 
-        if(!dbot)
-            return res.sendStatus(404);
-        switch (req.params.action) {
-            case "add":
-                res.redirect(dbot.details.customInviteLink || defaultInvite(dbot.id));
-                break;
-            case "votar":
-                cache(config).saveCached(dbot).then(element => {
-                  element.save();
-                  if (!req.session.user) return res.redirect("/oauth2/login");
-                  res.render("bots/votar", { title: `Vote em ${dbot.username}`, bot: { name: dbot.username, avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}` }});
-                });
-                break;
-            default:
-                res.sendStatus(404);
-                break;
-        }
+      if (!dbot)
+        return res.sendStatus(404);
+      switch (req.params.action) {
+        case "add":
+          res.redirect(dbot.details.customInviteLink || defaultInvite(dbot.id));
+          break;
+        case "votar":
+          cache(config).saveCached(dbot).then(element => {
+            element.save();
+            if (!req.session.user) return res.redirect("/oauth2/login");
+            res.render("bots/votar", { title: `Vote em ${dbot.username}`, bot: { name: dbot.username, avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}` } });
+          });
+          break;
+        default:
+          res.sendStatus(404);
+          break;
+      }
     });
   });
   router.post("/:id/votar", async (req, res) => {
     if (!req.session.user) return res.redirect("/oauth2/login");
     if (!(await captchaIsValid(config.recaptcha, req.body["g-recaptcha-response"])))
-        return res.render("message", {
-            message: "O Captcha precisa ser validado.",
-            url: req.originalUrl,
-    });
+      return res.render("message", {
+        message: "O Captcha precisa ser validado.",
+        url: req.originalUrl,
+      });
     const user = await db.Users.findById(req.session.user.id);
     if (user) {
-        const next = user.dates.nextVote;
-        const now = new Date();
-        if (next && next > now) 
-            return res.render("message", {
-                message: `Você precisa esperar até ${next.getHours()}:${next.getMinutes()} para poder votar novamente.`
-            });
-        db.Bots.findOne({$or: [{_id: req.params.id}, {"details.customURL": req.params.id}]}).then(dot => {
-            if (!dot)
-                return res.sendStatus(404);
-            now.setHours(now.getHours() + 8);
-            user.dates.nextVote = now;
-            user.save();
-            dot.votes.current++;
-            dot.save();
-            dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\``)
-            res.render("message", {
-                title: "Sucesso",
-                message: `Você votou em ${dot.username} com sucesso.`
-            });
-    });    
+      const next = user.dates.nextVote;
+      const now = new Date();
+      if (next && next > now)
+        return res.render("message", {
+          message: `Você precisa esperar até ${next.getHours()}:${next.getMinutes()} para poder votar novamente.`
+        });
+      db.Bots.findOne({ $or: [{ _id: req.params.id }, { "details.customURL": req.params.id }] }).then(dot => {
+        if (!dot)
+          return res.sendStatus(404);
+        now.setHours(now.getHours() + 8);
+        // user.dates.nextVote = now;
+        user.save();
+        dot.votes.current++;
+        dot.save();
+        dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\``)
+        res.render("message", {
+          title: "Sucesso",
+          message: `Você votou em ${dot.username} com sucesso.`
+        });
+        controller.broadcast(payloadToJson({ op: opcodes.Dispatch, data: { bot: dot._id, votes: dot.votes.current, user: user._id }, event: eventsCode.BOT_VOTE_ADD }))
+      });
     }
   });
   router.post("/add", async (req, res) => {
@@ -231,8 +235,8 @@ module.exports = (config, db) => {
                   diff.length == 1
                     ? `O dono de ID ${diff[0]} precisa fazer login no site ao menos 1 vez para poder ser adicionado.`
                     : `Os donos de ID ${diff.join(
-                        ", "
-                      )} precisam fazer login no site ao menos 1 vez para poderem ser adicionados.`,
+                      ", "
+                    )} precisam fazer login no site ao menos 1 vez para poderem ser adicionados.`,
                 url: req.originalUrl,
               });
             }
@@ -263,12 +267,12 @@ module.exports = (config, db) => {
             dBot.sendMessage(
               config.discord.bot.channels.botLogs,
               "<@" +
-                req.session.user.id +
-                "> enviou o bot **`" +
-                userToString(user) +
-                "`** (" +
-                b.id +
-                ") para a aprovação."
+              req.session.user.id +
+              "> enviou o bot **`" +
+              userToString(user) +
+              "`** (" +
+              b.id +
+              ") para a aprovação."
             );
 
             res.render("message", {

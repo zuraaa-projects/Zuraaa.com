@@ -30,6 +30,10 @@ class WebsocketController {
   close(code, reason) {
     console.log("closed ", code, reason);
   }
+
+  async broadcast(payload) {
+    for (let ws of this.websockets) await ws.send(payload);
+  }
 }
 
 class WsSession {
@@ -67,7 +71,9 @@ class WsSession {
         return this.disconnect(payloadToJson({ op: opcodes.InvalidSession, data: { code: 401 } }));
 
       this.status = Status.READY;
-      this.send(payloadToJson({ op: opcodes.Dispatch, data: partialBotObject(bot), event: eventsCode.READY, sequence: this.sequence++ }));
+      const usersCount = await mongoose.model('users').count().exec();
+      const botsCount = await mongoose.model('bots').count().exec();
+      this.send(payloadToJson({ op: opcodes.Dispatch, data: { selfBot: partialBotObject(bot), users: usersCount, bots: botsCount }, event: eventsCode.READY, sequence: this.sequence++ }));
     }
 
     if (this.queuePackets.length > 0) { // Packets in queue? Process each one like event emitted now
@@ -100,5 +106,5 @@ const Status = {
 
 
 const controller = new WebsocketController();
-module.exports.controller = controller;
-module.exports = (ws) => controller.bind(ws);
+module.exports = controller;
+module.exports.bindWs = (ws) => controller.bind(ws);
