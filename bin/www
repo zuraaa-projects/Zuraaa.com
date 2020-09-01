@@ -4,54 +4,54 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('botsparadiscord:server');
-var http = require('http');
-const { log } = require('console');
+var app = require("../app");
+var Websocket = require("ws");
+var debug = require("debug")("botsparadiscord:server");
+var http = require("http");
+const { log } = require("console");
 
 /**
  * Get port from environment and store in Express.
  */
 
 var port = app.config.server.port;
-app.app.set('port', port);
+app.app.set("port", port);
 
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app.app);
+var ws = new Websocket.Server({ server });
+require("../api/websocket")(ws);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
 server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
+server.on("error", onError);
+server.on("listening", onListening);
 
 /**
  * Event listener for HTTP server "error" event.
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
+  if (error.syscall !== "listen") {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
       process.exit(1);
       break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
       process.exit(1);
       break;
     default:
@@ -65,9 +65,7 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-  console.log("ouvindo em: " + bind)
+  var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  debug("Listening on " + bind);
+  console.log("ouvindo em: " + bind);
 }

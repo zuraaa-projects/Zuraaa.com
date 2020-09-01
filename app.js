@@ -10,6 +10,7 @@ const botsRouter = require('./routes/bots');
 const discordRouter = require('./routes/discord');
 const oauth = require('./routes/oauth2');
 const user = require('./routes/user');
+const api = require('./api');
 
 const app = express();
 
@@ -39,14 +40,15 @@ app.use('/discord', discordRouter(config));
 app.use('/oauth2', oauth(config, db));
 app.use('/user', user(db, config));
 app.use('/tag', tag(db));
+app.use('/api', api(db));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
