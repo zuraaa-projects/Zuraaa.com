@@ -1,0 +1,17 @@
+extends layouts/layout
+
+block head
+    link(rel="stylesheet", href="/css/page.css")
+
+block content
+    .container.main-container
+        p.title Bots com a tag #{tag}:
+            each bot in bots
+                include layouts/bot
+            else
+                p.subtitle Não há nenhum bot com essa tag.
+            br
+            .buttons.is-centered.pagecontrol
+                if page != 1
+                    a.button(href="?page=" + (page - 1))="<"
+                a.button(href="?page=" + (++page))=">"

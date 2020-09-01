@@ -10,6 +10,7 @@ const Mongo = require("../modules/mongo");
 const user = require("../utils/user");
 const cache = require("../utils/imageCache");
 
+const { partialBotObject } = require("../utils/bot");
 
 function defaultInvite(id) {
     return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`
@@ -23,8 +24,19 @@ function defaultInvite(id) {
 module.exports = (config, db) => {
   const dBot = bot(config);
   router.get("/", (req, res) => {
-    res.render("index", { title: "Bots" });
-  });
+    let page = req.query.page;
+    if (!page || isNaN(page) || page < 1) 
+        page = 1
+    const params = {};
+    const search = req.query.search;
+    if (search) {
+      const regex = {$regex: search, $options: "i"};
+      params.$or = [{username: regex}, {"details.shortDescription": regex}];
+    }
+    db.Bots.find(params).limit(18).skip((page-1) * 18).exec().then(bots => {
+        res.render("bots/bots", {title: "Bots", page, search, bots: (bots || []).map(partialBotObject)});
+    });
+});
 
   router.get("/:id", (req, res) => {
     if (req.params.id == "add") {
@@ -34,10 +46,8 @@ module.exports = (config, db) => {
     db.Bots.findOne({
         $or: [{_id: req.params.id}, {"details.customURL": req.params.id}]
     }).exec().then(dbot => {
-        if(!dbot) {
-            if (!dbot)
-                return res.sendStatus(404); 
-        }
+          if (!dbot)
+            return res.sendStatus(404); 
 
         if(!dbot.details.htmlDescription){
               dbot.details.htmlDescription = md.render(dbot.details.longDescription);
@@ -107,6 +117,9 @@ module.exports = (config, db) => {
             now.setHours(now.getHours() + 8);
             user.dates.nextVote = now;
             user.save();
+            dot.votes.current++;
+            dot.save();
+            dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\``)
             res.render("message", {
                 title: "Sucesso",
                 message: `Você votou em ${dot.username} com sucesso.`
