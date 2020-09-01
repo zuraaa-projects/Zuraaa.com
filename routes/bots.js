@@ -48,10 +48,10 @@ module.exports = (config, db) => {
   // });
   //   res.sendStatus(200);
   // })
-  router.get("/reset", (req, res) => {
-    db.Bots.updateMany({}, {"votes.current": 0}).exec();
-    res.sendStatus(200);
-  })
+  // router.get("/reset", (req, res) => {
+  //   db.Bots.updateMany({}, {"votes.current": 0}).exec();
+  //   res.sendStatus(200);
+  // })
   router.get("/", (req, res) => {
     let page = req.query.page;
     if (!page || isNaN(page) || page < 1) 
