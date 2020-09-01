@@ -181,7 +181,7 @@ module.exports = (config, db) => {
       ];
       const owners = typeof b.owners == "string" ? [b.owners] : b.owners;
       {
-        if (!owners || owners.some((o) => isNaN(o) || o.length != 18))
+        if (owners && owners.some((o) => isNaN(o) || o.length != 18))
           return res.render("message", {
             message: "Lista de donos inválida.",
             url: req.originalUrl,
