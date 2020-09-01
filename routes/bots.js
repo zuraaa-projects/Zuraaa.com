@@ -7,8 +7,8 @@ const md = require("markdown-it")();
 const libraries = require("../utils/libraries");
 const { captchaIsValid } = require("../utils/captcha");
 const Mongo = require("../modules/mongo");
-const user = require("../utils/user");
 const cache = require("../utils/imageCache");
+const colors = require("../utils/colors");
 
 const { partialBotObject } = require("../utils/bot");
 
@@ -56,19 +56,25 @@ module.exports = (config, db) => {
 
         cache(config).saveCached(dbot).then(element => {
           element.save();
+          const botTags = Object.keys(tags).filter(k=>dbot.details.tags.includes(tags[k]));
           res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
             bot: {
                 avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
                 name: dbot.username,
                 tag: dbot.discriminator,
                 bio: dbot.details.shortDescription,
+                tags: botTags,
                 content: dbot.details.htmlDescription,
                 url: `/bots/${dbot.details.customURL || dbot.id}/`,
                 support: dbot.details.supportServer,
                 website: dbot.details.website,
-                owners: [...dbot.details.otherOwners, dbot.owner]
+                owners: [...dbot.details.otherOwners, dbot.owner],
+                prefix: dbot.details.prefix,
+                library: dbot.details.library
             },
-            title: dbot.username
+            title: dbot.username,
+            colors,
+            tags: tags
           });
         });
         

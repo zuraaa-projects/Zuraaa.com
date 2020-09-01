@@ -8,11 +8,24 @@ block content
             | #{bot.name}
             span.is-size-4.has-text-grey-light ##{bot.tag}
         p.about.is-size-5.has-text-grey-light #{bot.bio}
+        #tags.is-inline-block
+            span.align.has-text-white Tags: 
+            - let i = 0;
+            each tag in bot.tags
+                a.tag(title=tag href="/tag/" + tag)
+                    span(style="background:" + colors[i] + ";")
+                    p=tags[tag]
+                -i ++
+        span.has-text-white.align  Prefixo: 
+        code.align=bot.prefix
+        span.has-text-white.align  Biblioteca: 
+        code.align=bot.library
+        br
         each owner in bot.owners
             .owner
                 figure.image.is-32x32
                     img.is-rounded(src="data:" + owner.avatarBuffer.contentType + ";base64, " + owner.avatarBuffer.data)
-                | #{owner.username}##{owner.discriminator}
+                a(href="/user/" + owner.id) #{owner.username}##{owner.discriminator}
         .buttons.is-centered
             a.button(href=bot.url + "add") Adicionar
             a.button(href=bot.url + "votar") Votar

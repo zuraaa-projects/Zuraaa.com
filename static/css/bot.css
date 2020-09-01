@@ -2,6 +2,7 @@
 
 .buttons {
     padding-top: 10px;
+    display: inline-block;
 }
 
 .main-container {
@@ -10,9 +11,19 @@
 
 .owner {
     display: inline-block;
+    height: min-content;
+    width: min-content;
+    vertical-align: middle;
+}
+
+.owner > a {
     color: white;
 }
 
 .owner > .image {
-    display: inline;
+    display: inline-block;
+}
+
+.align {
+    vertical-align: top;
 }
