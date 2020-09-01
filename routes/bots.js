@@ -45,7 +45,8 @@ module.exports = (config, db) => {
     }
     db.Bots.findOne({
         $or: [{_id: req.params.id}, {"details.customURL": req.params.id}]
-    }).exec().then(dbot => {
+    }).populate("owner", "_id username discriminator avatarBuffer")
+    .populate("details.otherOwners", "_id username discriminator avatarBuffer").exec().then(dbot => {
           if (!dbot)
             return res.sendStatus(404); 
 
@@ -64,7 +65,8 @@ module.exports = (config, db) => {
                 content: dbot.details.htmlDescription,
                 url: `/bots/${dbot.details.customURL || dbot.id}/`,
                 support: dbot.details.supportServer,
-                website: dbot.details.website
+                website: dbot.details.website,
+                owners: [...dbot.details.otherOwners, dbot.owner]
             },
             title: dbot.username
           });
@@ -141,7 +143,6 @@ module.exports = (config, db) => {
         ...new Set(typeof b.tags == "string" ? [b.tags] : b.tags),
       ];
       const owners = typeof b.owners == "string" ? [b.owners] : b.owners;
-      console.log(owners)
       {
         if (!owners || owners.some((o) => isNaN(o) || o.length != 18))
           return res.render("message", {

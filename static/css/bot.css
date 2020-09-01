@@ -7,3 +7,12 @@
 .main-container {
     padding-top: 2vh;
 }
+
+.owner {
+    display: inline-block;
+    color: white;
+}
+
+.owner > .image {
+    display: inline;
+}

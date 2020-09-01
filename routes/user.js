@@ -13,7 +13,6 @@ module.exports = (mongo, config) => {
     router.get('/:userId', (req, res) => {
         mongo.Users.findById(req.params.userId).exec().then((user) => {
             cache(config).saveCached(user).then(async element => {
-                console.log(element)
                 element.save();
                 user ? res.render("user", {
                     user: {
