@@ -1,4 +1,3 @@
-const events = require("./events");
 const payloadToJson = ({ op, data, sequence, event }) => {
   return JSON.stringify({
     op: toOpCode(op),
@@ -19,8 +18,8 @@ const jsonToPayload = (data) => {
   } catch (e) { return {}; };
 };
 
-// TODO: Improve this
-const isInvalidPayload = (payload) => !payload || !payload.op;
+const isInvalidPayload = (payload) => !payload || !payload.op || !Object.keys(opcodes).includes(payload.op);
+const toOpCode = (name) => Object.values(opcodes).indexOf(name);
 
 const opcodes = {
   Dispatch: 0,
@@ -33,19 +32,12 @@ const opcodes = {
   HeartbeatACK: 7,
 };
 
-const toOpCode = (name) => Object.values(opcodes).indexOf(name);
 
-const Hello = (heartbeat_interval) =>
-  payloadToJson({
-    op: opcodes.Hello,
-    data: { heartbeat_interval },
-  });
 
 module.exports = {
   payloadToJson,
   isInvalidPayload,
   toOpCode,
   opcodes,
-  Hello,
   jsonToPayload
 };

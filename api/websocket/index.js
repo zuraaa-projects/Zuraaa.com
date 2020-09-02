@@ -1,5 +1,4 @@
 const {
-  Hello,
   isInvalidPayload,
   jsonToPayload,
   opcodes,
@@ -25,6 +24,7 @@ class WebsocketController {
   connection(ws, request) {
     let wsSession = new WsSession(ws);
     this.websockets.add(wsSession);
+    console.log(ws);
   }
 
   close(code, reason) {
@@ -42,8 +42,12 @@ class WsSession {
     this.status = Status.IDLE;
     this.queuePackets = [];
     this.sequence = 0;
+    this.token = null;
     this.resetTimeout();
-    this.send(Hello(45000));
+    this.send(payloadToJson({
+      op: opcodes.Hello,
+      data: { heartbeat_interval: 45000 },
+    }));
 
     this.ws.onmessage = ({ data }) => this.onMessage(data);
   }
@@ -65,20 +69,28 @@ class WsSession {
         return this.queuePackets.push(payload); // If not identified, push packets and wait...
 
       const { token, properties } = payload.d;
-      console.log(token, properties);
-      const bot = await mongoose.model('bots').findOne({ tokens: { current: token } }).exec();
-      if (!bot)
+      this.bot = await mongoose.model('bots').findOne({ tokens: { current: token } }).exec();
+      if (!this.bot)
         return this.disconnect(payloadToJson({ op: opcodes.InvalidSession, data: { code: 401 } }));
 
+      this.token = token;
       this.status = Status.READY;
       const usersCount = await mongoose.model('users').count().exec();
       const botsCount = await mongoose.model('bots').count().exec();
-      this.send(payloadToJson({ op: opcodes.Dispatch, data: { selfBot: partialBotObject(bot), users: usersCount, bots: botsCount }, event: eventsCode.READY, sequence: this.sequence++ }));
+      this.send(payloadToJson({ op: opcodes.Dispatch, data: { selfBot: partialBotObject(this.bot), users: usersCount, bots: botsCount }, event: eventsCode.READY, sequence: this.sequence++ }));
     }
 
     if (this.queuePackets.length > 0) { // Packets in queue? Process each one like event emitted now
       let packet = this.queuePackets.shift();
       this.onMessage(packet);
+    }
+
+    if (payload.op == opcodes.Dispatch) {
+      switch (payload.t) {
+        case eventsCode.BOT_UPDATE: {
+          break;
+        }
+      }
     }
   }
 
@@ -90,6 +102,7 @@ class WsSession {
     this.status = Status.CLOSED;
     this.queuePackets = [];
     this.sequence = 0;
+    this.token = null;
   }
 
   resetTimeout() {
