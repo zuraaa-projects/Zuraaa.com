@@ -24,7 +24,6 @@ class WebsocketController {
   connection(ws, request) {
     let wsSession = new WsSession(ws);
     this.websockets.add(wsSession);
-    console.log(ws);
   }
 
   close(code, reason) {
@@ -69,6 +68,9 @@ class WsSession {
         return this.queuePackets.push(payload); // If not identified, push packets and wait...
 
       const { token, properties } = payload.d;
+      if (!token)
+        return this.disconnect(payloadToJson({ op: opcodes.InvalidSession, data: { code: 401 } }));
+
       this.bot = await mongoose.model('bots').findOne({ tokens: { current: token } }).exec();
       if (!this.bot)
         return this.disconnect(payloadToJson({ op: opcodes.InvalidSession, data: { code: 401 } }));

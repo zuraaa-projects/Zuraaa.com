@@ -18,7 +18,7 @@ const jsonToPayload = (data) => {
   } catch (e) { return {}; };
 };
 
-const isInvalidPayload = (payload) => !payload || !payload.op || !Object.keys(opcodes).includes(payload.op);
+const isInvalidPayload = (payload) => !payload || !payload.op || !Object.values(opcodes).includes(payload.op);
 const toOpCode = (name) => Object.values(opcodes).indexOf(name);
 
 const opcodes = {
