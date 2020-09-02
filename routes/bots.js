@@ -97,7 +97,10 @@ module.exports = (config, db) => {
                 url: `/bots/${dbot.details.customURL || dbot.id}/`,
                 support: dbot.details.supportServer,
                 website: dbot.details.website,
-                owners: [...new Set([...dbot.details.otherOwners, dbot.owner])],
+                owners: [...dbot.details.otherOwners, dbot.owner].filter(
+                  (x, index, self) =>
+                    self.findIndex(y => y.id == x.id) == index
+                  ),
                 prefix: dbot.details.prefix,
                 library: dbot.details.library
             },
