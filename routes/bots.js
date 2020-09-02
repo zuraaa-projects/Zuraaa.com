@@ -86,8 +86,6 @@ module.exports = (config, db) => {
         cache(config).saveCached(dbot).then(element => {
           element.save();
           const botTags = Object.keys(tags).filter(k=>dbot.details.tags.includes(tags[k]));
-          console.log(dbot)
-          console.log([...dbot.details.otherOwners, dbot.owner])
           res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
             bot: {
                 avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
@@ -99,7 +97,7 @@ module.exports = (config, db) => {
                 url: `/bots/${dbot.details.customURL || dbot.id}/`,
                 support: dbot.details.supportServer,
                 website: dbot.details.website,
-                owners: [...dbot.details.otherOwners, dbot.owner],
+                owners: [...new Set([...dbot.details.otherOwners, dbot.owner])],
                 prefix: dbot.details.prefix,
                 library: dbot.details.library
             },
