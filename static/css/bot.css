@@ -12,12 +12,13 @@
 .owner {
     display: inline-block;
     height: min-content;
-    width: min-content;
     vertical-align: middle;
+    padding-right: 5px;
 }
 
 .owner > a {
     color: white;
+    vertical-align: 10px;
 }
 
 .owner > .image {
@@ -26,4 +27,8 @@
 
 .align {
     vertical-align: top;
+}
+
+.buttons {
+    padding-bottom: 10px;
 }

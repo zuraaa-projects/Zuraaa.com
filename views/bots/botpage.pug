@@ -21,11 +21,17 @@ block content
         span.has-text-white.align  Biblioteca: 
         code.align=bot.library
         br
+        span.has-text-white| Dono#{bot.owners.length > 1 ? "s" : ""}: 
         each owner in bot.owners
             .owner
                 figure.image.is-32x32
-                    img.is-rounded(src="data:" + owner.avatarBuffer.contentType + ";base64, " + owner.avatarBuffer.data)
+                    if owner.avatarBuffer && owner.avatarBuffer.data
+                        img.is-rounded(src="data:" + owner.avatarBuffer.contentType + ";base64, " + owner.avatarBuffer.data)
+                    else
+                        img.is-rounded(src="https://cdn.discordapp.com/embed/avatars/4.png")
+
                 a(href="/user/" + owner.id) #{owner.username}##{owner.discriminator}
+        br
         .buttons.is-centered
             a.button(href=bot.url + "add") Adicionar
             a.button(href=bot.url + "votar") Votar

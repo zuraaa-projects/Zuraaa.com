@@ -2,7 +2,7 @@ const express = require("express");
 const fetch = require('node-fetch');
 const router = express.Router();
 const Mongo = require("../modules/mongo");
-
+const cache = require("../utils/imageCache");
 /**
  * 
  * @param {*} config 
@@ -71,7 +71,9 @@ module.exports = (config, mongo) => {
                     permissions: []
                 });
             }
-            userFind.save();
+            cache(config).saveCached(userFind).then(element => {
+                element.save();
+            });
         });
         
     }

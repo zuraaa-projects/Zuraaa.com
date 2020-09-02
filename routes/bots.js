@@ -26,6 +26,35 @@ function defaultInvite(id) {
  */
 module.exports = (config, db) => {
   const dBot = bot(config);
+  // router.get("/test", (req, res) => {
+  //   db.Bots.find({$or: [{"owner.avatarBuffer": null}, {"owner.avatarBuffer": null}]}).populate("owner", "_id avatar avatarBuffer").populate("details.otherOwners", "_id avatar avatarBuffer").exec().then(dabot => { 
+  //     for (b of dabot) {
+  //     const owners = [...(b.otherOwners || []), b.owner];
+  //     for (let i = 0; i < owners.length; i++) {
+  //       const dbot = owners[i];
+  //       if (dbot && !(dbot.avatarBuffer && dbot.avatarBuffer.data)) {
+  //         setTimeout(() => {
+  //           cache(config).saveCached(dbot).then(element => {
+  //             element.save();
+  //             console.log(element.id);
+  //           })}, (i+1)*1000);
+  //       }
+  //     }
+  // for (let i = 0; i < dabot.length; i++) {
+  //   const dbot = dabot[i];
+  //   setTimeout(() => {
+  //   cache(config).saveCached(dbot).then(element => {
+  //     element.save();
+  //     console.log(element.id);
+  //   })}, (i+1)*1000);
+  // }
+  // });
+  //   res.sendStatus(200);
+  // })
+  // router.get("/reset", (req, res) => {
+  //   db.Bots.updateMany({}, {"votes.current": 0}).exec();
+  //   res.sendStatus(200);
+  // })
   router.get("/", (req, res) => {
     let page = req.query.page;
     if (!page || isNaN(page) || page < 1)
@@ -60,6 +89,8 @@ module.exports = (config, db) => {
         cache(config).saveCached(dbot).then(element => {
           element.save();
           const botTags = Object.keys(tags).filter(k => dbot.details.tags.includes(tags[k]));
+          console.log(dbot)
+          console.log([...dbot.details.otherOwners, dbot.owner])
           res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
             bot: {
               avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
@@ -154,7 +185,7 @@ module.exports = (config, db) => {
       ];
       const owners = typeof b.owners == "string" ? [b.owners] : b.owners;
       {
-        if (!owners || owners.some((o) => isNaN(o) || o.length != 18))
+        if (owners && owners.some((o) => isNaN(o) || o.length != 18))
           return res.render("message", {
             message: "Lista de donos inválida.",
             url: req.originalUrl,
