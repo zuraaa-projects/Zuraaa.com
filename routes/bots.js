@@ -89,8 +89,6 @@ module.exports = (config, db) => {
         cache(config).saveCached(dbot).then(element => {
           element.save();
           const botTags = Object.keys(tags).filter(k => dbot.details.tags.includes(tags[k]));
-          console.log(dbot)
-          console.log([...dbot.details.otherOwners, dbot.owner])
           res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
             bot: {
               avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
@@ -102,7 +100,10 @@ module.exports = (config, db) => {
               url: `/bots/${dbot.details.customURL || dbot.id}/`,
               support: dbot.details.supportServer,
               website: dbot.details.website,
-              owners: [...dbot.details.otherOwners, dbot.owner],
+              owners: [...dbot.details.otherOwners, dbot.owner].filter(
+                (x, index, self) =>
+                  self.findIndex(y => y.id == x.id) == index
+              ),
               prefix: dbot.details.prefix,
               library: dbot.details.library
             },
@@ -183,7 +184,7 @@ module.exports = (config, db) => {
       const botTags = [
         ...new Set(typeof b.tags == "string" ? [b.tags] : b.tags),
       ];
-      const owners = typeof b.owners == "string" ? [b.owners] : b.owners;
+      const owners = typeof b.owners == "string" ? [b.owners] : (b.owners || []);
       {
         if (owners && owners.some((o) => isNaN(o) || o.length != 18))
           return res.render("message", {
