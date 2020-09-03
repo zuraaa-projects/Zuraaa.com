@@ -158,10 +158,11 @@ module.exports = (config, db) => {
         if (!dot)
           return res.sendStatus(404);
         now.setHours(now.getHours() + 8);
-        // user.dates.nextVote = now;
+        user.dates.nextVote = now;
         user.save();
         dot.votes.current++;
         dot.save();
+        new db.Votes({ user: user._id, dot: bot._id }).save();
         dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\``)
         res.render("message", {
           title: "Sucesso",

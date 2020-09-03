@@ -58,5 +58,49 @@ module.exports = (mongo) => {
     res.status(204).send();
   });
 
+
+  router.get("/:id/votes", async (req, res) => {
+    const bot = await handleBotId(req, res);
+    if (!bot)
+      return;
+
+    let limit = Math.min(Number(req.query.limit) || 1, 15);
+    let after = Number(req.query.after) || 0;
+
+    const votes = await mongo.Votes.aggregate([
+      { $skip: after },
+      { $limit: limit },
+    ]);
+
+    return res.status(200).json(votes);
+  });
+
+  router.get("/:id/votes/:userId", async (req, res) => {
+    const bot = await handleBotId(req, res);
+    if (!bot)
+      return;
+
+    const id = req.params.userId;
+    if (!id) {
+      res.status(400).json({ message: "Invalid user id" });
+      return;
+    }
+    const user = await mongo.Users.findById({ _id: id }).exec();
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    let limit = Math.min(Number(req.query.limit) || 1, 15);
+    let after = Number(req.query.after) || 0;
+
+    const votes = await mongo.Votes.aggregate([
+      { $skip: after },
+      { $limit: limit },
+    ]);
+
+    return res.status(200).json(votes);
+  });
+
   return router;
 };

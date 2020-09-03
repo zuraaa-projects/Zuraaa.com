@@ -7,6 +7,21 @@ module.exports = class Mongo {
             useUnifiedTopology: true
         });
 
+        this.Votes = mongoose.model("votes", new mongoose.Schema({
+            user: {
+                ref: "users",
+                type: String
+            },
+            bot: {
+                ref: "bots",
+                type: String
+            },
+            date: {
+                default: Date.now,
+                type: Date
+            }
+        }));
+
         this.Users = mongoose.model("users", new mongoose.Schema({
             _id: String,
             username: String,
@@ -59,7 +74,7 @@ module.exports = class Mongo {
                 otherOwners: [
                     {
                         ref: "users",
-                        type: String    
+                        type: String
                     }
                 ],
                 customURL: String
@@ -69,8 +84,10 @@ module.exports = class Mongo {
                 type: String
             },
             votes: {
-                current: Number,
-                default: 0
+                current: {
+                    type: Number,
+                    default: 0
+                },
             },
             count: {
                 guild: Number
