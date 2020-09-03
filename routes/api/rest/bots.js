@@ -5,17 +5,24 @@ const router = require("express").Router();
 
 
 module.exports = (mongo) => {
-  const handleBotId = async (req) => {
+  const handleBotId = async (req, res) => {
     const id = req.params.id;
-    if (!id) return res.status(400).json({ message: "Invalid id" });
+    if (!id) {
+      res.status(400).json({ message: "Invalid id" });
+      return;
+    }
     const bot = await mongo.Bots.findById({ _id: id }).exec();
-    if (!bot) return res.status(404).json({ message: "Bot not found" });
+    if (!bot) {
+      res.status(404).json({ message: "Bot not found" });
+      return;
+    }
     return bot;
   }
 
   router.get("/:id", async (req, res) => {
-    const bot = await handleBotId(req);
-    return res.status(200).json(partialBotObject(bot));
+    const bot = await handleBotId(req, res);
+    if (bot)
+      return res.status(200).json(partialBotObject(bot));
   });
 
   router.get("", async (req, res) => {
@@ -31,7 +38,10 @@ module.exports = (mongo) => {
   });
 
   router.patch("/:id", async (req, res) => {
-    const bot = await handleBotId(req);
+    const bot = await handleBotId(req, res);
+    if (!bot)
+      return;
+
     const { data, token } = req.body;
     if (!data)
       return res.status(400).json({ message: 'Missing data' });
