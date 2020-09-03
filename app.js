@@ -11,7 +11,7 @@ const botsRouter = require('./routes/bots');
 const discordRouter = require('./routes/discord');
 const oauth = require('./routes/oauth2');
 const user = require('./routes/user');
-const api = require('./api');
+const api = require('./routes/api');
 
 const app = express();
 

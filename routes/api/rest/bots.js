@@ -1,4 +1,4 @@
-const { partialBotObject } = require("../../utils/bot");
+const { partialBotObject } = require('../../../utils/bot');
 const mongoose = require("mongoose");
 
 const router = require("express").Router();

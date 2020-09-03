@@ -5,7 +5,7 @@ const {
   payloadToJson,
 } = require("./util/payload");
 const mongoose = require('mongoose');
-const { partialBotObject } = require("../../utils/bot");
+const { partialBotObject } = require("../../../utils/bot");
 const { eventsCode } = require("./util/events");
 
 

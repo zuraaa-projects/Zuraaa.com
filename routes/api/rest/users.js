@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { userToJson } = require("../../utils/user");
+const { userToJson } = require("../../../utils/user");
 
 module.exports = (mongo) => {
   router.get("/:id", async (req, res) => {

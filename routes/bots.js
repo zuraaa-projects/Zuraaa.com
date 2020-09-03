@@ -11,9 +11,9 @@ const cache = require("../utils/imageCache");
 const colors = require("../utils/colors");
 
 const { partialBotObject } = require("../utils/bot");
-const controller = require("../api/websocket");
-const { payloadToJson, opcodes } = require("../api/websocket/util/payload");
-const { eventsCode } = require("../api/websocket/util/events");
+const controller = require("./api/websocket");
+const { payloadToJson, opcodes } = require("./api/websocket/util/payload");
+const { eventsCode } = require("./api/websocket/util/events");
 
 function defaultInvite(id) {
   return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`
