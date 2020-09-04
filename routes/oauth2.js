@@ -10,9 +10,22 @@ const config = require('../config.json');
  * @param {*} config 
  * @param {Mongo} mongo 
  */
+
+let stateMap = new Map();
+
+const newStateUrl = (req) => {
+    const key = (Math.random() * 10000).toFixed(0);
+    stateMap.set(key, fullUrl(req));
+    return key;
+}
+
+const getStateUrl = (req) => {
+    return stateMap.get(req.query.state);
+}
+
 module.exports = (mongo) => {
     router.get("/login", (req, res) => {
-        res.redirect(generateUrl(config));
+        res.redirect(generateUrl(newStateUrl(req)));
     });
 
     router.get("/callback", (req, res) => {
@@ -36,11 +49,12 @@ module.exports = (mongo) => {
                     req.session.save();
 
                     saveData(jsonUser);
-
-                    if (!req.cookies['redirectPage'])
+                    const url = getStateUrl(req);
+                    if (!url)
                         res.redirect("/");
-                    else
-                        res.redirect(req.cookies['redirectPage']);
+                    else {
+                        res.redirect(url);
+                    }
                 });
             });
         } else {
@@ -80,17 +94,15 @@ module.exports = (mongo) => {
 
     return router;
 }
-
 module.exports.isAuthenticated = (req, res) => {
     if (req.session.user)
         return true;
 
-    res.cookie('redirectPage', fullUrl(req) + '', { expires: new Date(Date.now() + 2 * 60 * 100) });
-    res.redirect(generateUrl());
+    res.redirect(generateUrl(newStateUrl(req)));
     return false;
 }
 
-function generateUrl() {
+function generateUrl(state) {
     return `${config.oauth.urls.authorization}?client_id=${config.oauth.client.id}`
-        + `&redirect_uri=${encodeURIComponent(config.oauth.urls.redirect)}&response_type=code&scope=identify`;
+        + `&redirect_uri=${encodeURIComponent(config.oauth.urls.redirect)}&response_type=code&scope=identify&state=${state}`;
 }
