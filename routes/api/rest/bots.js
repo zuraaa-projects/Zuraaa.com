@@ -52,7 +52,7 @@ module.exports = (mongo) => {
 
     const { guilds } = data;
     if (isNaN(guilds) || Math.max(guilds, -1) == -1)
-      return res.status(400).json({ message: 'Invalid number: guilds muste be positive number' })
+      return res.status(400).json({ message: 'Invalid number: guilds must be positive number' })
 
     bot.count.guilds = guilds;
     await bot.save();
