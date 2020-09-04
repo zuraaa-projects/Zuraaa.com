@@ -162,7 +162,7 @@ module.exports = (config, db) => {
         user.save();
         dot.votes.current++;
         dot.save();
-        new db.Votes({ user: user._id, dot: bot._id }).save();
+        new db.Votes({ user: user._id, bot: dot._id }).save();
         dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\``)
         res.render("message", {
           title: "Sucesso",
