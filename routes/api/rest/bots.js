@@ -1,7 +1,7 @@
 const { partialBotObject } = require('../../../utils/bot');
 const mongoose = require("mongoose");
 const ratelimit = require('express-rate-limit');
-
+const { rateLimitOptions } = require('../util/constants');
 const router = require("express").Router();
 
 
@@ -20,13 +20,13 @@ module.exports = (mongo) => {
     return bot;
   }
 
-  router.get("/:id", ratelimit({ windowMs: 60 * 1000, max: 30 }), async (req, res) => {
+  router.get("/:id", ratelimit(rateLimitOptions.get), async (req, res) => {
     const bot = await handleBotId(req, res);
     if (bot)
       return res.status(200).json(partialBotObject(bot));
   });
 
-  router.get("", ratelimit({ windowMs: 60 * 1000, max: 15 }), async (req, res) => {
+  router.get("", ratelimit(rateLimitOptions.gets), async (req, res) => {
     let limit = Math.min(Number(req.query.limit) || 1, 15);
     let after = Number(req.query.after) || 0;
 
@@ -38,7 +38,7 @@ module.exports = (mongo) => {
     return res.status(200).json(bots.map(partialBotObject));
   });
 
-  router.patch("/:id", ratelimit({ windowMs: 10 * 60 * 60 * 1000, max: 10 }), async (req, res) => {
+  router.patch("/:id", ratelimit(rateLimitOptions.patch), async (req, res) => {
     const bot = await handleBotId(req, res);
     if (!bot)
       return;
@@ -60,7 +60,7 @@ module.exports = (mongo) => {
   });
 
 
-  router.get("/:id/votes", ratelimit({ windowMs: 60 * 1000, max: 15 }), async (req, res) => {
+  router.get("/:id/votes", ratelimit(rateLimitOptions.gets), async (req, res) => {
     const bot = await handleBotId(req, res);
     if (!bot)
       return;
@@ -76,7 +76,7 @@ module.exports = (mongo) => {
     return res.status(200).json(votes);
   });
 
-  router.get("/:id/votes/:userId", ratelimit({ windowMs: 60 * 1000, max: 10 }), async (req, res) => {
+  router.get("/:id/votes/:userId", ratelimit(rateLimitOptions.gets), async (req, res) => {
     const bot = await handleBotId(req, res);
     if (!bot)
       return;
