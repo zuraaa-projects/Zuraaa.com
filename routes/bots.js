@@ -14,6 +14,7 @@ const { partialBotObject } = require("../utils/bot");
 const controller = require("./api/websocket");
 const { payloadToJson, opcodes } = require("./api/websocket/util/payload");
 const { eventsCode } = require("./api/websocket/util/events");
+const { isAuthenticated } = require("./oauth2");
 
 function defaultInvite(id) {
   return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`
@@ -72,7 +73,8 @@ module.exports = (config, db) => {
 
   router.get("/:id", (req, res) => {
     if (req.params.id == "add") {
-      if (!req.session.user) return res.redirect("/oauth2/login");
+      if (!isAuthenticated(req, res))
+        return;
       return res.render("bots/add", { tags, title: "Adicionar Bot", libraries });
     }
     db.Bots.findOne({
@@ -129,7 +131,8 @@ module.exports = (config, db) => {
         case "votar":
           cache(config).saveCached(dbot).then(element => {
             element.save();
-            if (!req.session.user) return res.redirect("/oauth2/login");
+            if (!isAuthenticated(req, res))
+              return;
             res.render("bots/votar", { title: `Vote em ${dbot.username}`, bot: { name: dbot.username, avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}` } });
           });
           break;
@@ -140,7 +143,8 @@ module.exports = (config, db) => {
     });
   });
   router.post("/:id/votar", async (req, res) => {
-    if (!req.session.user) return res.redirect("/oauth2/login");
+    if (!isAuthenticated(req, res))
+      return;
     if (!(await captchaIsValid(config.recaptcha, req.body["g-recaptcha-response"])))
       return res.render("message", {
         message: "O Captcha precisa ser validado.",
@@ -174,7 +178,8 @@ module.exports = (config, db) => {
   });
   router.post("/add", async (req, res) => {
     try {
-      if (!req.session.user) return res.redirect("/oauth2/login");
+      if (!isAuthenticated(req, res))
+        return;
       const b = req.body;
       if (!(await captchaIsValid(config.recaptcha, b["g-recaptcha-response"])))
         return res.render("message", {

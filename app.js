@@ -39,7 +39,7 @@ app.use(session({
 app.use('/', indexRouter(db));
 app.use('/bots', botsRouter(config, db));
 app.use('/discord', discordRouter(config));
-app.use('/oauth2', oauth(config, db));
+app.use('/oauth2', oauth(db));
 app.use('/user', user(db, config));
 app.use('/tag', tag(db));
 app.use('/api', api(db));
