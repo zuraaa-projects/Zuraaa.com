@@ -10,7 +10,6 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-session": "^1.17.1",
-    "helmet": "4.1.0",
     "http-errors": "~1.6.3",
     "markdown-it": "^11.0.0",
     "mongoose": "^5.10.0",

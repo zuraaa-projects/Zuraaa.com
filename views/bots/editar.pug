@@ -7,17 +7,17 @@ block head
 
 block content
     .container.main-container
-        p#addtitle.title.is-size-4 ADICIONAR BOT
-        p.subtitle.is-size-6 Preencha o formulário para submeter seu bot à aprovação.
+        p#addtitle.title.is-size-4 EDITAR BOT
+        p.subtitle.is-size-6 Preencha o formulário para editar o seu bot..
         
-        form#form(action="/bots/add" method="POST")
+        form#form(action="/bots/editar" method="POST")
             .field.is-horizontal
-                .field-label.is-normal.has-text-left
+                .field-label.is-normal.has-text-left    
                     label.label ID *
                 .field-body
                     .field.is-narrow
                         .control
-                            input.input#id(maxlength="18" name="id" placeholder="Insira o ID do seu bot." )
+                            input.input#id(name="id" readonly value=bot.id)
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
                     label.label Outros donos
@@ -25,8 +25,18 @@ block content
                     .field
                         .control
                             #owners
-                                button.is-hidden.button#remOwner(type="button") -
-                                button.button#addOwner(type="button") +
+                                if bot.details.otherOwners
+                                    each owner of bot.details.otherOwners
+                                        if owner
+                                            input.input.owner-input(name="owners" maxlength="18" placeholder="Insira o ID do usuário" value=owner)
+                                if bot.details.otherOwners && bot.details.otherOwners.some(x => x)
+                                    button.button#remOwner(type="button") -
+                                else
+                                    button.is-hidden.button#remOwner(type="button") -
+                                if bot.details.otherOwners && bot.details.otherOwners.length > 5
+                                    button.is-hidden.button#addOwner(type="button") +
+                                else
+                                    button.button#addOwner(type="button") +
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
                     label.label Biblioteca *
@@ -37,7 +47,7 @@ block content
                                 select#library(name="library")
                                     option(value="")="Escolha uma biblioteca..."
                                     for lib in libraries
-                                        option=lib
+                                        option(selected=(lib == bot.details.library))=lib
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
                     label.label Servidor de suporte
@@ -46,21 +56,21 @@ block content
                         p.control
                             a.button.is-static https://discord.gg/
                         p.control
-                            input.input#support(maxlength="20" name="support" type="text")
+                            input.input#support(maxlength="20" name="support" type="text" value=bot.details.supportServer)
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
                     label.label Convite customizado
                 .field-body
                     .field
                         .control
-                            input.input#invite(maxlength="2083" name="custominvite" type="text" placeholder="https://sitedomeubot.com.br/adicionar")
+                            input.input#invite(maxlength="2083" name="custominvite" type="text" placeholder="https://sitedomeubot.com.br/adicionar" value=bot.details.customInviteLink)
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
                     label.label Prefixo *
                 .field-body
                     .field.is-narrow
                         .control
-                            input.input#prefix(maxlength="15" name="prefix" type="text" placeholder="Insira o prefixo do seu bot.")
+                            input.input#prefix(maxlength="15" name="prefix" type="text" placeholder="Insira o prefixo do seu bot." value=bot.details.prefix)
                         p.help Digite até 15 caracteres
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
@@ -68,7 +78,7 @@ block content
                 .field-body
                     .field
                         .control
-                            textarea#shortdesc.textarea(maxlength="300" name="shortdesc" placeholder="Fale resumidamente sobre seu bot." rows="2")
+                            textarea#shortdesc.textarea(maxlength="300" name="shortdesc" placeholder="Fale resumidamente sobre seu bot." rows="2")=bot.details.shortDescription
                         p.help Digite de 3 até 300 caracteres.
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
@@ -76,7 +86,7 @@ block content
                 .field-body
                     .field
                         .control
-                            textarea#longdesc.textarea(maxlength="10000" name="longdesc" placeholder="Fale detalhadamente sobre seu bot." rows="8")
+                            textarea#longdesc.textarea(maxlength="10000" name="longdesc" placeholder="Fale detalhadamente sobre seu bot." rows="8")=bot.details.longDescription
                         p.help Digite até 10.000 caracteres. Markdown permitido.
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
@@ -86,6 +96,6 @@ block content
                         .select.is-multiple
                             select#tags(name="tags" multiple)
                                 for tag, key in tags
-                                    option(value=key)=tag
+                                    option(value=key selected=bot.details.tags.some(x=>[tag, key].includes(x)))=tag
                         p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.            
             button.g-recaptcha.button(data-sitekey="6LdHhsUZAAAAACjS-miwB8JcjWbT427rtckYEcmh" data-callback="onSubmit" data-action="submit") Enviar
