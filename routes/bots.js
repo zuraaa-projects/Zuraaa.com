@@ -154,7 +154,7 @@ module.exports = (config, db) => {
             dot.votes.current++;
             dot.save();
             dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\`\n` +
-            `${config.urls.base}${config.urls.endpoints.bots}${dot.details.customURL || dot.id}`);
+            `${config.server.root}bots/${dot.details.customURL || dot.id}`);
             res.render("message", {
                 title: "Sucesso",
                 message: `Você votou em ${dot.username} com sucesso.`
@@ -190,7 +190,7 @@ module.exports = (config, db) => {
           }, dbot.owner, owners, botTags, dbot);
           dBot.sendMessage(config.discord.bot.channels.botLogs,
             `\`${userToString(req.session.user)}\` editou o bot **\`${userToString(dbot)}\`** (${dbot.id}).\n` + 
-            `${config.urls.base}${config.urls.endpoints.bots}${dbot.details.customURL || dbot.id}`);
+            `${config.sever.root}bots/${dbot.details.customURL || dbot.id}`);
           res.render("message", {message: `Você editou o bot ${userToString(dbot)} com sucesso.`, title: "Sucesso"})
         }
       });
