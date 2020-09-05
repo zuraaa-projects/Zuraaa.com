@@ -190,7 +190,7 @@ module.exports = (config, db) => {
           }, dbot.owner, owners, botTags, dbot);
           dBot.sendMessage(config.discord.bot.channels.botLogs,
             `\`${userToString(req.session.user)}\` editou o bot **\`${userToString(dbot)}\`** (${dbot.id}).\n` + 
-            `${config.sever.root}bots/${dbot.details.customURL || dbot.id}`);
+            `${config.server.root}bots/${dbot.details.customURL || dbot.id}`);
           res.render("message", {message: `Você editou o bot ${userToString(dbot)} com sucesso.`, title: "Sucesso"})
         }
       });
