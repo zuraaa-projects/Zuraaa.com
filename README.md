@@ -16,6 +16,7 @@ Na pasta da aplicação crie um arquivo chamado config.json
 ```js
 {
     "server": {
+        "root": "https://zuraaa.com/",
         "port": 80,
         "session": {
             "secret": "Insira uma chave para criptografar a session aqui"
@@ -61,6 +62,7 @@ Na pasta da aplicação crie um arquivo chamado config.json
 ```
 
 Após configurar a aplicação basta baixar as dependências e rodar a aplicação:
+
 ```sh
 $ npm i
 $ npm start

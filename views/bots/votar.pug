@@ -2,16 +2,15 @@ extends ../layouts/layout
 
 block head
     script(src="https://www.google.com/recaptcha/api.js" async defer)
+    script(src="/js/vote.js")
     link(rel="stylesheet", href="/css/votar.css")
 
 block content
     .container.main-container
-        form(method="POST")
+        form#votef(method="POST")
             .box.has-text-centered
                 h1.title.is-1 Vote em #{bot.name}
                 figure.image.is-128x128.container
-                    img.is-rounded(src=bot.avatar)
+                    img.is-rounded(src=bot.avatar)                
                 br
-                .g-recaptcha.captcha(data-sitekey="6Ld6hsUZAAAAAPUV_NLQJdbod-zdUPY0QDy-l5mj")
-                br
-                button.button Votar
+                button.g-recaptcha.button(data-sitekey="6LdHhsUZAAAAACjS-miwB8JcjWbT427rtckYEcmh" data-callback="onSubmit" data-action="submit") Votar

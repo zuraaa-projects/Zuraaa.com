@@ -39,5 +39,7 @@ block content
                 a.button(href=bot.website) Site
             if bot.support
                 a.button(href="https://discord.gg/" + bot.support) Suporte
+            if user && bot.owners.some(x => x.id == user.id)
+                a.button(href=bot.url + "editar") Editar
     .container.main-container
         .box.content !{bot.content}
