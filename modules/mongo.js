@@ -17,7 +17,10 @@ module.exports = class Mongo{
                 contentType: String
             },
             dates: {
-                firstSeen: Date,
+                firstSeen: {
+                    default: Date.now,
+                    type: Date
+                },
                 lastBotAdd: Date,
                 nextVote: Date
             },
@@ -43,7 +46,10 @@ module.exports = class Mongo{
                 type: String
             },
             dates: {
-                sent: Date,
+                sent: {
+                    default: Date.now,
+                    type: Date
+                },
                 approved: Date
             },
             details: {
