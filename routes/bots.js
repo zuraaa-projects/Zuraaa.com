@@ -68,7 +68,10 @@ module.exports = (config, db) => {
 });
   router.get("/:id", (req, res) => {
     if (req.params.id == "add") {
-        if (!req.session.user) return res.redirect("/oauth2/login");
+        if (!req.session.user) {
+          req.session.path = req.originalUrl;
+          return res.redirect("/oauth2/login");
+        }
         return res.render("bots/add", { tags, title: "Adicionar Bot", libraries });
     }
     db.Bots.findOne({
@@ -121,17 +124,23 @@ module.exports = (config, db) => {
   });
   
   router.get("/:id/votar", (req, res) => {
+    if (!req.session.user) {
+      req.session.path = req.originalUrl;
+      return res.redirect("/oauth2/login");
+    }
     getBotBy(req.params.id).then(dbot => {
       cache(config).saveCached(dbot).then(element => {
         element.save();
-        if (!req.session.user) return res.redirect("/oauth2/login");
         res.render("bots/votar", { title: `Vote em ${dbot.username}`, bot: { name: dbot.username, avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}` }});
       });
     });
   });
 
   router.post("/:id/votar", async (req, res) => {
-    if (!req.session.user) return res.redirect("/oauth2/login");
+    if (!req.session.user) {
+      req.session.path = req.originalUrl;
+      return res.redirect("/oauth2/login");
+    }
     if (!(await captchaIsValid(config.recaptcha, req.body["g-recaptcha-response"])))
         return res.render("message", {
             message: "O Captcha precisa ser validado.",
@@ -164,7 +173,10 @@ module.exports = (config, db) => {
   });
 
   router.get("/:id/editar", (req, res) => {
-    if (!req.session.user) return res.redirect("/oauth2/login");
+    if (!req.session.user) {
+      req.session.path = req.originalUrl;
+      return res.redirect("/oauth2/login");
+    }
     getBotBy(req.params.id).then(dbot => {
       if (!dbot) return res.sendStatus(404);
       if (!([...dbot.details.otherOwners, dbot.owner].includes(req.session.user.id)))
@@ -174,7 +186,10 @@ module.exports = (config, db) => {
   });
 
   router.post("/editar", (req, res) => {
-    if (!req.session.user) return res.redirect("/oauth2/login");
+    if (!req.session.user) {
+      req.session.path = req.originalUrl;
+      return res.redirect("/oauth2/login");
+    }
     getBotBy(req.body.id).then(dbot => {
       if (!dbot)
         return res.sendStatus(404);
@@ -199,7 +214,10 @@ module.exports = (config, db) => {
 
   router.post("/add", async (req, res) => {
     try {
-      if (!req.session.user) return res.redirect("/oauth2/login");
+      if (!req.session.user) {
+        req.session.path = req.originalUrl;
+        return res.redirect("/oauth2/login");
+      }
       const b = req.body;
       const botTags = stringToArray(b.tags);
       const owners = stringToArray(b.owners);

@@ -36,7 +36,7 @@ module.exports = (config, mongo) => {
 
                     saveData(jsonUser);
 
-                    res.redirect("/");
+                    res.redirect(req.session.path || "/");
                 });
             });
         }else{
