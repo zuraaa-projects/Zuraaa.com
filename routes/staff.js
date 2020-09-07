@@ -3,6 +3,7 @@ const router = express.Router();
 const { partialBotObject } = require("../utils/bot");
 const { userToString } = require("../utils/user");
 const discordBotM = require("../utils/discordbot");
+const discordbot = require("../utils/discordbot");
 
 module.exports = (config, db) => {
     const discordBot = discordBotM(config); 
@@ -39,6 +40,12 @@ module.exports = (config, db) => {
             bot.save();
             discordBot.sendMessage(config.discord.bot.channels.botLogs, `O bot \`${userToString(bot)}\` foi aprovado por \`${userToString(req.session.user)}\`\n` +
             `${config.server.root}bots/${bot.id}`);
+            const allOwners = [...(bot.details.otherOwners || []), bot.owner];
+            for (let i = 0; i < allOwners.length; i++) {
+                setTimeout(() => {
+                    discordBot.addRole(config.discord.bpdId, allOwners[i], config.discord.bot.roles.developer);
+                }, i * 500)
+            }
             res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi aprovado com sucesso.`, url: "/staff/bots"})
         });
     });
