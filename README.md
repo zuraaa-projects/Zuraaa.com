@@ -68,3 +68,7 @@ Após configurar a aplicação basta baixar as dependências e rodar a aplicaç�
 $ npm i
 $ npm start
 ```
+
+## Complementos da comunidade
+
+- [Verificador de Votos Zuraaa](https://github.com/sayuribotbr/votosZuraaa), permite você obtenha os votos do seu bot a partir da guild do Bots Para Discord
