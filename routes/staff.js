@@ -32,14 +32,14 @@ module.exports = (config, db) => {
         
         db.Bots.findById(req.params.id).then(bot => {
             if (!bot)
-                return res.render("message", {message: "O bot não existe."})
+                return res.render("message", {message: "O bot não existe.", url: "/staff/bots"})
             if (bot.approvedBy)
-                return res.render("message", {message: `O bot ${userToString(bot)} já está aprovado.`})
+                return res.render("message", {message: `O bot ${userToString(bot)} já está aprovado.`, url: "/staff/bots"})
             bot.approvedBy = req.session.user.id;
             bot.save();
             discordBot.sendMessage(config.discord.bot.channels.botLogs, `O bot \`${userToString(bot)}\` foi aprovado por \`${userToString(req.session.user)}\`\n` +
             `${config.server.root}bots/${bot.id}`);
-            res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi aprovado com sucesso.`})
+            res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi aprovado com sucesso.`, url: "/staff/bots"})
         });
     });
     router.get("/bots/:id/rejeitar", (req, res) => {
@@ -63,13 +63,13 @@ module.exports = (config, db) => {
         }
         db.Bots.findById(req.body.id).then(bot => {
             if (!bot)
-                return res.render("message", {message: "O bot não existe."})
+                return res.render("message", {message: "O bot não existe.", url: "/staff/bots"})
             if (bot.approvedBy)
-                return res.render("message", {message: `O bot ${userToString(bot)} foi aprovado.`})
+                return res.render("message", {message: `O bot ${userToString(bot)} foi aprovado.`, url: "/staff/bots"})
             db.Bots.deleteOne({_id: bot.id}).exec();
             discordBot.sendMessage(config.discord.bot.channels.botLogs, `O bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(req.session.user)}\`\n` + 
             `Motivo: \`${req.body.reason}\``);
-            res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi rejeitado com sucesso.`})
+            res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi rejeitado com sucesso.`, url: "/staff/bots"})
         });
     });
 
