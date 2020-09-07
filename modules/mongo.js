@@ -4,7 +4,8 @@ module.exports = class Mongo{
     constructor(config){
         mongoose.connect(config.database.mongo.url, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useFindAndModify: false
         });
 
         this.Users = mongoose.model("users", new mongoose.Schema({
@@ -25,10 +26,9 @@ module.exports = class Mongo{
                 nextVote: Date
             },
             details: {
-                customURL: String,
-                bio: String
-            },
-            permissions: Array
+                description: String,
+                role: Number
+            }
         }));
 
         this.Bots = mongoose.model("bots", new mongoose.Schema({
@@ -65,7 +65,7 @@ module.exports = class Mongo{
                 otherOwners: [
                     {
                         ref: "users",
-                        type: String    
+                        type: String
                     }
                 ],
                 customURL: String
@@ -75,7 +75,10 @@ module.exports = class Mongo{
                 type: String
             },
             votes: {
-                current: Number
+                current: {
+                    default: 0,
+                    type: Number
+                }
             },
             count: {
                 guild: Number

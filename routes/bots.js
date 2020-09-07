@@ -99,7 +99,7 @@ module.exports = (config, db) => {
                 url: `/bots/${dbot.details.customURL || dbot.id}/`,
                 support: dbot.details.supportServer,
                 website: dbot.details.website,
-                owners: [...dbot.details.otherOwners, dbot.owner].filter(
+                owners: [...(dbot.details.otherOwners || []), dbot.owner].filter(
                   (x, index, self) =>
                     self.findIndex(y => y.id == x.id) == index
                   ),
@@ -203,10 +203,11 @@ module.exports = (config, db) => {
             username: dbot.username,
             discriminator: dbot.discriminator
           }, dbot.owner, owners, botTags, dbot);
+          const url = dbot.details.customURL || dbot.id;
           dBot.sendMessage(config.discord.bot.channels.botLogs,
             `\`${userToString(req.session.user)}\` editou o bot **\`${userToString(dbot)}\`** (${dbot.id}).\n` + 
-            `${config.server.root}bots/${dbot.details.customURL || dbot.id}`);
-          res.render("message", {message: `Você editou o bot ${userToString(dbot)} com sucesso.`, title: "Sucesso"})
+            `${config.server.root}bots/${url}`);
+          res.render("message", {message: `Você editou o bot ${userToString(dbot)} com sucesso.`, title: "Sucesso", url: `/bots/${url}`})
         }
       });
     });
@@ -358,10 +359,10 @@ module.exports = (config, db) => {
     bot.avatar = botUser.avatar;
     bot.owner = userId;
     bot.status = "online"; // alterar
-    bot.dates.sent = Date.now();
     bot.details = {
       prefix: b.prefix,
       tags: botTags,
+      customInviteLink: b.custominvite,
       library: b.library,
       shortDescription: b.shortdesc,
       longDescription: b.longdesc,

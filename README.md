@@ -51,6 +51,7 @@ Na pasta da aplicação crie um arquivo chamado config.json
                 "botLogs": "ID do canal para enviar os logs"
             }
         },
+        "ownerId": "ID da pessoa que vai ter permissão para adicionar administradores",
         "endpoints": {
             "userMe": "https://discord.com/api/users/@me"
         },

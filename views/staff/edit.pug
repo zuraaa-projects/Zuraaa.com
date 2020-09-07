@@ -1,0 +1,26 @@
+extends ../layouts/layout
+
+block content
+    .container.main-container
+        .box
+            p.title.is-size-4 EDITAR STAFFER
+            form#form(method="POST")
+                .field.is-horizontal
+                    .field-label.is-normal.has-text-left
+                        label.label ID
+                    .field-body
+                        .field.is-narrow
+                            .control
+                                input.input(maxlength="18" name="id")
+                .field.is-horizontal
+                    .field-label.is-normal.has-text-left
+                        label.label Cargo
+                    .field-body
+                        .field
+                            .control
+                                .select
+                                    select(name="role")
+                                        each val, key in roles
+                                            option(value=val)=key
+                                
+                button.button EDITAR
