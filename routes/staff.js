@@ -38,7 +38,7 @@ module.exports = (config, db) => {
                 return res.render("message", {message: `O bot ${userToString(bot)} já está aprovado.`, url: "/staff/bots"})
             bot.approvedBy = req.session.user.id;
             bot.save();
-            discordBot.sendMessage(config.discord.bot.channels.botLogs, `O bot \`${userToString(bot)}\` foi aprovado por \`${userToString(req.session.user)}\`\n` +
+            discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi aprovado por \`${userToString(req.session.user)}\`\n` +
             `${config.server.root}bots/${bot.id}`);
             const allOwners = [...(bot.details.otherOwners || []), bot.owner];
             for (let i = 0; i < allOwners.length; i++) {
@@ -74,7 +74,7 @@ module.exports = (config, db) => {
             if (bot.approvedBy)
                 return res.render("message", {message: `O bot ${userToString(bot)} foi aprovado.`, url: "/staff/bots"})
             db.Bots.deleteOne({_id: bot.id}).exec();
-            discordBot.sendMessage(config.discord.bot.channels.botLogs, `O bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(req.session.user)}\`\n` + 
+            discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(req.session.user)}\`\n` + 
             `Motivo: \`${req.body.reason}\``);
             res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi rejeitado com sucesso.`, url: "/staff/bots"})
         });
