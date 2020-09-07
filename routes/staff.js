@@ -19,14 +19,14 @@ module.exports = (config, db) => {
         });
     });
 
-    router.get("/bots/:id/aprovar", (req, res) => {
+    router.get("/bots/:id/aprovar", async (req, res) => {
         if (!req.session.user) {
             req.session.path = req.originalUrl;
             return res.redirect("/oauth2/login");
         }
         if (req.session.user.id != config.discord.ownerId) {
-            const user = db.Users.findById(req.session.user.id);
-            if (!user || !user.details.role || user.details.role < 1) 
+            const user = await db.Users.findById(req.session.user.id).exec();
+            if (!user || !user.details || !user.details.role || user.details.role < 1) 
                 return res.sendStatus(403);
         }
         
@@ -57,7 +57,7 @@ module.exports = (config, db) => {
             return res.redirect("/oauth2/login");
         }
         if (req.session.user.id != config.discord.ownerId) {
-            const user = db.Users.findById(req.session.user.id);
+            const user = await db.Users.findById(req.session.user.id).exec();
             if (!user || !user.details.role || user.details.role < 1) 
                 return res.sendStatus(403);
         }
@@ -85,14 +85,14 @@ module.exports = (config, db) => {
         res.render("staff/edit", {roles: {nenhum: 0, aprovador: 1, administrador: 2}});
     });
 
-    router.post("/edit", (req, res) => {
+    router.post("/edit", async (req, res) => {
         if (!req.session.user) {
             req.session.path = req.originalUrl;
             return res.redirect("/oauth2/login");
         }
         let perm = req.session.user.id == config.discord.ownerId ? 3 : 0;
         if (!perm) {
-            const user = db.Users.findById(req.session.user.id);
+            const user = await db.Users.findById(req.session.user.id).exec();
             if (user && user.details)
                 perm = user.details.role;
         }
