@@ -16,7 +16,7 @@ module.exports = (config, db) => {
             return res.sendStatus(403);
         res.render("staff/bots", {
             bots: (await db.Bots.find({approvedBy: null}).exec()).map(partialBotObject),
-            bpdId: config.discord.bpdId
+            bpdId: config.discord.addId
         });
     });
 
