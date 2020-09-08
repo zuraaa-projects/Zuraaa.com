@@ -4,7 +4,8 @@ module.exports = class Mongo {
     constructor(config) {
         mongoose.connect(config.database.mongo.url, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useFindAndModify: false
         });
 
         this.Votes = mongoose.model("votes", new mongoose.Schema({
@@ -32,15 +33,17 @@ module.exports = class Mongo {
                 contentType: String
             },
             dates: {
-                firstSeen: Date,
+                firstSeen: {
+                    default: Date.now,
+                    type: Date
+                },
                 lastBotAdd: Date,
                 nextVote: Date
             },
             details: {
-                customURL: String,
-                bio: String
-            },
-            permissions: Array
+                description: String,
+                role: Number
+            }
         }));
 
         this.Bots = mongoose.model("bots", new mongoose.Schema({
@@ -58,7 +61,10 @@ module.exports = class Mongo {
                 type: String
             },
             dates: {
-                sent: Date,
+                sent: {
+                    default: Date.now,
+                    type: Date
+                },
                 approved: Date
             },
             details: {

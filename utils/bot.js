@@ -9,7 +9,7 @@ function partialBotObject(bot) {
     status: bot.status,
     description: bot.details.shortDescription,
     votes: bot.votes ? bot.votes.current : -1,
-    guilds: bot.count ? bot.count.guilds : -1,
+    guilds: bot.count ? bot.count.guilds : undefined,
     baseUrl: `/bots/${bot.details.customURL || bot.id || bot._id}/`
   };
 }

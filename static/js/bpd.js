@@ -13,6 +13,14 @@ $.get("/userdata", function(user) {
             $("#navavatar").prop("src", avatarUrl(user));
             $("#navusername").text(user.username);
             $("#navprofile").prop("href", "/user/" + user.id);
+            if (user.role) {
+                var divider = $("#divider");
+                if (user.role > 0)
+                    divider.before($("<a class='navbar-item' href='/staff/bots'>Bots</a>"));
+                if (user.role > 1)
+                    divider.before($("<a class='navbar-item' href='/staff/edit'>Editar staff</a>"));
+
+            }
         }
         else
         {

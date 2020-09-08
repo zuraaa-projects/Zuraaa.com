@@ -24,8 +24,16 @@ module.exports = (config) => {
         });
     }
 
+    function addRole(guildId, memberId, roleId) {
+        fetch(`${baseUrl}guilds/${guildId}/members/${memberId}/roles/${roleId}`, {
+            headers,
+            method: "PUT"
+        });
+    }
+
     return {
         fetchUser,
-        sendMessage
+        sendMessage,
+        addRole
     };
 };

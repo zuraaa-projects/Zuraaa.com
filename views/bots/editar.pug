@@ -56,7 +56,7 @@ block content
                         p.control
                             a.button.is-static https://discord.gg/
                         p.control
-                            input.input#support(maxlength="20" name="support" type="text" value=bot.details.supportServer)
+                            input.input#support(maxlength="20" name="server" type="text" value=bot.details.supportServer)
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
                     label.label Convite customizado
@@ -64,6 +64,13 @@ block content
                     .field
                         .control
                             input.input#invite(maxlength="2083" name="custominvite" type="text" placeholder="https://sitedomeubot.com.br/adicionar" value=bot.details.customInviteLink)
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Site
+                .field-body
+                    .field
+                        .control
+                            input.input#site(maxlength="2083" name="website" type="text" placeholder="https://sitedomeubot.com.br/" value=bot.details.website)
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
                     label.label Prefixo *
