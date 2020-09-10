@@ -60,7 +60,7 @@ module.exports = (config, mongo) => {
     }
 
     async function saveData(user){
-        let userFind = await mongo.Users.findById(user.id).exec();
+        const userFind = await cache(config).saveCached(await mongo.Users.findById(user.id).exec())
         if(userFind){
             userFind.username = user.username;
             userFind.discriminator = user.discriminator;
@@ -73,9 +73,8 @@ module.exports = (config, mongo) => {
                 avatar: user.avatar
             });
         }
-        const element = await cache(config).saveCached(userFind)
-        element.save();
-        return element;
+        userFind.save();
+        return userFind;
     }
 
     return router;

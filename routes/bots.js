@@ -142,34 +142,40 @@ module.exports = (config, db) => {
       return res.redirect("/oauth2/login");
     }
     if (!(await captchaIsValid(config.recaptcha, req.body["g-recaptcha-response"])))
-        return res.render("message", {
-            message: "O Captcha precisa ser validado.",
-            url: req.originalUrl,
-    });
-    const user = await db.Users.findById(req.session.user.id);
-    if (user) {
+      return res.render("message", {
+        message: "O Captcha precisa ser validado.",
+        url: req.originalUrl,
+      });
+      db.Users.findById(req.session.user.id).then(user => {
+      if (user) {
         const next = user.dates.nextVote;
         const now = new Date();
-        if (next && next > now) 
-            return res.render("message", {
-                message: `Você precisa esperar até ${next.getHours()}:${next.getMinutes()} para poder votar novamente.`
-            });
+        if (next && next > now) {
+          let time = `${next.getHours().toString().padStart(2, 0)}h`;
+          const minutes = next.getMinutes();
+          if (minutes)
+            time += `${minutes.toString().padStart(2, 0)}min`;
+          return res.render("message", {
+            message: `Você precisa esperar até ás ${time} para poder votar novamente.`
+          });
+        }
         getBotBy(req.params.id).then(dot => {
-            if (!dot)
-                return res.sendStatus(404);
-            now.setHours(now.getHours() + 8);
-            user.dates.nextVote = now;
-            user.save();
-            dot.votes.current++;
-            dot.save();
-            dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\`\n` +
-            `${config.server.root}bots/${dot.details.customURL || dot.id}`);
-            res.render("message", {
-                title: "Sucesso",
-                message: `Você votou em ${dot.username} com sucesso.`
-            });
-    });    
-    }
+        if (!dot)
+          return res.sendStatus(404);
+        now.setHours(now.getHours() + 8);
+        user.dates.nextVote = now;
+        user.save();
+        dot.votes.current++;
+        dot.save();
+        dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\`\n` +
+          `${config.server.root}bots/${dot.details.customURL || dot.id}`);
+        res.render("message", {
+          title: "Sucesso",
+          message: `Você votou em ${dot.username} com sucesso.`
+          });
+        });
+      }
+    });
   });
 
   router.get("/:id/editar", (req, res) => {
