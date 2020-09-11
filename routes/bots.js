@@ -365,18 +365,18 @@ module.exports = (config, db) => {
     bot.avatar = botUser.avatar;
     bot.owner = userId;
     bot.status = "online"; // alterar
-    bot.details = {
-      prefix: b.prefix,
-      tags: botTags,
-      customInviteLink: b.custominvite,
-      library: b.library,
-      shortDescription: b.shortdesc,
-      longDescription: b.longdesc,
-      htmlDescription: md.render(b.longdesc),
-      otherOwners: owners.filter(owner => owner != userId),
-      website: b.website,
-      supportServer: b.server
-    }
+    bot.details = bot.details || {}
+    bot.details.prefix = b.prefix;
+    bot.details.tags = botTags;
+    bot.details.customInviteLink = b.custominvite;
+    bot.details.library = b.library;
+    bot.details.shortDescription = b.shortdesc;
+    bot.details.longDescription = b.longdesc;
+    bot.details.htmlDescription = md.render(b.longdesc);
+    bot.details.otherOwners = owners.filter(owner => owner != userId);
+    bot.details.website = b.website;
+    bot.details.supportServer = b.server;
+    
     cache(config).saveCached(bot).then(dbBot => dbBot.save());
   }
   return router;

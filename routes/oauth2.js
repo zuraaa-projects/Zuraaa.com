@@ -60,19 +60,14 @@ module.exports = (config, mongo) => {
     }
 
     async function saveData(user){
-        const userFind = await cache(config).saveCached(await mongo.Users.findById(user.id).exec())
-        if(userFind){
-            userFind.username = user.username;
-            userFind.discriminator = user.discriminator;
-            userFind.avatar = user.avatar;
-        }else{
-            userFind = new mongo.Users({
-                _id: user.id,
-                username: user.username,
-                discriminator: user.discriminator,
-                avatar: user.avatar
+        let userFind = await mongo.Users.findById(user.id).exec() ||
+            new mongo.Users({
+                _id: user.id
             });
-        }
+        userFind = await cache(config).saveCached(userFind);
+        userFind.username = user.username;
+        userFind.discriminator = user.discriminator;
+        userFind.avatar = user.avatar;
         userFind.save();
         return userFind;
     }
