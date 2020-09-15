@@ -52,7 +52,7 @@ module.exports = (config, db) => {
             res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi aprovado com sucesso.`, url: "/staff/bots"})
         });
     });
-    router.get("/bots/:id/rejeitar", (req, res) => {
+    router.get("/bots/:id/rejeitar", async (req, res) => {
         if (!req.session.user) {
             req.session.path = req.originalUrl;
             return res.redirect("/oauth2/login");
@@ -86,7 +86,7 @@ module.exports = (config, db) => {
         });
     });
 
-    router.get("/edit", (req, res) => {
+    router.get("/edit", async (req, res) => {
         if (!req.session.user) {
             req.session.path = req.originalUrl;
             return res.redirect("/oauth2/login");
