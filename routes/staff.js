@@ -12,8 +12,11 @@ module.exports = (config, db) => {
             req.session.path = req.originalUrl;
             return res.redirect("/oauth2/login");
         }
-        if (!req.session.user.role || req.session.user.role < 1)
-            return res.sendStatus(403);
+        if (req.session.user.id != config.discord.ownerId) {
+            const user = await db.Users.findById(req.session.user.id).exec();
+            if (!user || !user.details.role || user.details.role < 1) 
+                return res.sendStatus(403);
+        }
         res.render("staff/bots", {
             bots: (await db.Bots.find({approvedBy: null}).exec()).map(partialBotObject),
             bpdId: config.discord.addId
@@ -27,7 +30,7 @@ module.exports = (config, db) => {
         }
         if (req.session.user.id != config.discord.ownerId) {
             const user = await db.Users.findById(req.session.user.id).exec();
-            if (!user || !user.details || !user.details.role || user.details.role < 1) 
+            if (!user || !user.details.role || user.details.role < 1) 
                 return res.sendStatus(403);
         }
         
@@ -54,8 +57,11 @@ module.exports = (config, db) => {
             req.session.path = req.originalUrl;
             return res.redirect("/oauth2/login");
         }
-        if (!req.session.user.role || req.session.user.role < 1)
-            return res.sendStatus(403);
+        if (req.session.user.id != config.discord.ownerId) {
+            const user = await db.Users.findById(req.session.user.id).exec();
+            if (!user || !user.details.role || user.details.role < 1) 
+                return res.sendStatus(403);
+        }
         res.render("staff/reject", {id: req.params.id});
     });
     router.post("/bots/rejeitar", async (req, res) => {
@@ -85,9 +91,11 @@ module.exports = (config, db) => {
             req.session.path = req.originalUrl;
             return res.redirect("/oauth2/login");
         }
-        
-        if (!req.session.user.role || req.session.user.role < 2)
-            return res.sendStatus(403);
+        if (req.session.user.id != config.discord.ownerId) {
+            const user = await db.Users.findById(req.session.user.id).exec();
+            if (!user || !user.details.role || user.details.role < 2) 
+                return res.sendStatus(403);
+        }
         
         res.render("staff/edit", {roles: {nenhum: 0, aprovador: 1, administrador: 2}});
     });
