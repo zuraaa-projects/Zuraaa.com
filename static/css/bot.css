@@ -32,3 +32,12 @@
 .buttons {
     padding-bottom: 10px;
 }
+
+.about {
+    display: flex;
+    width: 100%;
+}
+
+.about > p {
+    max-width: 500px;
+}

@@ -7,7 +7,8 @@ block content
         h1.username.is-size-1.has-text-white
             | #{bot.name}
             span.is-size-4.has-text-grey-light ##{bot.tag}
-        p.about.is-size-5.has-text-grey-light #{bot.bio}
+        .about
+            p.is-size-5.has-text-grey-light #{bot.bio}
         #tags.is-inline-block
             span.align.has-text-white Tags: 
             - let i = 0;
