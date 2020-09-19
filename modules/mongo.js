@@ -78,7 +78,13 @@ module.exports = class Mongo{
                 current: {
                     default: 0,
                     type: Number
-                }
+                },
+                voteslog: [
+                    {
+                        ref: "users",
+                        type: String
+                    }
+                ]
             },
             count: {
                 guild: Number

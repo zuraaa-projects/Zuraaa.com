@@ -166,6 +166,7 @@ module.exports = (config, db) => {
         user.dates.nextVote = now;
         user.save();
         dot.votes.current++;
+        dot.votes.voteslog.push(user.id)
         dot.save();
         dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\`\n` +
           `${config.server.root}bots/${dot.details.customURL || dot.id}`);
