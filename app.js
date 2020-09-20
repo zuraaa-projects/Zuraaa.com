@@ -32,7 +32,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static')));
 
-app.use(express.coo)
 
 app.use(session({
   secret: config.server.session.secret,
