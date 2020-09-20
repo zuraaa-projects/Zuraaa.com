@@ -5,3 +5,9 @@
 .bot-card {
     margin-right: 15px;
 }
+
+@media screen and (min-width:1216px) {
+    .container {
+        max-width:1245px;
+    }
+}
