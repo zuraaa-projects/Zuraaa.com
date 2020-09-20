@@ -1,5 +1,6 @@
 const express = require("express");
 const botFilter = require("../../utils/botFilter");
+const {botObjectSender} = require("../../utils/bot");
 const router = express.Router();
 
 module.exports = (mongo) => {
@@ -15,7 +16,12 @@ module.exports = (mongo) => {
     });
 
     router.get("/:id/bots", async (req, res) => {
-        res.send((await mongo.Bots.find().or([{owner: req.params.id}, {"details.otherOwners": req.params.id}]).select(botFilter(req.query))));
+        const documents = await mongo.Bots.find().or([{owner: req.params.id}, {"details.otherOwners": req.params.id}]).select(botFilter(req.query));
+        for(let i = 0; i < documents.length; i++){
+            documents[i] = botObjectSender(documents[i]);
+        }
+        
+        res.send(documents);
     })
     return router;
 }

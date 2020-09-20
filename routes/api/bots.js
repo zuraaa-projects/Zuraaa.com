@@ -1,6 +1,7 @@
 const express = require("express");
 const botFilter = require("../../utils/botFilter");
 const router = express.Router();
+const {botObjectSender} = require("../../utils/bot");
 
 module.exports = (mongo) => {
     const simpleBotQuery = "-details.longDescription -details.htmlDescription ";
@@ -11,11 +12,17 @@ module.exports = (mongo) => {
         const limit = (!isNaN(req.query.limit) && req.query.limit > 0 && req.query.limit < 15)
             ? Number(req.query.limit) : 15;
         
-        res.send(await mongo.Bots.find().where("approvedBy").ne(null).select(botFilter(req.query)).skip(page*limit).limit(limit).exec());
+        const documents = await mongo.Bots.find().where("approvedBy").ne(null).select(botFilter(req.query)).skip(page*limit).limit(limit).exec();
+        for(let i = 0; i < documents.length; i++){
+            documents[i] = botObjectSender(documents[i]);
+        }
+        
+        res.send(documents);
     });
 
     router.get("/:id", async (req, res) => {
-        res.send(await findByIdOrURL(req.params.id).select(botFilter(req.query)));
+        const doc = await findByIdOrURL(req.params.id).select(botFilter(req.query));
+        res.send(botObjectSender(doc));
     });
 
     function findByIdOrURL(param) {

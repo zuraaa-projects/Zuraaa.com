@@ -14,6 +14,24 @@ function partialBotObject(bot) {
     };
 }
 
+function botObjectSender(bot) {
+    return {
+        _id: bot._id,
+        username: bot.username,
+        discriminator: bot.discriminator,
+        owner: bot.owner,
+        status: bot.status,
+        dates: bot.dates,
+        details: bot.details,
+        votes: {
+            current: bot.votes.current,
+            voteslog: bot.votes.voteslog
+        },
+
+    }
+}
+
 module.exports = {
     partialBotObject,
+    botObjectSender
 };
