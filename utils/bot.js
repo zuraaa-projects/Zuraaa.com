@@ -20,6 +20,7 @@ function botObjectSender(bot) {
         username: bot.username,
         discriminator: bot.discriminator,
         owner: bot.owner,
+        avatar: bot.avatar,
         status: bot.status,
         dates: bot.dates,
         details: bot.details,
