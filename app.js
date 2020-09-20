@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const session = require("express-session");
+//const session = require("express-session");
 const Mongo = require("./modules/mongo");
 const indexRouter = require('./routes/index');
 const botsRouter = require('./routes/bots');
@@ -12,6 +12,8 @@ const oauth = require('./routes/oauth2');
 const user = require('./routes/user');
 const staff = require("./routes/staff");
 const api = require("./routes/api");
+const cookiesession = require("cookie-session");
+
 
 const app = express();
 
@@ -30,10 +32,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static')));
 
+/*
 app.use(session({
   secret: config.server.session.secret,
   resave: true,
-  saveUninitialized: false
+  saveUninitialized: false,
+}));
+*/
+
+app.use(cookiesession({
+  maxAge: 604800000,
+  secret: config.server.session.secret,
+  name: "session"
 }));
 
 app.use('/', indexRouter(db));
