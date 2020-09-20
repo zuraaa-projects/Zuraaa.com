@@ -22,7 +22,9 @@ function botObjectSender(bot) {
         owner: bot.owner,
         avatar: bot.avatar,
         status: bot.status,
-        dates: bot.dates,
+        dates: {
+            sent: bot.dates.sent
+        },
         details: bot.details,
         votes: {
             current: bot.votes.current,
