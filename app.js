@@ -4,6 +4,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require("express-session");
+const Mongosession = require("connect-mongodb-session")(session);
+const helmet = require("helmet");
+
 const Mongo = require("./modules/mongo");
 const indexRouter = require('./routes/index');
 const botsRouter = require('./routes/bots');
@@ -12,7 +15,7 @@ const oauth = require('./routes/oauth2');
 const user = require('./routes/user');
 const staff = require("./routes/staff");
 const api = require("./routes/api");
-const Mongosession = require("connect-mongodb-session")(session);
+
 
 const config = require("./config");
 
@@ -31,6 +34,30 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
+
+app.use(helmet.hidePoweredBy());
+app.use(helmet.expectCt());
+app.use(helmet.referrerPolicy({
+  policy: "no-referrer"
+}));
+app.use(helmet.noSniff());
+app.use(
+  helmet.dnsPrefetchControl({
+    allow: false,
+  })
+);
+app.use(helmet.ieNoOpen());
+app.use(
+  helmet.frameguard({
+    action: "sameorigin",
+  })
+);
+app.use(
+  helmet.permittedCrossDomainPolicies({
+    permittedPolicies: "none",
+  })
+);
+app.use(helmet.xssFilter());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
