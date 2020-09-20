@@ -14,6 +14,7 @@ module.exports = (config) => {
                 contentType: response.headers.get("content-type"),
                 data: image.toString("base64")
             }
+            element.avatar = user.avatar;
         }
         return element;
     }
