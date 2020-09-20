@@ -72,3 +72,4 @@ $ npm start
 ## Complementos da comunidade
 
 - [Verificador de Votos Zuraaa](https://github.com/sayuribotbr/votosZuraaa), permite você obtenha os votos do seu bot a partir da guild do Bots Para Discord
+- [Async-zuraaa-wrapper](https://github.com/NiumXp/Async-zuraaa-wrapper), simples wrapper para pegar usuario a partir da API do Zuraaa
