@@ -84,7 +84,7 @@ module.exports = (config, db) => {
         if(!dbot.details.htmlDescription){
               dbot.details.htmlDescription = md.render(dbot.details.longDescription);
         }
-
+        console.log(dbot);
         cache(config).saveCached(dbot).then(element => {
           element.save();
           const botTags = Object.keys(tags).filter(k=>dbot.details.tags.includes(tags[k]));
@@ -94,6 +94,7 @@ module.exports = (config, db) => {
                 name: dbot.username,
                 tag: dbot.discriminator,
                 bio: dbot.details.shortDescription,
+                votes: dbot.votes.current,
                 tags: botTags,
                 content: dbot.details.htmlDescription,
                 url: `/bots/${dbot.details.customURL || dbot.id}/`,
