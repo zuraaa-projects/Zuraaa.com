@@ -5,7 +5,7 @@ const { partialBotObject } = require("../utils/bot");
 
 module.exports = (db) => {
     router.get("/:tag", (req, res) => {
-        const tagName = tags[req.params.tag];
+        const tagName = req.params.tag
         let page = req.query.page;
         if (!page || isNaN(page) || page < 1) 
             page = 1
