@@ -6,8 +6,8 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "connect-mongodb-session": "^2.4.1",
     "cookie-parser": "~1.4.4",
-    "cookie-session": "^1.4.0",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-session": "^1.17.1",

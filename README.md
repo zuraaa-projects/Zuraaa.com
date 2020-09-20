@@ -19,7 +19,7 @@ Na pasta da aplicação crie um arquivo chamado config.json
         "root": "https://zuraaa.com/",
         "port": 80,
         "session": {
-            "secret": ["Insira pelo menos duas chave para criptografar a session aqui"]
+            "secret": "Insira a chave para criptografar a session aqui"
         }
     },
 

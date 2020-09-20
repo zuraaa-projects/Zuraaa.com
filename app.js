@@ -12,12 +12,17 @@ const oauth = require('./routes/oauth2');
 const user = require('./routes/user');
 const staff = require("./routes/staff");
 const api = require("./routes/api");
-const cookiesession = require("cookie-session");
+const Mongosession = require("connect-mongodb-session")(session);
 
+const config = require("./config");
+
+const storesession = new Mongosession({
+  uri: config.database.mongo.url,
+  collection: "usersession"
+});
 
 const app = express();
 
-const config = require("./config");
 const tag = require('./routes/tag');
 const db = new Mongo(config);
 
@@ -37,9 +42,18 @@ app.use(session({
   secret: config.server.session.secret,
   resave: true,
   saveUninitialized: false,
+  store: storesession
 }));
 
+/*
 
+app.use(cookiesession({
+  maxAge: 604800000,
+  secret: config.server.session.secret,
+  name: "session",
+  secure: false
+}));
+*/
 
 app.use('/', indexRouter(db));
 app.use('/bots', botsRouter(config, db));

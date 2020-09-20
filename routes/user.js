@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Mongo = require('../modules/mongo');
-const {avatarFormat} = require("../utils/user");
 const {partialBotObject} = require("../utils/bot");
 const cache = require("../utils/imageCache");
 
