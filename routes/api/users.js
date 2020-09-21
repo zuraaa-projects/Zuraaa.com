@@ -10,7 +10,9 @@ module.exports = (mongo) => {
             query += " avatarBuffer"
         mongo.Users.findById(req.params.id).select(query).then(user => {
             if (!user)
-                return res.sendStatus(404);
+                return res.status(404).send({
+                    error: `O usuário ${req.params.id} não foi encontrado.`
+                });
             res.send(user);
         });
     });
@@ -19,7 +21,9 @@ module.exports = (mongo) => {
         const user = await mongo.Users.findById(req.params.id);
 
         if(!user)
-            return res.send(404);
+            return res.status(404).send({
+                error: `O usuário ${req.params.id} não foi encontrado.`
+            });
 
         const documents = await mongo.Bots.find().or([{owner: req.params.id}, {"details.otherOwners": req.params.id}]).select(botFilter(req.query));
         if(!documents || documents.length == 0)

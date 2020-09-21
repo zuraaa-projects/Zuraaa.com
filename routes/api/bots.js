@@ -23,7 +23,9 @@ module.exports = (mongo) => {
     router.get("/:id", async (req, res) => {
         const doc = await findByIdOrURL(req.params.id).select(botFilter(req.query));
         if(!doc)
-            return res.send(404)
+            return res.status(404).send({
+                error: `O bot ${req.params.id} não foi encontrado.`
+            })
         res.send(botObjectSender(doc));
     });
 
