@@ -84,6 +84,10 @@ module.exports = (config, db) => {
             db.Bots.deleteOne({_id: bot.id}).exec();
             discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(req.session.user)}\`\n` + 
             `Motivo: \`${req.body.reason}\``);
+
+            discordBot.removeBot(config.discord.addId, bot.id);
+            res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi aprovado com sucesso.`, url: "/staff/bots"})
+
             res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi rejeitado com sucesso.`, url: "/staff/bots"})
         });
     });
