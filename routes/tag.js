@@ -11,7 +11,7 @@ module.exports = (db) => {
         let page = req.query.page;
         if (!page || isNaN(page) || page < 1) 
             page = 1
-        db.Bots.find({"details.tags": tagName}).limit(18).skip((page-1) * 18).exec().then(bots => {
+        db.Bots.find({"details.tags": tagName}).sort({"dates.sent": -1}).limit(18).skip((page-1) * 18).exec().then(bots => {
             res.render("tags", {
                 title: tagFormated, 
                 tag: tagFormated, 

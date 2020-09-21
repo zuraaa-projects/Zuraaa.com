@@ -62,7 +62,7 @@ module.exports = (config, db) => {
       const regex = {$regex: search, $options: "i"};
       params.$or = [{username: regex}, {"details.shortDescription": regex}];
     }
-    db.Bots.find(params).limit(18).skip((page-1) * 18).exec().then(bots => {
+    db.Bots.find(params).sort({"dates.sent": -1}).limit(18).skip((page-1) * 18).exec().then(bots => {
         res.render("bots/bots", {title: "Bots", page, search, bots: (bots || []).map(partialBotObject)});
     });
 });
