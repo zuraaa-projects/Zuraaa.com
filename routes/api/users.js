@@ -16,9 +16,14 @@ module.exports = (mongo) => {
     });
 
     router.get("/:id/bots", async (req, res) => {
+        const user = await mongo.Users.findById(req.params.id);
+
+        if(!user)
+            return res.send(404);
+
         const documents = await mongo.Bots.find().or([{owner: req.params.id}, {"details.otherOwners": req.params.id}]).select(botFilter(req.query));
         if(!documents || documents.length == 0)
-            return res.send(404);
+            return res.status(406).send([])
         for(let i = 0; i < documents.length; i++){
             documents[i] = botObjectSender(documents[i]);
         }
