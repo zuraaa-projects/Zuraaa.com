@@ -31,9 +31,17 @@ module.exports = (config) => {
         });
     }
 
+    function removeBot(guildId, memberId){
+        fetch(`${baseUrl}guilds/${guildId}/members/${memberId}`, {
+            headers,
+            method: "DELETE"
+        })
+    }
+
     return {
         fetchUser,
         sendMessage,
-        addRole
+        addRole,
+        removeBot
     };
 };

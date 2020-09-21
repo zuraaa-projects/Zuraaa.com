@@ -3,7 +3,6 @@ const router = express.Router();
 const { partialBotObject } = require("../utils/bot");
 const { userToString } = require("../utils/user");
 const discordBotM = require("../utils/discordbot");
-const discordbot = require("../utils/discordbot");
 
 module.exports = (config, db) => {
     const discordBot = discordBotM(config); 
@@ -49,6 +48,9 @@ module.exports = (config, db) => {
                     discordBot.addRole(config.discord.bpdId, allOwners[i], config.discord.bot.roles.developer);
                 }, i * 500)
             }
+
+
+            discordBot.removeBot(config.discord.addId, bot.id);
             res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi aprovado com sucesso.`, url: "/staff/bots"})
         });
     });

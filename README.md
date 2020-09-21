@@ -45,18 +45,23 @@ Na pasta da aplicação crie um arquivo chamado config.json
         "secret": "secret do recaptcha"
     },
     "discord": {
+        "bpdId": "guild da botlist",
+        "addId": "guild do servidor de teste de bot",
         "bot": {
-            "token": "token do seu bot",
+            "token": "token bot",
             "channels": {
-                "botLogs": "ID do canal para enviar os logs"
+                "botLogs": "canal de log de eventos do site"
+            },
+            "roles": {
+                "developer": "developper role"
             }
         },
-        "ownerId": "ID da pessoa que vai ter permissão para adicionar administradores",
+        "ownerId": "",
         "endpoints": {
             "userMe": "https://discord.com/api/users/@me"
         },
         "servers": {
-            "support": "https://discord.gg/V3VcDx5"
+            "support": "https://discord.gg/t5qzWQB"
         }
     }
 }
