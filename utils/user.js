@@ -3,10 +3,18 @@ function userToString(user) {
 };
 
 function avatarFormat(user) {
-    const avatar = user.avatar;
-    if (!avatar)
-        return "https://cdn.discordapp.com/embed/avatars/4.png";
-    return "https://cdn.discordapp.com/avatars/" + (user.id || user._id) + "/" + avatar + (avatar.startsWith("a_") ? ".gif" : ".webp?size=1024");
+    const avatarHash = user.avatar;
+
+    if (!avatarHash) {
+        const number = user.discriminator % 5;
+        return `https://cdn.discordapp.com/embed/avatars/${number}.png`;
+    }
+
+    const isAnimatedAvatar = avatarHash.startsWith("a_")
+    const avatarExtension = isAnimatedAvatar ? ".gif" : ".webp?size=1024"
+    const userId = (user.id || user._id)
+
+    return `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}.${avatarExtension}`;
 }
 
 module.exports = {
