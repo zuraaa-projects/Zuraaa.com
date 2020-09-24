@@ -14,7 +14,7 @@ function avatarFormat(user) {
     const avatarExtension = isAnimatedAvatar ? ".gif" : ".webp?size=1024"
     const userId = (user.id || user._id)
 
-    return `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}.${avatarExtension}`;
+    return `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}${avatarExtension}`;
 }
 
 module.exports = {
