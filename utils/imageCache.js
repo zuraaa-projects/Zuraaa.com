@@ -7,6 +7,8 @@ module.exports = (config) => {
 
     async function saveCached(element){
         const user = await app.fetchUser(element.id || element._id);
+        element.username = user.username;
+        element.discriminator = user.discriminator;
         if(user && (user.avatar != element.avatar || !(element.avatarBuffer && element.avatarBuffer.contentType))){
             const response = await fetch(formatter.avatarFormat(user));
             const image = Buffer.from(await response.buffer())
@@ -15,8 +17,6 @@ module.exports = (config) => {
                 data: image.toString("base64")
             }
             element.avatar = user.avatar;
-            element.username = user.username;
-            element.discriminator = user.discriminator;
         }
         return element;
     }
