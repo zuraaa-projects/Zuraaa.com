@@ -69,7 +69,10 @@ app.use(session({
   secret: config.server.session.secret,
   resave: true,
   saveUninitialized: false,
-  store: storesession
+  store: storesession,
+  cookie: {
+    expires: 604800000
+  }
 }));
 
 /*
