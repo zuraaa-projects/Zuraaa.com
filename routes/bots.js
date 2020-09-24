@@ -84,11 +84,9 @@ module.exports = (config, db) => {
         if(!dbot.details.htmlDescription){
               dbot.details.htmlDescription = md.render(dbot.details.longDescription);
         }
-        console.log(dbot);
         cache(config).saveCached(dbot).then(element => {
           element.save();
           const botTags = dbot.details.tags;
-          console.log(botTags);
           res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
             bot: {
                 avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
