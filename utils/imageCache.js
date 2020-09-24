@@ -10,11 +10,12 @@ module.exports = (config) => {
         if(user && (user.avatar != element.avatar || !(element.avatarBuffer && element.avatarBuffer.contentType))){
             const response = await fetch(formatter.avatarFormat(user));
             const image = Buffer.from(await response.buffer())
+            element = user;
             element.avatarBuffer = {
                 contentType: response.headers.get("content-type"),
                 data: image.toString("base64")
             }
-            element.avatar = user.avatar;
+            
         }
         return element;
     }
