@@ -16,6 +16,7 @@ const user = require('./routes/user');
 const staff = require("./routes/staff");
 const api = require("./routes/api");
 
+const admvaga = require('./routes/vaga-adm')
 
 const config = require("./config");
 
@@ -93,6 +94,7 @@ app.use('/user', user(db, config));
 app.use('/tag', tag(db));
 app.use("/staff", staff(config, db));
 app.use("/api", api(db));
+app.use('/', admvaga)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
