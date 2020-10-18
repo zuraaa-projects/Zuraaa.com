@@ -86,8 +86,6 @@ module.exports = (config, db) => {
             `Motivo: \`${req.body.reason}\``);
 
             discordBot.removeBot(config.discord.addId, bot.id);
-            res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi aprovado com sucesso.`, url: "/staff/bots"})
-
             res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi rejeitado com sucesso.`, url: "/staff/bots"})
         });
     });
