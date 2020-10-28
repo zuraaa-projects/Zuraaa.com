@@ -87,9 +87,16 @@ module.exports = (config, db) => {
         cache(config).saveCached(dbot).then(element => {
           element.save();
           const botTags = dbot.details.tags;
+          const avatarUrl = (Buffer.isBuffer(element.avatarBuffer.data)) ? Buffer.from(element.avatarBuffer.data).toString('base64') : element.avatarBuffer.data
+          let owners = [...(dbot.details.otherOwners || []), dbot.owner].filter(
+            (x, index, self) =>
+              self.findIndex(y => y.id == x.id) == index
+            ).forEach(o => {
+              o.avatarBuffer.data = (Buffer.isBuffer(o.avatarBuffer.data)) ? Buffer.from(o.avatarBuffer.data).toString('base64') : o.avatarBuffer.data
+            })
           res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
             bot: {
-                avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
+                avatar: `data:${element.avatarBuffer.contentType};base64, ${avatarUrl}`,
                 name: dbot.username,
                 tag: dbot.discriminator,
                 bio: dbot.details.shortDescription,
@@ -99,10 +106,7 @@ module.exports = (config, db) => {
                 url: `/bots/${dbot.details.customURL || dbot.id}/`,
                 support: dbot.details.supportServer,
                 website: dbot.details.website,
-                owners: [...(dbot.details.otherOwners || []), dbot.owner].filter(
-                  (x, index, self) =>
-                    self.findIndex(y => y.id == x.id) == index
-                  ),
+                owners: ,
                 prefix: dbot.details.prefix,
                 library: dbot.details.library
             },

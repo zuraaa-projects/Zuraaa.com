@@ -17,7 +17,6 @@ module.exports = (mongo, config) => {
                 element.save();
                 
                 const avatarUrl = (Buffer.isBuffer(element.avatarBuffer.data)) ? Buffer.from(element.avatarBuffer.data).toString('base64') : element.avatarBuffer.data
-                console.table({ buffer: Buffer.isBuffer(element.avatarBuffer.data), result: avatarUrl})
                 
                 user ? res.render("user", {
                     user: {
