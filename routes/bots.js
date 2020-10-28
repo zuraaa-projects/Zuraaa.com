@@ -91,7 +91,9 @@ module.exports = (config, db) => {
           const owners = [...(dbot.details.otherOwners || []), dbot.owner].filter(
             (x, index, self) =>
               self.findIndex(y => y.id == x.id) == index
-            ).forEach(o => {
+            )
+            
+            owners.forEach(o => {
               o.avatarBuffer.data = (Buffer.isBuffer(o.avatarBuffer.data)) ? Buffer.from(o.avatarBuffer.data).toString('base64') : o.avatarBuffer.data
             })
           res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
