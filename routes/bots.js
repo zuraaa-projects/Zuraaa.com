@@ -88,7 +88,7 @@ module.exports = (config, db) => {
           element.save();
           const botTags = dbot.details.tags;
           const avatarUrl = (Buffer.isBuffer(element.avatarBuffer.data)) ? Buffer.from(element.avatarBuffer.data).toString('base64') : element.avatarBuffer.data
-          let owners = [...(dbot.details.otherOwners || []), dbot.owner].filter(
+          const owners = [...(dbot.details.otherOwners || []), dbot.owner].filter(
             (x, index, self) =>
               self.findIndex(y => y.id == x.id) == index
             ).forEach(o => {
@@ -106,7 +106,7 @@ module.exports = (config, db) => {
                 url: `/bots/${dbot.details.customURL || dbot.id}/`,
                 support: dbot.details.supportServer,
                 website: dbot.details.website,
-                owners: ,
+                owners,
                 prefix: dbot.details.prefix,
                 library: dbot.details.library
             },
