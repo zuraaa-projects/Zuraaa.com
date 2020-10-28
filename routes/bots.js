@@ -85,9 +85,9 @@ module.exports = (config, db) => {
               dbot.details.htmlDescription = md.render(dbot.details.longDescription);
         }
         cache(config).saveCached(dbot).then(element => {
-          element.save(typeof element.avatarBuffer.data);
+          element.save();
           const botTags = dbot.details.tags;
-          console.table()
+          console.table(typeof element.avatarBuffer.data)
           const avatarUrl = (typeof element.avatarBuffer.data === 'string') ? Buffer.from(element.avatarBuffer.data).toString('base64') : element.avatarBuffer.data
           const owners = [...(dbot.details.otherOwners || []), dbot.owner].filter(
             (x, index, self) =>
