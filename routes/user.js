@@ -21,7 +21,7 @@ module.exports = (mongo, config) => {
                 
                 user ? res.render("user", {
                     user: {
-                        avatar: `data:${element.avatarBuffer.contentType};base64, ${}`,
+                        avatar: `data:${element.avatarBuffer.contentType};base64, ${avatarUrl}`,
                         name: user.username,
                         tag: user.discriminator
                     },
