@@ -15,9 +15,10 @@ module.exports = (mongo, config) => {
                 res.sendStatus(404);
             cache(config).saveCached(user).then(async element => {
                 element.save();
+                const avatarUrl = (Buffer.isBuffer(element.avatarBuffer.contentType)) ? Buffer.from(element.avatarBuffer.contentType).toString('base64') : element.avatarBuffer.contentType
                 user ? res.render("user", {
                     user: {
-                        avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
+                        avatar: `data:${avatarUrl};base64, ${element.avatarBuffer.data}`,
                         name: user.username,
                         tag: user.discriminator
                     },
