@@ -94,7 +94,7 @@ module.exports = (config, db) => {
             )
             
             owners.forEach(o => {
-              o.avatarBuffer.data = (Buffer.isBuffer(o.avatarBuffer.data)) ? Buffer.from(o.avatarBuffer.data).toString('base64') : o.avatarBuffer.data
+              o.avatarBuffer.data = (typeof element.avatarBuffer.data === 'string') ? Buffer.from(o.avatarBuffer.data).toString('base64') : o.avatarBuffer.data
             })
           res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
             bot: {
