@@ -16,13 +16,12 @@ module.exports = (mongo, config) => {
             cache(config).saveCached(user).then(async element => {
                 element.save();
                 
-                const avatarUrl = (Buffer.isBuffer(element.avatarBuffer.contentType)) ? Buffer.from(element.avatarBuffer.contentType).toString('base64') : element.avatarBuffer.contentType
-                
-                console.table({ buffer: Buffer.isBuffer(element.avatarBuffer.contentType), result: avatarUrl})
+                const avatarUrl = (Buffer.isBuffer(element.avatarBuffer.data)) ? Buffer.from(element.avatarBuffer.data).toString('base64') : element.avatarBuffer.data
+                console.table({ buffer: Buffer.isBuffer(element.avatarBuffer.data), result: avatarUrl})
                 
                 user ? res.render("user", {
                     user: {
-                        avatar: `data:${avatarUrl};base64, ${element.avatarBuffer.data}`,
+                        avatar: `data:${element.avatarBuffer.contentType};base64, ${}`,
                         name: user.username,
                         tag: user.discriminator
                     },
