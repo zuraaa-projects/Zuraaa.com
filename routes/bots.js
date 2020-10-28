@@ -88,14 +88,14 @@ module.exports = (config, db) => {
           element.save();
           const botTags = dbot.details.tags;
           console.table(typeof element.avatarBuffer.data)
-          const avatarUrl = (typeof element.avatarBuffer.data === 'string') ? Buffer.from(element.avatarBuffer.data).toString('base64') : element.avatarBuffer.data
+          const avatarUrl = (typeof element.avatarBuffer.data !== 'string') ? Buffer.from(element.avatarBuffer.data).toString('base64') : element.avatarBuffer.data
           const owners = [...(dbot.details.otherOwners || []), dbot.owner].filter(
             (x, index, self) =>
               self.findIndex(y => y.id == x.id) == index
             )
             
             owners.forEach(o => {
-              o.avatarBuffer.data = (typeof element.avatarBuffer.data === 'string') ? Buffer.from(o.avatarBuffer.data).toString('base64') : o.avatarBuffer.data
+              o.avatarBuffer.data = (typeof element.avatarBuffer.data !== 'string') ? Buffer.from(o.avatarBuffer.data).toString('base64') : o.avatarBuffer.data
             })
           res.render("bots/bot" + (req.query.frame ? "frame" : ""), {
             bot: {
