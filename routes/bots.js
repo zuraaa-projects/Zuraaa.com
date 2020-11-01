@@ -81,6 +81,7 @@ module.exports = (config, db) => {
     .populate("details.otherOwners", "_id username discriminator avatarBuffer").exec().then(async dbot => {
           if (!dbot || !dbot.dates.approved){
             const user = await db.Users.findById(req.session.user.id).exec();
+            console.table(user.details.role)
             if (!user || !user.details.role || user.details.role < 1) 
               return res.sendStatus(404); 
           }
