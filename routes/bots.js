@@ -78,7 +78,7 @@ module.exports = (config, db) => {
     db.Bots.findOne({
         $or: [{_id: req.params.id}, {"details.customURL": req.params.id}]
     }).populate("owner", "_id username discriminator avatarBuffer")
-    .populate("details.otherOwners", "_id username discriminator avatarBuffer").exec().then(dbot => {
+    .populate("details.otherOwners", "_id username discriminator avatarBuffer").exec().then(async dbot => {
           if (!dbot || !dbot.dates.approved){
             const user = await db.Users.findById(req.session.user.id).exec();
             if (!user || !user.details.role || user.details.role < 1) 
