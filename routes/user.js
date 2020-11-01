@@ -16,13 +16,12 @@ module.exports = (mongo, config) => {
             cache(config).saveCached(user).then(async element => {
                 element.save();
                 
-                const avatarUrl = (Buffer.isBuffer(element.avatarBuffer.data)) ? Buffer.from(element.avatarBuffer.data).toString('base64') : element.avatarBuffer.data
-                
                 user ? res.render("user", {
                     user: {
-                        avatar: `data:${element.avatarBuffer.contentType};base64, ${avatarUrl}`,
+                        avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}`,
                         name: user.username,
-                        tag: user.discriminator
+                        tag: user.discriminator,
+                        bio: user.details.description || 'Esse usuário ainda não definiu uma biografia.'
                     },
                     bots: (await mongo.Bots.find().or([{ owner: user.id }, { "details.otherOwners": user.id }]).exec()).map(partialBotObject),
                     title: user.username
