@@ -74,12 +74,17 @@ module.exports = (config, db) => {
         }
         return res.render("bots/add", { tags, title: "Adicionar Bot", libraries });
     }
+
     db.Bots.findOne({
         $or: [{_id: req.params.id}, {"details.customURL": req.params.id}]
     }).populate("owner", "_id username discriminator avatarBuffer")
     .populate("details.otherOwners", "_id username discriminator avatarBuffer").exec().then(dbot => {
-          if (!dbot)
-            return res.sendStatus(404); 
+          if (!dbot || !dbot.dates.approved){
+            const user = await db.Users.findById(req.session.user.id).exec();
+            if (!user || !user.details.role || user.details.role < 1) 
+              return res.sendStatus(404); 
+          }
+            
 
         if(!dbot.details.htmlDescription){
               dbot.details.htmlDescription = md.render(dbot.details.longDescription);
