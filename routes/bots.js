@@ -79,7 +79,7 @@ module.exports = (config, db) => {
         $or: [{_id: req.params.id}, {"details.customURL": req.params.id}]
     }).populate("owner", "_id username discriminator avatarBuffer")
     .populate("details.otherOwners", "_id username discriminator avatarBuffer").exec().then(async dbot => {
-          if (!dbot || !dbot.dates.approved){
+          if (!dbot || !dbot.approvedBy){
             if(!req.session.user)
               return res.sendStatus(404); 
             const user = await db.Users.findById(req.session.user.id).exec();
