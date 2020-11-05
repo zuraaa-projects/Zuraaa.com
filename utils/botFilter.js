@@ -1,8 +1,8 @@
 module.exports = (query) => {
     let filter = "-tokens";
-    if (query.buffer === undefined)
+    if (!query.buffer)
         filter = "-avatarBuffer " + filter
-    if (query.simple !== undefined)
+    if (query.simple)
         filter = simpleBotQuery + filter
     return filter;
 }
