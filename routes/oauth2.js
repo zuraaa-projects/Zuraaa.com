@@ -39,6 +39,8 @@ module.exports = (config, mongo) => {
                     req.session.user = jsonUser;
                     const x = await saveData(jsonUser);
                     req.session.user.role = x.id == config.discord.ownerId ? 3 : x.details.role;
+                    req.session.user.buffer = (x.avatarBuffer && x.avatarBuffer.contentType)  &&
+                    "data:" + x.avatarBuffer.contentType + ";base64, " + x.avatarBuffer.data;
                     req.session.save();
                     res.redirect(req.session.path || "/");
                 });

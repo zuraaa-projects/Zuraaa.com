@@ -1,4 +1,6 @@
 window.avatarUrl = function(user) {
+    if (user.buffer)
+        return user.buffer;
     var avatar = user.avatar;
     if (!avatar)
         return "https://cdn.discordapp.com/embed/avatars/4.png";
