@@ -11,7 +11,7 @@ async function captchaIsValid(config, response) {
     },
   }).then((res) => res.json());
 
-  return res.sucess;
+  return res.sucess && res.score >= 0.5;
 }
 
 module.exports = {
