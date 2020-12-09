@@ -10,3 +10,11 @@
 #support {
     max-width: 110px;
 }
+
+.limitedetags {
+    display: block;
+    color: red;
+    font-size: 1rem;
+    margin-top: .25rem;
+    display: none;
+}

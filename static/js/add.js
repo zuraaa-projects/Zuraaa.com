@@ -20,6 +20,21 @@ $(function() {
     });
 });
 
+$(document).ready(function() {
+    $("#tags").click(function() {
+        const tags = $(this).val();        
+        if(tags.length >= 6){
+            $("#limite").css("display", "block")
+        }else{
+            $("#limite").css("display", "none")
+        }
+
+        if(tags.length > 6){
+            console.log( $("option:selected").last().prop("selected", false));
+        }
+    });
+});
+
 function isId(st) {
     return !isNaN(st) && st.length == 18
 }

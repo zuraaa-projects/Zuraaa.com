@@ -15,6 +15,6 @@ block content
                 nav.level
                     .level-left
                         a.button.level-item(href=bot.baseUrl) Página 
-                        a.button.level-item(href=`https://discord.com/oauth2/authorize?client_id=${bot.id}&scope=bot&guild_id=${bpdId}`) Adicionar
-                        a.button.level-item(href=`/staff/bots/${bot.id}/aprovar`) Aprovar
-                        a.button.level-item(href=`/staff/bots/${bot.id}/rejeitar`) Rejeitar
+                        a.button.level-item(href=`https://discord.com/oauth2/authorize?client_id=${bot.id}&scope=bot&guild_id=${bpdId}&disable_guild_select=true` target="_blank") Adicionar
+                        a.button.is-success.level-item(href=`/staff/bots/${bot.id}/aprovar`) Aprovar
+                        a.button.is-danger.level-item(href=`/staff/bots/${bot.id}/rejeitar`) Rejeitar
