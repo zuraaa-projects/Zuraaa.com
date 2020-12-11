@@ -2,7 +2,7 @@ const { NotFound } = require("http-errors");
 const fetch = require("node-fetch");
 
 module.exports = (config) => {
-    const baseUrl = "https://discord.com/api/";
+    const baseUrl = "https://discord.com/api/v8/";
     const headers = {
         Authorization: `Bot ${config.discord.bot.token}`,
         "Content-Type": "application/json"
@@ -12,6 +12,32 @@ module.exports = (config) => {
         const response = await fetch(`${baseUrl}users/${id}`, {headers});
         if (response.status == 200)
             return await response.json();
+    }
+
+    async function criarDm(id){
+        const response = await fetch(`${baseUrl}users/@me/channels`, {
+            headers,
+            method: "POST",
+            body: JSON.stringify({
+                recipient_id: id
+            })
+        });
+        if(response.status == 200){
+            return await response.json();
+        }
+    }
+
+    async function sendMessageDm(id, content) {
+        const dmCriada = await criarDm(id);
+        if(dmCriada){
+            fetch(`${baseUrl}channels/${dmCriada.id}/messages`, {
+                headers,
+                method: "POST",
+                body: JSON.stringify({
+                    embed: content
+                })
+            });
+        }
     }
 
     function sendMessage(channelId, content) {
@@ -42,6 +68,8 @@ module.exports = (config) => {
         fetchUser,
         sendMessage,
         addRole,
-        removeBot
+        removeBot,
+        criarDm,
+        sendMessageDm
     };
 };

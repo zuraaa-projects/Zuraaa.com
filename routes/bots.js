@@ -276,7 +276,12 @@ module.exports = (config, db) => {
                                         url: req.originalUrl,
                                     });
 
-                                dBot.sendMessage(config.discord.bot.channels.botLogs, `\`${userToString(req.session.user)}\` enviou o bot **\`${userToString(user)}\`** (${b.id}) para a aprovação. <@&550700674422276096>`);
+                                dBot.sendMessage(config.discord.bot.channels.botLogs, `\`${userToString(req.session.user)}\` enviou o bot **\`${userToString(user)}\`** (${b.id}) para a aprovação. <@&${config.discord.bot.roles.verifier}>`);
+                                dBot.sendMessageDm(req.session.user.id, {
+                                    title: "O seu bot foi enviado para aprovação",
+                                    color: 0xfbff00,
+                                    description: `O seu bot \`${userToString(user)}\` foi para a fila de aprovação`
+                                });
                                 saveBot(b, user, req.session.user.id, owners, botTags, new db.Bots({ _id: b.id }));
                                 res.render("message", {
                                     title: "Sucesso",

@@ -42,6 +42,11 @@ module.exports = (config, db) => {
             bot.save();
             discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi aprovado por \`${userToString(req.session.user)}\`\n` +
             `${config.server.root}bots/${bot.id}`);
+            discordBot.sendMessageDm(bot.owner, {
+                title: "Sucesso",
+                color: 0x7ED321,
+                description: `O seu bot \`${userToString(bot)}\` foi aprovado por \`${userToString(req.session.user)}\``
+            });
             const allOwners = [...(bot.details.otherOwners || []), bot.owner];
             for (let i = 0; i < allOwners.length; i++) {
                 setTimeout(() => {
@@ -84,7 +89,20 @@ module.exports = (config, db) => {
             db.Bots.deleteOne({_id: bot.id}).exec();
             discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(req.session.user)}\`\n` + 
             `Motivo: \`${req.body.reason}\``);
-
+            discordBot.sendMessageDm(bot.owner, {
+                title: "Não foi dessa vez",
+                color: 0xff0000,
+                description: `O seu bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(req.session.user)}\``,
+                fields: [
+                    {
+                        name: "Motivo:",
+                        value: req.body.reason                  
+                    }
+                ],
+                footer: {
+                    text: "Você pode enviar o bot de novo quando tiver corrigido os os motivos dele ter sido rejeitado"
+                }
+            });
             discordBot.removeBot(config.discord.addId, bot.id);
             res.render("message", {title: "Sucesso", message: `O bot ${userToString(bot)} foi rejeitado com sucesso.`, url: "/staff/bots"})
         });
