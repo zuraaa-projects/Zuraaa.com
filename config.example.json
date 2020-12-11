@@ -38,7 +38,7 @@
             },
             "roles": {
                 "developer": "developper role",
-                "checker": "id do cargo de verificador"
+                "verifier": "id do cargo de verificador"
             }
         },
         "ownerId": "",
