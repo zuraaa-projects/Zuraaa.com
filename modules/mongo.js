@@ -91,6 +91,10 @@ module.exports = class Mongo{
             },
             tokens: {
                 current: String
+            },
+            webhook: {
+                url: String,
+                authorization: String
             }
         }));
     }

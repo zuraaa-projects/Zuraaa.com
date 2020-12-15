@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const tags = require("../utils/tags");
 const bot = require("../utils/discordbot");
+const httpExtensions = require("../utils/httpExtensions")
 const { userToString, avatarFormat } = require("../utils/user");
 const md = require("markdown-it")();
 const libraries = require("../utils/libraries");
@@ -9,7 +10,7 @@ const { captchaIsValid } = require("../utils/captcha");
 const Mongo = require("../modules/mongo");
 const cache = require("../utils/imageCache");
 const colors = require("../utils/colors");
-
+var validUrl = require('valid-url');
 const { partialBotObject } = require("../utils/bot");
 
 function defaultInvite(id) {
@@ -186,6 +187,13 @@ module.exports = (config, db) => {
                     user.dates.nextVote = now;
                     user.save();
                     dot.votes.current++;
+                    const http = httpExtensions();
+                    http.enviarVoto(dot.webhook.url, dot.webhook.authorization, {
+                        id: user._id,
+                        username: user.username,
+                        discriminator: user.discriminator,
+                        avatar: user.avatar
+                    }, dot.votes.current);
                     dot.votes.voteslog.push(user.id)
                     dot.save();
                     dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\`\n` +
@@ -337,7 +345,22 @@ module.exports = (config, db) => {
             });
             return false;
         }
-
+        if(body.webhook){
+            if(!validUrl.isUri(body.webhook)){
+                res.render("message", {
+                    message: "O url do webhook não é valido.",
+                    url: req.originalUrl,
+                });
+                return false;
+            }
+            if(!body.authorization){
+                res.render("message", {
+                    message: "Você tem que especificar o Authorization a ser enviado.",
+                    url: req.originalUrl,
+                });
+                return false;
+            }
+        }
         if (body.support && body.support.length > 2083) {
             res.render("message", {
                 message: "Link do servidor de suporte é inválido.",
@@ -386,6 +409,8 @@ module.exports = (config, db) => {
         bot.discriminator = botUser.discriminator;
         bot.avatar = botUser.avatar;
         bot.owner = userId;
+        bot.webhook.url = b.webhook;
+        bot.webhook.authorization = b.authorization;
         bot.status = "online"; // alterar
         bot.details = bot.details || {}
         bot.details.prefix = b.prefix;
