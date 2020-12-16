@@ -99,7 +99,7 @@ block content
                 .field-body
                     .field
                         .control
-                            input.input#webhook(maxlength="2083" name="authorization" type="text")
+                            input.input#authorization(maxlength="2083" name="authorization" type="text")
                         p.help Header "Authorization" que sera enviado junto
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
@@ -113,5 +113,5 @@ block content
                         p.limitedetags.hidden#limite Você chegou no limite de tags.
                         p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.     
             button.g-recaptcha.button(data-sitekey="6LdHhsUZAAAAACjS-miwB8JcjWbT427rtckYEcmh" data-callback="onSubmit" data-action="submit") Enviar                        
-        button.button#btlegal Testar Webhook
+        button.g-recaptcha.button#btlegal(data-sitekey="6LdHhsUZAAAAACjS-miwB8JcjWbT427rtckYEcmh" data-callback="nomeLegal" data-action="submit") Testar Webhook
         p.limitedetags#sim

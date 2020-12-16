@@ -427,7 +427,10 @@ module.exports = (config, db) => {
                 resposta.sucesso = false;
                 resposta.msg = "Webhook url invalido"
             }
-
+            if(!(await captchaIsValid(config.recaptcha, req.body["g-recaptcha-response"]))){
+                resposta.sucesso = false;
+                resposta.msg = "Captcha invalido"
+            }
             if(resposta.sucesso){
                 const http = httpExtensions();
                 const enviada = await http.enviarVoto(req.body.webhook, req.body.authorization, {

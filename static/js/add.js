@@ -33,26 +33,26 @@ $(document).ready(function() {
             console.log( $("option:selected").last().prop("selected", false));
         }
     });
-
-    $("#btlegal").click(function() {
-        const form = $("#form");
-        $.post("/bots/testarwebsoco", form.serialize(), function(data) {
-            const sim = $("#sim");
-            sim.css("display", "block");
-            if(data.sucesso){
-                sim.css("color", "green");
-            } else{
-                sim.css("color", "red");
-            }
-            sim.text(data.msg);
-        });
-    });
 });
+
+function nomeLegal(token) {
+    const form = $("#form");
+    $.post("/bots/testarwebsoco", form.serialize().replace("&g-recaptcha-response=", "&g-recaptcha-response="+token), function(data) {
+        const sim = $("#sim");
+        sim.css("display", "block");
+        if(data.sucesso){
+            sim.css("color", "green");
+        } else{
+            sim.css("color", "red");
+        }
+        sim.text(data.msg);
+    });
+}
 
 function isId(st) {
     return !isNaN(st) && st.length == 18
 }
 
 function onSubmit(token) {
-    $("#form").submit();
+   $("#form").submit();
 }
