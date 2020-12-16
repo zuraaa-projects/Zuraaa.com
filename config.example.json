@@ -26,7 +26,8 @@
     },
     "recaptcha": {
         "enabled": false,
-        "secret": "secret do recaptcha"
+        "secret": "secret do recaptcha",
+        "public": "chave publica do captcha"
     },
     "discord": {
         "bpdId": "guild da botlist",

@@ -25,35 +25,6 @@ function defaultInvite(id) {
  */
 module.exports = (config, db) => {
     const dBot = bot(config);
-    // router.get("/test", (req, res) => {
-    //   db.Bots.find({$or: [{"owner.avatarBuffer": null}, {"owner.avatarBuffer": null}]}).populate("owner", "_id avatar avatarBuffer").populate("details.otherOwners", "_id avatar avatarBuffer").exec().then(dabot => { 
-    //     for (b of dabot) {
-    //     const owners = [...(b.otherOwners || []), b.owner];
-    //     for (let i = 0; i < owners.length; i++) {
-    //       const dbot = owners[i];
-    //       if (dbot && !(dbot.avatarBuffer && dbot.avatarBuffer.data)) {
-    //         setTimeout(() => {
-    //           cache(config).saveCached(dbot).then(element => {
-    //             element.save();
-    //             console.log(element.id);
-    //           })}, (i+1)*1000);
-    //       }
-    //     }
-    // for (let i = 0; i < dabot.length; i++) {
-    //   const dbot = dabot[i];
-    //   setTimeout(() => {
-    //   cache(config).saveCached(dbot).then(element => {
-    //     element.save();
-    //     console.log(element.id);
-    //   })}, (i+1)*1000);
-    // }
-    // });
-    //   res.sendStatus(200);
-    // })
-    // router.get("/reset", (req, res) => {
-    //   db.Bots.updateMany({}, {"votes.current": 0}).exec();
-    //   res.sendStatus(200);
-    // })
     router.get("/", (req, res) => {
         let page = req.query.page;
         if (!page || isNaN(page) || page < 1)
@@ -76,7 +47,7 @@ module.exports = (config, db) => {
                 req.session.path = req.originalUrl;
                 return res.redirect("/oauth2/login");
             }
-            return res.render("bots/add", { tags, title: "Adicionar Bot", libraries });
+            return res.render("bots/add", { tags, title: "Adicionar Bot", libraries, captcha: config.recaptcha.public });
         }
 
         db.Bots.findOne({
@@ -136,7 +107,6 @@ module.exports = (config, db) => {
             })
     });
 
-
     router.get("/:id/add", (req, res) => {
         getBotBy(req.params.id).then(dbot => {
             if (!dbot)
@@ -153,7 +123,7 @@ module.exports = (config, db) => {
         getBotBy(req.params.id).then(dbot => {
             cache(config).saveCached(dbot).then(element => {
                 element.save();
-                res.render("bots/votar", { title: `Vote em ${dbot.username}`, bot: { name: dbot.username, avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}` } });
+                res.render("bots/votar", {captcha: config.recaptcha.public, title: `Vote em ${dbot.username}`, bot: { name: dbot.username, avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}` } });
             });
         });
     });
@@ -215,9 +185,8 @@ module.exports = (config, db) => {
         }
         getBotBy(req.params.id).then(dbot => {
             if (!dbot) return res.sendStatus(404);
-            if (!([...dbot.details.otherOwners, dbot.owner].includes(req.session.user.id)))
-                return res.sendStatus(403);
-            res.render("bots/editar", { bot: dbot, libraries, tags });
+            if (!([...dbot.details.otherOwners, dbot.owner].includes(req.session.user.id))) return res.sendStatus(403);
+            res.render("bots/editar", { bot: dbot, libraries, tags, captcha: config.recaptcha.public });
         });
     });
 
@@ -431,7 +400,6 @@ module.exports = (config, db) => {
                 resposta.sucesso = false;
                 resposta.msg = "Captcha invalido"
             }
-            console.log(req.body);
             if(resposta.sucesso){
                 const http = httpExtensions();
                 const enviada = await http.enviarVoto(req.body.webhook, req.body.authorization, {

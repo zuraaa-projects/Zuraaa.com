@@ -121,6 +121,6 @@ block content
                                 for tag, key in tags
                                     option(value=key selected=bot.details.tags.some(x=>[tag, key].includes(x)))=tag
                         p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.            
-            button.g-recaptcha.button(data-sitekey="6LdRDQkaAAAAAGmBqRcjVbAnlQKoL9oSFTgcbiRV" data-callback="onSubmit" data-action="submit") Enviar
-        button.g-recaptcha.button#btlegal(data-sitekey="6LdRDQkaAAAAAGmBqRcjVbAnlQKoL9oSFTgcbiRV" data-callback="nomeLegal" data-action="submit") Testar Webhook
+            button.g-recaptcha.button(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar
+        button.g-recaptcha.button#btlegal(data-sitekey=captcha data-callback="nomeLegal" data-action="submit") Testar Webhook
         p.limitedetags#sim
