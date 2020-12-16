@@ -157,14 +157,16 @@ module.exports = (config, db) => {
                     now.setHours(now.getHours() + 8);
                     user.dates.nextVote = now;
                     user.save();
-                    dot.votes.current++;
-                    const http = httpExtensions();
-                    http.enviarVoto(dot.webhook.url, dot.webhook.authorization, {
-                        id: user._id,
-                        username: user.username,
-                        discriminator: user.discriminator,
-                        avatar: user.avatar
-                    }, dot.votes.current);
+                    dot.votes.current++;                        
+                    if(dot.webhook.url){
+                        const http = httpExtensions();
+                        http.enviarVoto(dot.webhook.url, dot.webhook.authorization, {
+                            id: user._id,
+                            username: user.username,
+                            discriminator: user.discriminator,
+                            avatar: user.avatar
+                        }, dot.votes.current);
+                    }
                     dot.votes.voteslog.push(user.id)
                     dot.save();
                     dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\`\n` +
