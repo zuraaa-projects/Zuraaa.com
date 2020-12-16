@@ -2,6 +2,7 @@ const fetch = require("node-fetch");
 
 module.exports = () => {
     async function enviarVoto(url, authorization, usuario, totalVotos){
+        console.log("Enviando(ou tentando) Webhook para: " + url);
         try{
             await fetch(url, {
                 headers: {
@@ -19,7 +20,6 @@ module.exports = () => {
                     total_votes: totalVotos
                 })
             });
-            console.log("Enviado Webhook para: " + url);
             return true;
         }catch{
             return false;

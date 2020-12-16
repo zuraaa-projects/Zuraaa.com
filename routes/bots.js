@@ -431,6 +431,7 @@ module.exports = (config, db) => {
                 resposta.sucesso = false;
                 resposta.msg = "Captcha invalido"
             }
+            console.log(req.body);
             if(resposta.sucesso){
                 const http = httpExtensions();
                 const enviada = await http.enviarVoto(req.body.webhook, req.body.authorization, {
