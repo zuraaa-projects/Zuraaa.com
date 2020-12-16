@@ -19,6 +19,7 @@ module.exports = () => {
                     total_votes: totalVotos
                 })
             });
+            console.log("Enviado Webhook para: " + url);
             return true;
         }catch{
             return false;

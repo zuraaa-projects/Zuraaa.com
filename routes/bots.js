@@ -434,10 +434,10 @@ module.exports = (config, db) => {
             if(resposta.sucesso){
                 const http = httpExtensions();
                 const enviada = await http.enviarVoto(req.body.webhook, req.body.authorization, {
-                    id: "123456789123456789",
-                    username: "PessoaLegal",
-                    discriminator: "0000",
-                    avatar: "48339d6cb5925e682559955a677893fc"
+                    id: req.session.user.id,
+                    username: req.session.user.username,
+                    discriminator: req.session.user.discriminator,
+                    avatar: req.session.user.avatar
                 }, 10);
 
                 if(enviada) {
