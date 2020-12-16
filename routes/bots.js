@@ -12,6 +12,7 @@ const cache = require("../utils/imageCache");
 const colors = require("../utils/colors");
 var validUrl = require('valid-url');
 const { partialBotObject } = require("../utils/bot");
+const { response } = require("express");
 
 function defaultInvite(id) {
     return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`
@@ -404,6 +405,55 @@ module.exports = (config, db) => {
         return true;
     }
 
+    router.post("/testarwebsoco", async (req, res) => {
+        try {
+            if (!req.session.user) {
+                req.session.path = req.originalUrl;
+                return res.redirect("/oauth2/login");
+            }
+
+            let resposta = {
+                sucesso: true
+            };
+            if(!req.body.webhook){
+                resposta.sucesso = false;
+                resposta.msg = "Você tem que falar o url do webhook"
+            }
+            if(!req.body.authorization){
+                resposta.sucesso = false;
+                resposta.msg = "Você tem que especificar o Authorization a ser enviado."
+            }
+            if(!validUrl.isUri(req.body.webhook)){
+                resposta.sucesso = false;
+                resposta.msg = "Webhook url invalido"
+            }
+
+            if(resposta.sucesso){
+                const http = httpExtensions();
+                const enviada = await http.enviarVoto(req.body.webhook, req.body.authorization, {
+                    id: "123456789123456789",
+                    username: "PessoaLegal",
+                    discriminator: "0000",
+                    avatar: "48339d6cb5925e682559955a677893fc"
+                }, 10);
+
+                if(enviada) {
+                    resposta.msg = "Mensagem de teste enviada"
+                }else{
+                    resposta.sucesso = false;
+                    resposta.msg = "Não foi possivel enviar a mensagem de teste"
+                }
+            }
+            res.json(resposta);
+        } catch (error) {
+            console.error(error);
+            return res.render("message", {
+                title: "Erro interno",
+                message: "Ocorreu um erro interno enquanto processávamos sua solicitação, pedimos desculpas pela incoveniência.",
+            });
+        }
+    })
+
     function saveBot(b, botUser, userId, owners, botTags, bot) {
         bot.username = botUser.username;
         bot.discriminator = botUser.discriminator;
@@ -434,3 +484,4 @@ function stringToArray(string) {
     ...new Set(typeof string == "string" ? [string] : string || []),
   ];
 }
+

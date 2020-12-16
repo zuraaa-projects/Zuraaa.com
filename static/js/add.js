@@ -33,6 +33,20 @@ $(document).ready(function() {
             console.log( $("option:selected").last().prop("selected", false));
         }
     });
+
+    $("#btlegal").click(function() {
+        const form = $("#form");
+        $.post("/bots/testarwebsoco", form.serialize(), function(data) {
+            const sim = $("#sim");
+            sim.css("display", "block");
+            if(data.sucesso){
+                sim.css("color", "green");
+            } else{
+                sim.css("color", "red");
+            }
+            sim.text(data.msg);
+        });
+    });
 });
 
 function isId(st) {

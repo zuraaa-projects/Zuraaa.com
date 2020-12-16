@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 
 module.exports = () => {
     async function enviarVoto(url, authorization, usuario, totalVotos){
-        
+        try{
             await fetch(url, {
                 headers: {
                     "Content-Type": "application/json",
@@ -19,6 +19,10 @@ module.exports = () => {
                     total_votes: totalVotos
                 })
             });
+            return true;
+        }catch{
+            return false;
+        }
     }
 
     return {
