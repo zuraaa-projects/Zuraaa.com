@@ -7,12 +7,13 @@ Acompanhe o desenvolvimento [clicando aqui](https://github.com/zuraaa-projects)
 Agradecimento especial ao Naegin pela base do Design.
 
 ## Baixar e inicializar a aplicação:
-Clone o código fonte usando o [Git](https://git-scm.com/downloads)
+
+- Clone o código fonte usando o [Git](https://git-scm.com/downloads)
 ```sh
 $ git clone https://github.com/zuraaa-projects/Zuraaa.com.git
 ```
 
-Na pasta da aplicação crie um arquivo chamado config.json
+- Na pasta da aplicação crie um arquivo chamado config.json
 ```js
 {
     "server": {
@@ -67,14 +68,12 @@ Na pasta da aplicação crie um arquivo chamado config.json
 }
 ```
 
-Após configurar a aplicação basta baixar as dependências e rodar a aplicação:
-
+- Após configurar a aplicação basta baixar as dependências e rodar a aplicação:
 ```sh
 $ npm i
 $ npm start
 ```
 
-## Complementos da comunidade
+## [Docs Oficiais Zuraaa](https://github.com/zuraaa-projects/Zuraaa.com/wiki#zuraaa-docs)
 
-- [Verificador de Votos Zuraaa](https://github.com/sayuribotbr/votosZuraaa), permite você obtenha os votos do seu bot a partir da guild do Bots Para Discord (Javascript)
-- [Async-zuraaa-wrapper](https://github.com/NiumXp/Async-zuraaa-wrapper), simples wrapper para pegar usuario a partir da API do Zuraaa (Python)
+## [Complementos da comunidade](https://github.com/zuraaa-projects/Zuraaa.com/wiki#projetos-da-comunidade)
