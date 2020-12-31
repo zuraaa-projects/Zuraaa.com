@@ -1,6 +1,8 @@
 const fetch = require("node-fetch");
+const bot = require("./discordbot");
 
-module.exports = () => {
+
+module.exports = (config) => {
     async function enviarVoto(url, authorization, usuario, totalVotos){
         console.log("Enviando(ou tentando) Webhook para: " + url);
         try{
@@ -28,8 +30,9 @@ module.exports = () => {
 
     async function pegarServidores(id) {
         const response = await fetch(`http://127.0.0.1:5000/api/bots/${id}`);
-        if (response.status == 200)
+        if (response.status == 200){
             return (await response.json()).guildCount;
+        }
     }
 
 

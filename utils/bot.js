@@ -1,5 +1,4 @@
 function partialBotObject(bot) {
-    console.log(bot);
     return {
         tags: bot.details.tags,
         avatar: bot.avatarBuffer && bot.avatarBuffer.contentType ?
@@ -10,7 +9,7 @@ function partialBotObject(bot) {
         status: bot.status,
         description: bot.details.shortDescription,
         votes: bot.votes ? bot.votes.current : -1,
-        guilds: bot.details.guilds,
+        guilds: bot.details.guilds ? "±" + bot.details.guilds : undefined,
         baseUrl: `/bots/${bot.details.customURL || bot.id || bot._id}/`
     };
 }

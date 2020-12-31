@@ -5,7 +5,7 @@
     
     .avatar(style="background-image: url('" + bot.avatar + "')")
   .details
-    p.heading(title="Tags") #{bot.tags[Math.floor(Math.random() * bot.tags.length)]} | #{bot.guilds || "???"} servidores | #{bot.votes} votos
+    p.heading(title="Tags") #{bot.tags[Math.floor(Math.random() * bot.tags.length)]} |  #{bot.guilds || "???"} servidores | #{bot.votes} votos
     p.title.is-size-4(title=bot.name)
       img(title="Online" src="/img/icons/" + bot.status + ".png" oncontextmenu="return false;")
       | #{bot.name}

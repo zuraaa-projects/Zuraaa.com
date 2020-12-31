@@ -78,7 +78,9 @@ module.exports = (config, db) => {
                         eu nem sei como essa merda de codigo ainda funciona
                         me impressiono todo dia q ele n pego fogo
                     */
-                   dbot.details.guilds = await httpExtensions().pegarServidores(dbot._id);
+                   if(config.discord.atualizarServidores){
+                        dbot.details.guilds = await httpExtensions(config).pegarServidores(dbot._id);
+                   }
                     cache(config).saveCached(dbot).then(element => {
                         element.save();
                         const botTags = dbot.details.tags;
@@ -107,7 +109,7 @@ module.exports = (config, db) => {
                                 owners,
                                 prefix: dbot.details.prefix,
                                 library: dbot.details.library,
-                                guilds: dbot.details.guilds
+                                guilds: dbot.details.guilds ? "±" + dbot.details.guilds : "???"
                             },
                             title: dbot.username,
                             colors,
@@ -173,7 +175,7 @@ module.exports = (config, db) => {
                     user.save();
                     dot.votes.current++;                        
                     if(dot.webhook.url){
-                        const http = httpExtensions();
+                        const http = httpExtensions(config);
                         http.enviarVoto(dot.webhook.url, dot.webhook.authorization, {
                             id: user._id,
                             username: user.username,
@@ -223,7 +225,7 @@ module.exports = (config, db) => {
                     saveBot(req.body, {
                         username: dbot.username,
                         discriminator: dbot.discriminator
-                    }, dbot.owner, owners, botTags, dbot, (await (httpExtensions()).pegarServidores(b.id)) );
+                    }, dbot.owner, owners, botTags, dbot, config.discord.atualizarServidores ? (await (httpExtensions(config)).pegarServidores(b.id)) : null );
                     const url = dbot.details.customURL || dbot.id;
                     dBot.sendMessage(config.discord.bot.channels.botLogs,
                         `\`${userToString(req.session.user)}\` editou o bot **\`${userToString(dbot)}\`** (${dbot.id}).\n` +
@@ -276,7 +278,7 @@ module.exports = (config, db) => {
                                     color: 0xfbff00,
                                     description: `O seu bot \`${userToString(user)}\` foi para a fila de aprovação`
                                 });
-                                saveBot(b, user, req.session.user.id, owners, botTags, new db.Bots({ _id: b.id }), await httpExtensions().pegarServidores(b.id));
+                                saveBot(b, user, req.session.user.id, owners, botTags, new db.Bots({ _id: b.id }), config.discord.atualizarServidores ? await httpExtensions(config).pegarServidores(b.id) : null);
                                 res.render("message", {
                                     title: "Sucesso",
                                     message: `O bot ${userToString(
@@ -417,7 +419,7 @@ module.exports = (config, db) => {
                 resposta.msg = "Captcha invalido"
             }
             if(resposta.sucesso){
-                const http = httpExtensions();
+                const http = httpExtensions(config);
                 const enviada = await http.enviarVoto(req.body.webhook, req.body.authorization, {
                     id: req.session.user.id,
                     username: req.session.user.username,
@@ -461,7 +463,9 @@ module.exports = (config, db) => {
         bot.details.otherOwners = owners.filter(owner => owner != userId);
         bot.details.website = b.website;
         bot.details.supportServer = b.server;
-        bot.details.guilds = servidores;
+        if(config.discord.atualizarServidores){
+            bot.details.guilds = servidores;
+        }
 
         cache(config).saveCached(bot).then(dbBot => dbBot.save());
     }
