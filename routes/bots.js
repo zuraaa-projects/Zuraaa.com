@@ -66,6 +66,19 @@ module.exports = (config, db) => {
                     if (!dbot.details.htmlDescription) {
                         dbot.details.htmlDescription = md.render(dbot.details.longDescription);
                     }
+                    /*
+                        eh serio vei
+                        eh impossivel adicionar ou fazer manutenção nessa porra
+                        so n da, n da pra entender nada
+                        eu desejo morte a os envolvidos que fizerem isso
+                        enquanto isso eu choro
+                        tentanto achar onde eu faço essa merda atualizar
+                        pf alguem me ajuda
+                        eu peço que deus me ajuda com o doçe abraço da morte
+                        eu nem sei como essa merda de codigo ainda funciona
+                        me impressiono todo dia q ele n pego fogo
+                    */
+                   dbot.details.guilds = await httpExtensions().pegarServidores(dbot._id);
                     cache(config).saveCached(dbot).then(element => {
                         element.save();
                         const botTags = dbot.details.tags;
@@ -93,7 +106,8 @@ module.exports = (config, db) => {
                                 website: dbot.details.website,
                                 owners,
                                 prefix: dbot.details.prefix,
-                                library: dbot.details.library
+                                library: dbot.details.library,
+                                guilds: dbot.details.guilds
                             },
                             title: dbot.username,
                             colors,
@@ -209,7 +223,7 @@ module.exports = (config, db) => {
                     saveBot(req.body, {
                         username: dbot.username,
                         discriminator: dbot.discriminator
-                    }, dbot.owner, owners, botTags, dbot);
+                    }, dbot.owner, owners, botTags, dbot, (await (httpExtensions()).pegarServidores(b.id)) );
                     const url = dbot.details.customURL || dbot.id;
                     dBot.sendMessage(config.discord.bot.channels.botLogs,
                         `\`${userToString(req.session.user)}\` editou o bot **\`${userToString(dbot)}\`** (${dbot.id}).\n` +
@@ -262,7 +276,7 @@ module.exports = (config, db) => {
                                     color: 0xfbff00,
                                     description: `O seu bot \`${userToString(user)}\` foi para a fila de aprovação`
                                 });
-                                saveBot(b, user, req.session.user.id, owners, botTags, new db.Bots({ _id: b.id }));
+                                saveBot(b, user, req.session.user.id, owners, botTags, new db.Bots({ _id: b.id }), await httpExtensions().pegarServidores(b.id));
                                 res.render("message", {
                                     title: "Sucesso",
                                     message: `O bot ${userToString(
@@ -428,7 +442,7 @@ module.exports = (config, db) => {
         }
     })
 
-    function saveBot(b, botUser, userId, owners, botTags, bot) {
+    function saveBot(b, botUser, userId, owners, botTags, bot, servidores) {
         bot.username = botUser.username;
         bot.discriminator = botUser.discriminator;
         bot.avatar = botUser.avatar;
@@ -447,6 +461,7 @@ module.exports = (config, db) => {
         bot.details.otherOwners = owners.filter(owner => owner != userId);
         bot.details.website = b.website;
         bot.details.supportServer = b.server;
+        bot.details.guilds = servidores;
 
         cache(config).saveCached(bot).then(dbBot => dbBot.save());
     }

@@ -26,7 +26,15 @@ module.exports = () => {
         }
     }
 
+    async function pegarServidores(id) {
+        const response = await fetch(`http://127.0.0.1:5000/api/bots/${id}`);
+        if (response.status == 200)
+            return (await response.json()).guildCount;
+    }
+
+
     return {
-        enviarVoto
+        enviarVoto,
+        pegarServidores
     };
 };

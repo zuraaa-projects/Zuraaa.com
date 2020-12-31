@@ -62,6 +62,7 @@ module.exports = class Mongo{
                 htmlDescription: String,
                 supportServer: String,
                 website: String,
+                guilds: Number,
                 otherOwners: [
                     {
                         ref: "users",
