@@ -225,7 +225,7 @@ module.exports = (config, db) => {
                     saveBot(req.body, {
                         username: dbot.username,
                         discriminator: dbot.discriminator
-                    }, dbot.owner, owners, botTags, dbot, config.discord.atualizarServidores ? (await (httpExtensions(config)).pegarServidores(b.id)) : null );
+                    }, dbot.owner, owners, botTags, dbot, config.discord.atualizarServidores ? (await (httpExtensions(config)).pegarServidores(dbot.id)) : null );
                     const url = dbot.details.customURL || dbot.id;
                     dBot.sendMessage(config.discord.bot.channels.botLogs,
                         `\`${userToString(req.session.user)}\` editou o bot **\`${userToString(dbot)}\`** (${dbot.id}).\n` +
