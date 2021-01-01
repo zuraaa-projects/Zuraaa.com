@@ -193,7 +193,7 @@ module.exports = (config, db) => {
                     });
                 });
             }
-        });
+        }); 
     });
 
     router.get("/:id/editar", (req, res) => {
@@ -218,7 +218,7 @@ module.exports = (config, db) => {
                 return res.sendStatus(404);
             const botTags = stringToArray(req.body.tags);
             const owners = stringToArray(req.body.owners);
-            validateForm(req.body, config, req, res, botTags, owners).then(result => {
+            validateForm(req.body, config, req, res, botTags, owners).then(async result => {
                 if (result) {
                     if (!([...dbot.details.otherOwners, dbot.owner].includes(req.session.user.id)))
                         return res.sendStatus(403);
