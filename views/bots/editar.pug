@@ -1,7 +1,6 @@
 extends ../layouts/layout
 
 block head
-    script(src="https://www.google.com/recaptcha/api.js")
     script(src="/js/add.js")
     link(rel="stylesheet", href="/css/add.css")
 
@@ -97,22 +96,6 @@ block content
                         p.help Digite até 10.000 caracteres. Markdown permitido.
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
-                    label.label Webhook Url
-                .field-body
-                    .field
-                        .control
-                            input.input#webhook(maxlength="2083" name="webhook" type="text" placeholder="https://sitedomeubot.com.br/webhook" value=bot.webhook.url)
-                        a.help(href="https://github.com/zuraaa-projects/Zuraaa.com/wiki/Votos-Webhook" target="_blank") Documentação
-            .field.is-horizontal
-                .field-label.is-normal.has-text-left
-                    label.label Webhook Authentication header
-                .field-body
-                    .field
-                        .control
-                            input.input#authorization(maxlength="2083" name="authorization" type="text" value=bot.webhook.authorization)
-                        p.help Header "Authorization" que sera enviado junto
-            .field.is-horizontal
-                .field-label.is-normal.has-text-left
                     label.label Tags *
                 .field-body
                     .control
@@ -121,6 +104,5 @@ block content
                                 for tag, key in tags
                                     option(value=key selected=bot.details.tags.some(x=>[tag, key].includes(x)))=tag
                         p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.            
-            button.g-recaptcha.button(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar
-        button.g-recaptcha.button#btlegal(data-sitekey=captcha data-callback="nomeLegal" data-action="submit") Testar Webhook
+            button.button(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar
         p.limitedetags#sim

@@ -174,15 +174,6 @@ module.exports = (config, db) => {
                     user.dates.nextVote = now;
                     user.save();
                     dot.votes.current++;                        
-                    if(dot.webhook.url){
-                        const http = httpExtensions(config);
-                        http.enviarVoto(dot.webhook.url, dot.webhook.authorization, {
-                            id: user._id,
-                            username: user.username,
-                            discriminator: user.discriminator,
-                            avatar: user.avatar
-                        }, dot.votes.current);
-                    }
                     dot.votes.voteslog.push(user.id)
                     dot.save();
                     dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\`\n` +
@@ -305,13 +296,13 @@ module.exports = (config, db) => {
     }
 
     async function validateForm(body, config, req, res, botTags, owners) {
-        if (!(await captchaIsValid(config.recaptcha, body["g-recaptcha-response"]))) {
+       /* if (!(await captchaIsValid(config.recaptcha, body["g-recaptcha-response"]))) {
             res.render("message", {
                 message: "O Captcha precisa ser validado.",
                 url: req.originalUrl,
             });
             return false;
-        }
+        }*/
         if (owners && owners.some((o) => isNaN(o) || o.length != 18)) {
             res.render("message", {
                 message: "Lista de donos inválida.",
