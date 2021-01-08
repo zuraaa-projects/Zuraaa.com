@@ -656,3 +656,8 @@ a.page-option:not(:last-child) {
       margin-top: 100px
   }
 }
+
+#slavei {
+  width: fit-content;
+  margin: auto;
+}
