@@ -2,3 +2,8 @@
     max-width: max-content;
     margin: 0 auto;
 }
+
+.suicidioehumaopcao {
+    display: flex;
+    justify-content: center;
+}
