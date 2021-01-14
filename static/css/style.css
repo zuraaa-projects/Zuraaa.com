@@ -53,6 +53,8 @@ nav.navbar {
   margin-top: 15px;
   background-image: url('../img/logo.png');
   background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 a.navbar-item,
