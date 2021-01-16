@@ -6,6 +6,7 @@ module.exports = (config) => {
     const app = bot(config);
 
     async function saveCached(element){
+        /*
         const user = await app.fetchUser(element.id || element._id);
         element.username = user.username;
         element.discriminator = user.discriminator;
@@ -17,7 +18,7 @@ module.exports = (config) => {
                 data: image.toString("base64")
             }
             element.avatar = user.avatar;
-        }
+        */
         return element;
     }
 

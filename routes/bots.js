@@ -383,58 +383,6 @@ module.exports = (config, db) => {
         return true;
     }
 
-    router.post("/testarwebsoco", async (req, res) => {
-        try {
-            if (!req.session.user) {
-                req.session.path = req.originalUrl;
-                return res.redirect("/oauth2/login");
-            }
-
-            let resposta = {
-                sucesso: true
-            };
-            if(!req.body.webhook){
-                resposta.sucesso = false;
-                resposta.msg = "Você tem que falar o url do webhook"
-            }
-            if(!req.body.authorization){
-                resposta.sucesso = false;
-                resposta.msg = "Você tem que especificar o Authorization a ser enviado."
-            }
-            if(!validUrl.isUri(req.body.webhook)){
-                resposta.sucesso = false;
-                resposta.msg = "Webhook url invalido"
-            }
-            if(!(await captchaIsValid(config.recaptcha, req.body["g-recaptcha-response"]))){
-                resposta.sucesso = false;
-                resposta.msg = "Captcha invalido"
-            }
-            if(resposta.sucesso){
-                const http = httpExtensions(config);
-                const enviada = await http.enviarVoto(req.body.webhook, req.body.authorization, {
-                    id: req.session.user.id,
-                    username: req.session.user.username,
-                    discriminator: req.session.user.discriminator,
-                    avatar: req.session.user.avatar
-                }, 10);
-
-                if(enviada) {
-                    resposta.msg = "Mensagem de teste enviada"
-                }else{
-                    resposta.sucesso = false;
-                    resposta.msg = "Não foi possivel enviar a mensagem de teste"
-                }
-            }
-            res.json(resposta);
-        } catch (error) {
-            console.error(error);
-            return res.render("message", {
-                title: "Erro interno",
-                message: "Ocorreu um erro interno enquanto processávamos sua solicitação, pedimos desculpas pela incoveniência.",
-            });
-        }
-    })
-
     function saveBot(b, botUser, userId, owners, botTags, bot, servidores) {
         bot.username = botUser.username;
         bot.discriminator = botUser.discriminator;
