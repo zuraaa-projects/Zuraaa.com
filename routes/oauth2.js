@@ -29,21 +29,25 @@ module.exports = (config, mongo) => {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                 } 
-            }).then(discordToken => discordToken.json()).then((jsonToken) => {
-                fetch(config.discord.endpoints.userMe, {
-                    method: "get",
-                    headers: {
-                        "Authorization": `Bearer ${jsonToken.access_token}`
-                    } 
-                }).then(discordUser => discordUser.json()).then(async (jsonUser) => {
-                    req.session.user = jsonUser;
-                    const x = await saveData(jsonUser);
-                    req.session.user.role = x.id == config.discord.ownerId ? 3 : x.details.role;
-                    req.session.user.buffer = (x.avatarBuffer && x.avatarBuffer.contentType)  &&
-                    "data:" + x.avatarBuffer.contentType + ";base64, " + x.avatarBuffer.data;
-                    req.session.save();
-                    res.redirect(req.session.path || "/");
-                });
+            }).then(discordToken => {
+                discordToken.text().then(aa => {
+                    console.log(aa);
+                    let jsonToken = JSON.parse(aa);
+                    fetch(config.discord.endpoints.userMe, {
+                        method: "get",
+                        headers: {
+                            "Authorization": `Bearer ${jsonToken.access_token}`
+                        } 
+                    }).then(discordUser => discordUser.json()).then(async (jsonUser) => {
+                        req.session.user = jsonUser;
+                        const x = await saveData(jsonUser);
+                        req.session.user.role = x.id == config.discord.ownerId ? 3 : x.details.role;
+                        req.session.user.buffer = (x.avatarBuffer && x.avatarBuffer.contentType)  &&
+                        "data:" + x.avatarBuffer.contentType + ";base64, " + x.avatarBuffer.data;
+                        req.session.save();
+                        res.redirect(req.session.path || "/");
+                    }); 
+                })
             });
         }else{
             res.redirect("/oauth2/login");
