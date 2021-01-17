@@ -9,7 +9,7 @@ module.exports = (config) => {
     };
 
     async function fetchUser(id) {
-        const response = await fetch(`${baseUrl}users/${id}`, {headers});
+        const response = await fetch(`http://localhost:5001/users/${id}`);
         if (response.status == 200)
             return await response.json();
     }

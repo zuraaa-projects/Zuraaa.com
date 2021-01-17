@@ -1,0 +1,17 @@
+extends layouts/layout
+
+block head
+  script(src="https://www.google.com/recaptcha/api.js" async defer)
+  script.
+    function onSubmit() {
+      document.getElementById('login').submit();
+    }
+
+block content
+  .container.main-container
+    .box.has-text-centered
+      form#login(method="post")
+        h1.title.is-1 Clique no botão abaixo para o login.
+        input(type="hidden", name="code" value=code)
+        button.button.g-recaptcha(data-callback="onSubmit" data-sitekey=captcha) Login
+

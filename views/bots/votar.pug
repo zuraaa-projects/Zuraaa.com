@@ -17,6 +17,4 @@ block content
                 figure.image.is-128x128.container
                     img.is-rounded(src=bot.avatar)                
                 br
-                div.g-recaptcha.suicidioehumaopcao(data-sitekey=captcha)
-                br
-                button.button(data-action="submit") Votar
+                button.button.g-recaptcha(data-callback="onSubmit" data-sitekey=captcha) Votar

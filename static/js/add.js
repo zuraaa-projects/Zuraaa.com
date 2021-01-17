@@ -53,6 +53,6 @@ function isId(st) {
     return !isNaN(st) && st.length == 18
 }
 
-function onSubmit(token) {
+function onSubmit() {
    $("#form").submit();
 }

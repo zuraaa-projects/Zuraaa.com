@@ -12,7 +12,6 @@ const cache = require("../utils/imageCache");
 const colors = require("../utils/colors");
 var validUrl = require('valid-url');
 const { partialBotObject } = require("../utils/bot");
-const { response } = require("express");
 
 function defaultInvite(id) {
     return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`
@@ -296,13 +295,13 @@ module.exports = (config, db) => {
     }
 
     async function validateForm(body, config, req, res, botTags, owners) {
-       /* if (!(await captchaIsValid(config.recaptcha, body["g-recaptcha-response"]))) {
+       if (!(await captchaIsValid(config.recaptcha, body["g-recaptcha-response"]))) {
             res.render("message", {
                 message: "O Captcha precisa ser validado.",
                 url: req.originalUrl,
             });
             return false;
-        }*/
+       }
         if (owners && owners.some((o) => isNaN(o) || o.length != 18)) {
             res.render("message", {
                 message: "Lista de donos inválida.",

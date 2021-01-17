@@ -1,6 +1,7 @@
 extends ../layouts/layout
 
 block head
+    script(src="https://www.google.com/recaptcha/api.js" async defer)
     script(src="/js/add.js")
     link(rel="stylesheet", href="/css/add.css")
 
@@ -103,6 +104,6 @@ block content
                             select#tags(name="tags" multiple)
                                 for tag, key in tags
                                     option(value=key selected=bot.details.tags.some(x=>[tag, key].includes(x)))=tag
-                        p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.            
-            button.button(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar
+                        p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.   
+            button.button.g-recaptcha(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar                        
         p.limitedetags#sim

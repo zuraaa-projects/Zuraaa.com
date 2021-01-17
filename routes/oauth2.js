@@ -3,6 +3,8 @@ const fetch = require('node-fetch');
 const router = express.Router();
 const Mongo = require("../modules/mongo");
 const cache = require("../utils/imageCache");
+const { captchaIsValid } = require("../utils/captcha");
+
 /**
  * 
  * @param {*} config 
@@ -15,7 +17,20 @@ module.exports = (config, mongo) => {
 
     router.get("/callback", (req, res) => {
         const code = req.query.code;
-        if(code){
+        if(code) {
+            res.render('login', {
+                captcha: config.recaptcha.public,
+                code
+            });
+        }
+        else {
+            res.redirect("/oauth2/login");
+        }
+    });
+
+    router.post('/callback', (req, res) => {
+        const { code, ...captcha } = req.body;
+        if (code && captchaIsValid(config.recaptcha, captcha)) {
             fetch(config.oauth.urls.token, {
                 method: "post",
                 body: new URLSearchParams({
@@ -25,13 +40,12 @@ module.exports = (config, mongo) => {
                     scope: "identify",
                     code: code,
                     redirect_uri: config.oauth.urls.redirect,
-                }).toString(),
+                }),
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                 } 
             }).then(discordToken => {
                 discordToken.text().then(aa => {
-                    console.log(aa);
                     let jsonToken = JSON.parse(aa);
                     fetch(config.discord.endpoints.userMe, {
                         method: "get",
@@ -49,8 +63,9 @@ module.exports = (config, mongo) => {
                     }); 
                 })
             });
-        }else{
-            res.redirect("/oauth2/login");
+        }
+        else {
+            res.redirect('/oauth2/login');
         }
     });
 
