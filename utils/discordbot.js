@@ -76,6 +76,7 @@ module.exports = (config) => {
         addRole,
         removeBot,
         criarDm,
-        sendMessageDm
+        sendMessageDm,
+        fetchUserDiscord
     };
 };
