@@ -15,7 +15,9 @@ module.exports = (config) => {
     }
 
     async function fetchUserDiscord(id) {
-        const response = await fetch(`${baseUrl}/users/${id}`);
+        const response = await fetch(`${baseUrl}/users/${id}`, {
+            headers
+        });
         if (response.status == 200)
             return await response.json();
     }
