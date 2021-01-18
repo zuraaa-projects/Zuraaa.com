@@ -14,6 +14,12 @@ module.exports = (config) => {
             return await response.json();
     }
 
+    async function fetchUserDiscord(id) {
+        const response = await fetch(`${baseUrl}/users/${id}`);
+        if (response.status == 200)
+            return await response.json();
+    }
+
     async function criarDm(id){
         const response = await fetch(`${baseUrl}users/@me/channels`, {
             headers,

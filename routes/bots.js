@@ -237,7 +237,7 @@ module.exports = (config, db) => {
             const owners = stringToArray(b.owners);
             validateForm(b, config, req, res, botTags, owners).then(result => {
                 if (result) {
-                    dBot.fetchUser(b.id).then((user) => {
+                    dBot.fetchUserDiscord(b.id).then((user) => {
                         if (!user)
                             return res.render("message", {
                                 message: "O ID fornecido é inválido.",
