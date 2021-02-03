@@ -35,6 +35,6 @@ function botObjectSender(bot) {
 
 module.exports = {
   partialBotObject,
-  partialSelect: 'details.tags username status details.shortDescription votes.current details.customURL',
+  partialSelect: 'details.tags username status details.shortDescription votes.current details.customURL details.guilds',
   botObjectSender,
 };
