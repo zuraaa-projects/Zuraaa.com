@@ -10,9 +10,14 @@ module.exports = (db) => {
     const tagName = req.params.tag;
     const tagFormated = tags[tagName];
     let { page } = req.query;
-    if (!page || Number.isNaN(page) || page < 1) { page = 1; }
+    if (!page || Number.isNaN(page) || page < 1) {
+      page = 1;
+    }
     db.Bots.find({ 'details.tags': tagName }).sort({ 'dates.sent': -1 }).select(partialSelect).limit(18)
       .skip((page - 1) * 18)
+      .setOptions({
+        allowDiskUse: true,
+      })
       .exec()
       .then((bots) => {
         res.render('tags', {
