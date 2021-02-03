@@ -1,3 +1,3 @@
-function onSubmit(token) {
-    $("#votef").submit();
-}
+window.onSubmit = function onSubmit() {
+  $('#votef').submit();
+};

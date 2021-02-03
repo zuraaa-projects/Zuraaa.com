@@ -1,23 +1,23 @@
 function userToString(user) {
-    return `${user.username}#${user.discriminator}`; 
-};
+  return `${user.username}#${user.discriminator}`;
+}
 
 function avatarFormat(user) {
-    const avatarHash = user.avatar;
+  const avatarHash = user.avatar;
 
-    if (!avatarHash) {
-        const number = user.discriminator % 5;
-        return `https://cdn.discordapp.com/embed/avatars/${number}.png`;
-    }
+  if (!avatarHash) {
+    const number = user.discriminator % 5;
+    return `https://cdn.discordapp.com/embed/avatars/${number}.png`;
+  }
 
-    const isAnimatedAvatar = avatarHash.startsWith("a_")
-    const avatarExtension = isAnimatedAvatar ? ".gif" : ".webp?size=1024"
-    const userId = (user.id || user._id)
+  const isAnimatedAvatar = avatarHash.startsWith('a_');
+  const avatarExtension = isAnimatedAvatar ? '.gif' : '.webp?size=1024';
+  const userId = (user.id || user._id);
 
-    return `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}${avatarExtension}`;
+  return `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}${avatarExtension}`;
 }
 
 module.exports = {
-    userToString,
-    avatarFormat
+  userToString,
+  avatarFormat,
 };

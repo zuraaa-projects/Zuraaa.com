@@ -3,31 +3,32 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const session = require("express-session");
-const Mongosession = require("connect-mongodb-session")(session);
-const helmet = require("helmet");
+const session = require('express-session');
+const Mongosession = require('connect-mongodb-session')(session);
+const helmet = require('helmet');
 
-const Mongo = require("./modules/mongo");
+const Mongo = require('./modules/mongo');
 const indexRouter = require('./routes/index');
 const botsRouter = require('./routes/bots');
 const discordRouter = require('./routes/discord');
 const oauth = require('./routes/oauth2');
 const user = require('./routes/user');
-const staff = require("./routes/staff");
-const api = require("./routes/api");
+const staff = require('./routes/staff');
+const api = require('./routes/api');
 
-const admvaga = require('./routes/vaga-adm')
+const admvaga = require('./routes/vaga-adm');
 
-const config = require("./config");
+const config = require('./config');
 
 const storesession = new Mongosession({
   uri: config.database.mongo.url,
-  collection: "usersession"
+  collection: 'usersession',
 });
 
 const app = express();
 
 const tag = require('./routes/tag');
+
 const db = new Mongo(config);
 
 // view engine setup
@@ -39,24 +40,24 @@ app.use(logger('dev'));
 app.use(helmet.hidePoweredBy());
 app.use(helmet.expectCt());
 app.use(helmet.referrerPolicy({
-  policy: "no-referrer"
+  policy: 'no-referrer',
 }));
 app.use(helmet.noSniff());
 app.use(
   helmet.dnsPrefetchControl({
     allow: false,
-  })
+  }),
 );
 app.use(helmet.ieNoOpen());
 app.use(
   helmet.frameguard({
-    action: "sameorigin",
-  })
+    action: 'sameorigin',
+  }),
 );
 app.use(
   helmet.permittedCrossDomainPolicies({
-    permittedPolicies: "none",
-  })
+    permittedPolicies: 'none',
+  }),
 );
 app.use(helmet.xssFilter());
 
@@ -65,15 +66,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static')));
 
-
 app.use(session({
   secret: config.server.session.secret,
   resave: true,
   saveUninitialized: false,
   store: storesession,
   cookie: {
-    expires: 604800000
-  }
+    expires: 604800000,
+  },
 }));
 
 /*
@@ -92,17 +92,17 @@ app.use('/discord', discordRouter(config));
 app.use('/oauth2', oauth(config, db));
 app.use('/user', user(db, config));
 app.use('/tag', tag(db));
-app.use("/staff", staff(config, db));
-app.use("/api", api(db));
-app.use('/', admvaga)
+app.use('/staff', staff(config, db));
+app.use('/api', api(db));
+app.use('/', admvaga);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -114,5 +114,5 @@ app.use(function(err, req, res, next) {
 
 module.exports = {
   app,
-  config
-}
+  config,
+};
