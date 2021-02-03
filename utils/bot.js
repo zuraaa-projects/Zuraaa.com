@@ -2,10 +2,7 @@ function partialBotObject(bot) {
   const id = bot.id || bot._id;
   return {
     tags: bot.details.tags,
-    // avatar: `/avatars/bots/${id}`,
-    avatar: bot.avatarBuffer && bot.avatarBuffer.contentType
-      ? `data:${bot.avatarBuffer.contentType};base64, ${bot.avatarBuffer.data}`
-      : 'https://cdn.discordapp.com/embed/avatars/4.png',
+    avatar: `/avatars/bots/${id}`,
     name: bot.username,
     id,
     status: bot.status,
@@ -38,5 +35,6 @@ function botObjectSender(bot) {
 
 module.exports = {
   partialBotObject,
+  partialSelect: 'details.tags username status details.shortDescription votes.current details.customURL',
   botObjectSender,
 };

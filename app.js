@@ -15,6 +15,7 @@ const oauth = require('./routes/oauth2');
 const user = require('./routes/user');
 const staff = require('./routes/staff');
 const api = require('./routes/api');
+const avatars = require('./routes/avatars');
 
 const admvaga = require('./routes/vaga-adm');
 
@@ -94,6 +95,7 @@ app.use('/user', user(db, config));
 app.use('/tag', tag(db));
 app.use('/staff', staff(config, db));
 app.use('/api', api(db));
+app.use('/avatars', avatars(db));
 app.use('/', admvaga);
 
 // catch 404 and forward to error handler
@@ -102,7 +104,8 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res) => {
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

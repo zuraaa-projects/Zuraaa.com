@@ -11,7 +11,7 @@ const libraries = require('../utils/libraries');
 const { captchaIsValid } = require('../utils/captcha');
 const cache = require('../utils/imageCache');
 const colors = require('../utils/colors');
-const { partialBotObject } = require('../utils/bot');
+const { partialBotObject, partialSelect } = require('../utils/bot');
 
 function defaultInvite(id) {
   return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`;
@@ -160,7 +160,8 @@ module.exports = (config, db) => {
       params.$or = [{ username: regex }, { 'details.shortDescription': regex }];
     }
     params.$and = [{ approvedBy: { $ne: null } }];
-    db.Bots.find(params).sort({ 'dates.sent': -1 }).limit(18).skip((page - 1) * 18)
+    db.Bots.find(params).sort({ 'dates.sent': -1 }).select(partialSelect).limit(18)
+      .skip((page - 1) * 18)
       .exec()
       .then((bots) => {
         res.render('bots/bots', {
