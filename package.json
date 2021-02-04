@@ -16,7 +16,7 @@
     "http-errors": "~1.6.3",
     "markdown-it": "^11.0.0",
     "mongoose": "^5.11.15",
-    "morgan": "~1.9.1",
+    "morgan": "~1.10.0",
     "mquery": ">=3.2.3",
     "node-fetch": "^2.6.1",
     "pug": "^3.0.0",
