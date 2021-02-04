@@ -162,6 +162,9 @@ module.exports = (config, db) => {
     params.$and = [{ approvedBy: { $ne: null } }];
     db.Bots.find(params).sort({ 'dates.sent': -1 }).select(partialSelect).limit(18)
       .skip((page - 1) * 18)
+      .setOptions({
+        allowDiskUse: true,
+      })
       .exec()
       .then((bots) => {
         res.render('bots/bots', {
