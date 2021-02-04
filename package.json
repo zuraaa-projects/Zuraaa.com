@@ -9,7 +9,7 @@
   "dependencies": {
     "connect-mongodb-session": "^2.4.1",
     "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
+    "debug": "~4.3.1",
     "express": "~4.17.1",
     "express-session": "^1.17.1",
     "helmet": "^4.4.1",
