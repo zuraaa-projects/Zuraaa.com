@@ -15,7 +15,7 @@
     "helmet": "^4.1.1",
     "http-errors": "~1.6.3",
     "markdown-it": "^11.0.0",
-    "mongoose": "^5.10.0",
+    "mongoose": "^5.11.15",
     "morgan": "~1.9.1",
     "mquery": ">=3.2.3",
     "node-fetch": "^2.6.1",
