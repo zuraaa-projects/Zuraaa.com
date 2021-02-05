@@ -5,8 +5,8 @@ module.exports = (config) => {
 
   async function saveCached(element) {
     const user = await app.fetchUser(element.id || element._id);
-    element.username = user.nome;
-    element.discriminator = user.discriminator;
+    element.username = user?.nome;
+    element.discriminator = user?.discriminator;
     if (user && (
       user.avatar !== element.avatarHash
       || !(element.avatarBuffer && element.avatarBuffer.contentType)

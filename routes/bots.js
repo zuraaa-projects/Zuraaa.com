@@ -222,6 +222,10 @@ module.exports = (config, db) => {
             dbot.details.guilds = await httpExtensions(config).pegarServidores(dbot._id);
           }
           cache(config).saveCached(dbot).then((element) => {
+            if (!element) {
+              res.sendStatus(404);
+              return;
+            }
             element.save();
             const botTags = dbot.details.tags;
             const avatarUrl = (typeof element.avatarBuffer.data === 'string') ? Buffer.from(element.avatarBuffer.data).toString('base64') : element.avatarBuffer.data;
