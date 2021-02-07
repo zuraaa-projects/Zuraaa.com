@@ -53,6 +53,6 @@ function nomeLegal(token) {
 //   return !Number.isNaN(st) && st.length === 18;
 // }
 
-// function onSubmit() {
-//   $('#form').submit();
-// }
+window.onSubmit = function onSubmit() {
+  $('#form').submit();
+};
