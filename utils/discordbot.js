@@ -10,7 +10,7 @@ module.exports = (config) => {
   async function fetchUser(id) {
     const response = await fetch(`http://localhost:5001/users/${id}`);
     if (response.status === 200) {
-      const bot = response.json();
+      const bot = await response.json();
       bot.discriminator = bot.discriminator.toString().padStart(4, '0')
       return bot
     }
