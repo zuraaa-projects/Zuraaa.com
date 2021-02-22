@@ -48,13 +48,16 @@ nav.navbar {
 }
 
 .navbar-logo {
-  width: 60px;
-  height: 25px;
-  margin-top: 15px;
+  width: 40px;
+  height: 40px;
   background-image: url('../img/logo.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.navbar-brand {
+  align-items: center;
 }
 
 a.navbar-item,
