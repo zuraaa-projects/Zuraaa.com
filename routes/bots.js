@@ -254,7 +254,6 @@ module.exports = (config, db) => {
                 owners,
                 prefix: dbot.details.prefix,
                 library: dbot.details.library,
-                notaVerificador: dbot.details.notaVerificador ? `±${dbot.details.notaVerificador}` : 'O usuário não disponabilizou nenhuma nota.' ,
                 guilds: dbot.details.guilds ? `±${dbot.details.guilds}` : '???',
               },
               title: dbot.username,
