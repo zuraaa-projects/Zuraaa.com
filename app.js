@@ -19,7 +19,7 @@ const avatars = require('./routes/avatars');
 
 const admvaga = require('./routes/vaga-adm');
 
-const config = require('./config');
+const config = require("./config");
 
 const storesession = new Mongosession({
   uri: config.database.mongo.url,
