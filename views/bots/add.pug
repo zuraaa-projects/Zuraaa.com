@@ -102,6 +102,14 @@ block content
                                 for tag, key in tags
                                     option(value=key)=tag
                         p.limitedetags.hidden#limite Você chegou no limite de tags.
-                        p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.     
+                        p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.   
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Nota para o verificador
+                .field-body
+                    .field
+                        .control
+                            textarea#longdesc.textarea(maxlength="10000" name="notaVerificador" rows="8")
+                        p.help Deixe sua nota para o verificador que ira verificar o seu bot  
             button.button.g-recaptcha(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar                        
         p.limitedetags#sim

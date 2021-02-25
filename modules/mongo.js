@@ -61,6 +61,7 @@ module.exports = class Mongo {
         longDescription: String,
         htmlDescription: String,
         supportServer: String,
+        notaVerificador: String,
         website: String,
         github: String,
         guilds: Number,

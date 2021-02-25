@@ -7,6 +7,7 @@ function partialBotObject(bot) {
     id,
     status: bot.status,
     description: bot.details.shortDescription,
+    notaVerificador: bot.details.notaVerificador,
     votes: bot.votes ? bot.votes.current : -1,
     guilds: bot.details.guilds ? `±${bot.details.guilds}` : undefined,
     baseUrl: `/bots/${bot.details.customURL || id}/`,

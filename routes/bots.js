@@ -138,6 +138,7 @@ module.exports = (config, db) => {
     botModel.details.otherOwners = owners.filter((owner) => owner !== userId);
     botModel.details.website = b.website;
     botModel.details.github = b.github;
+    botModel.details.notaVerificador = b.notaVerificador;
     botModel.details.supportServer = b.server;
     if (config.discord.atualizarServidores) {
       botModel.details.guilds = servidores;
@@ -253,6 +254,7 @@ module.exports = (config, db) => {
                 owners,
                 prefix: dbot.details.prefix,
                 library: dbot.details.library,
+                notaVerificador: dbot.details.notaVerificador ? `±${dbot.details.notaVerificador}` : 'O usuário não disponabilizou nenhuma nota.' ,
                 guilds: dbot.details.guilds ? `±${dbot.details.guilds}` : '???',
               },
               title: dbot.username,
