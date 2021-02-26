@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "lintfix": "eslint . --fix"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "connect-mongodb-session": "^2.4.1",
     "cookie-parser": "~1.4.4",
     "debug": "~4.3.1",
@@ -15,6 +17,7 @@
     "helmet": "^4.4.1",
     "http-errors": "~1.6.3",
     "markdown-it": "^12.0.4",
+    "moment-timezone": "^0.5.33",
     "mongoose": "^5.11.15",
     "morgan": "~1.10.0",
     "mquery": ">=3.2.3",

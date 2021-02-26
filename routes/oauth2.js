@@ -1,32 +1,22 @@
 const express = require('express');
-const fetch = require('node-fetch');
 
 const router = express.Router();
-const cache = require('../utils/imageCache');
 const { captchaIsValid } = require('../utils/captcha');
 
 /**
  *
  * @param {*} config
- * @param {Mongo} mongo
+ * @param {*} api
  */
-module.exports = (config, mongo) => {
+module.exports = (config, api) => {
   function generateUrl() {
-    return `${config.oauth.urls.authorization}?client_id=${config.oauth.client.id}`
-        + `&redirect_uri=${encodeURIComponent(config.oauth.urls.redirect)}&response_type=code&scope=identify`;
-  }
-
-  async function saveData(user) {
-    let userFind = await mongo.Users.findById(user.id).exec()
-            || new mongo.Users({
-              _id: user.id,
-            });
-    userFind = await cache(config).saveCached(userFind);
-    userFind.username = user.username;
-    userFind.discriminator = user.discriminator;
-    userFind.avatar = user.avatar;
-    userFind.save();
-    return userFind;
+    const params = new URLSearchParams({
+      client_id: config.oauth.client.id,
+      redirect_uri: config.oauth.urls.redirect,
+      response_type: 'code',
+      scope: 'identify',
+    });
+    return `${config.oauth.urls.authorization}?${params}`;
   }
 
   router.get('/login', (req, res) => {
@@ -48,38 +38,17 @@ module.exports = (config, mongo) => {
   router.post('/callback', (req, res) => {
     const { code, ...captcha } = req.body;
     if (code && captchaIsValid(config.recaptcha, captcha)) {
-      fetch(config.oauth.urls.token, {
-        method: 'post',
-        body: new URLSearchParams({
-          client_id: config.oauth.client.id,
-          client_secret: config.oauth.client.secret,
-          grant_type: 'authorization_code',
-          scope: 'identify',
-          code,
-          redirect_uri: config.oauth.urls.redirect,
-        }),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      }).then((discordToken) => {
-        discordToken.text().then((aa) => {
-          const jsonToken = JSON.parse(aa);
-          fetch(config.discord.endpoints.userMe, {
-            method: 'get',
-            headers: {
-              Authorization: `Bearer ${jsonToken.access_token}`,
-            },
-          }).then((discordUser) => discordUser.json()).then(async (jsonUser) => {
-            req.session.user = jsonUser;
-            const x = await saveData(jsonUser);
-            req.session.user.role = x.id === config.discord.ownerId ? 3 : x.details.role;
-            req.session.user.buffer = (x.avatarBuffer && x.avatarBuffer.contentType)
-                        && `data:${x.avatarBuffer.contentType};base64, ${x.avatarBuffer.data}`;
-            req.session.save();
-            res.redirect(req.session.path || '/');
-          });
+      api.login(code)
+        .then((discordToken) => {
+          if (discordToken) {
+            req.session.token = discordToken.access_token;
+            req.session.save(() => {
+              res.redirect(req.session.path || '/');
+            });
+          } else {
+            res.redirect('/oauth2/login');
+          }
         });
-      });
     } else {
       res.redirect('/oauth2/login');
     }

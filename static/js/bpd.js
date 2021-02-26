@@ -1,21 +1,14 @@
-window.avatarUrl = function avatarUrl(user) {
-  if (user.buffer) { return user.buffer; }
-  const { avatar } = user;
-  if (!avatar) { return 'https://cdn.discordapp.com/embed/avatars/4.png'; }
-  return `https://cdn.discordapp.com/avatars/${user.id}/${avatar}${avatar.startsWith('a_') ? '.gif' : '.webp?size=1024'}`;
-};
-
 $.get('/userdata', (user) => {
   $(() => {
     const navuser = $('#navuser');
     if (user) {
-      $('#navavatar').prop('src', window.avatarUrl(user));
+      $('#navavatar').prop('src', `/avatars/${user._id}`);
       $('#navusername').text(user.username);
-      $('#navprofile').prop('href', `/user/${user.id}`);
-      if (user.role) {
+      $('#navprofile').prop('href', `/user/${user._id}`);
+      if (user.details.role) {
         const divider = $('#divider');
-        if (user.role > 0) { divider.before($("<a class='navbar-item' href='/staff/bots'>Bots</a>")); }
-        if (user.role > 1) { divider.before($("<a class='navbar-item' href='/staff/edit'>Editar staff</a>")); }
+        if (user.details.role > 0) { divider.before($("<a class='navbar-item' href='/staff/bots'>Bots</a>")); }
+        if (user.details.role > 1) { divider.before($("<a class='navbar-item' href='/staff/edit'>Editar staff</a>")); }
       }
     } else {
       navuser.empty();

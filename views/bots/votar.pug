@@ -11,6 +11,6 @@ block content
             .box.has-text-centered
                 h1.title.is-1 Vote em #{bot.name}
                 figure.image.is-128x128.container
-                    img.is-rounded(src=bot.avatar)                
+                    img.is-rounded(src="/avatars/" + bot.id)                
                 br
                 button.button.g-recaptcha(data-callback="onSubmit" data-sitekey=captcha) Votar

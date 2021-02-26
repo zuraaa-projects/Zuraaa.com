@@ -16,7 +16,6 @@ async function captchaIsValid(config, response) {
     },
     body,
   })).json();
-  // console.log(res);
   return res.success;
 }
 

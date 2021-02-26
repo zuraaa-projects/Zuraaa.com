@@ -7,16 +7,6 @@ module.exports = (config) => {
     'Content-Type': 'application/json',
   };
 
-  async function fetchUser(id) {
-    const response = await fetch(`http://localhost:5001/users/${id}`);
-    if (response.status === 200) {
-      const bot = await response.json();
-      bot.discriminator = bot.discriminator.toString().padStart(4, '0')
-      return bot
-    }
-    return undefined;
-  }
-
   async function fetchUserDiscord(id) {
     const response = await fetch(`${baseUrl}/users/${id}`, {
       headers,
@@ -79,7 +69,6 @@ module.exports = (config) => {
   }
 
   return {
-    fetchUser,
     sendMessage,
     addRole,
     removeBot,

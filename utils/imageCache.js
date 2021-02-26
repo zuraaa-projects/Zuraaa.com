@@ -15,7 +15,7 @@ module.exports = (config) => {
         contentType: `image/${user.avatarHash.startsWith('a_') ? 'gif' : 'webp'}`,
         data: user.avatar,
       };
-      element.avatar = user.avatarHash;;
+      element.avatar = user.avatarHash;
     }
     return element;
   }

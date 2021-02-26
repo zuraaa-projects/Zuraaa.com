@@ -3,7 +3,7 @@ block head
 
 block content
     #profile.has-text-centered
-        img#avatar.avatar(src=bot.avatar alt=bot.name oncontextmenu="return false;" draggable="false")
+        img#avatar.avatar(src="/avatars/" + bot.id alt=bot.name oncontextmenu="return false;" draggable="false")
         h1.username.is-size-1.has-text-white
             | #{bot.name}
             span.is-size-4.has-text-grey-light ##{bot.tag}
@@ -30,12 +30,8 @@ block content
         each owner in bot.owners
             .owner
                 figure.image.is-32x32
-                    if owner.avatarBuffer && owner.avatarBuffer.data
-                        img.is-rounded(src="data:" + owner.avatarBuffer.contentType + ";base64, " + owner.avatarBuffer.data)
-                    else
-                        img.is-rounded(src="https://cdn.discordapp.com/embed/avatars/4.png")
-
-                a(href="/user/" + owner.id) #{owner.username}##{owner.discriminator}
+                    img.is-rounded(src="/avatars/" + owner._id)
+                a(href="/user/" + owner._id) #{owner.username}##{owner.discriminator}
         br
         .buttons.is-centered
             a.button(href=bot.url + "add") Adicionar

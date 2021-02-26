@@ -1,39 +1,39 @@
 const express = require('express');
 
 const router = express.Router();
-const { partialBotObject } = require('../utils/bot');
 const { userToString } = require('../utils/user');
 const discordBotM = require('../utils/discordbot');
 
-module.exports = (config, db) => {
+module.exports = (config, db, api) => {
   const discordBot = discordBotM(config);
   router.get('/bots', async (req, res) => {
-    if (!req.session.user) {
+    const user = await api.getMe(req.session.token);
+    if (!user) {
       req.session.path = req.originalUrl;
       res.redirect('/oauth2/login');
       return;
     }
-    if (req.session.user.id !== config.discord.ownerId) {
-      const user = await db.Users.findById(req.session.user.id).exec();
+    if (user._id !== config.discord.ownerId) {
       if (!user || !user.details.role || user.details.role < 1) {
         res.sendStatus(403);
         return;
       }
     }
     res.render('staff/bots', {
-      bots: (await db.Bots.find({ approvedBy: null }).exec()).map(partialBotObject),
+      bots: (await db.Bots.find({ approvedBy: null }).exec()),
       bpdId: config.discord.addId,
     });
   });
 
   router.get('/bots/:id/aprovar', async (req, res) => {
-    if (!req.session.user) {
+    const sessionUser = await api.getMe(req.session.token);
+    if (!sessionUser) {
       req.session.path = req.originalUrl;
       res.redirect('/oauth2/login');
       return;
     }
-    if (req.session.user.id !== config.discord.ownerId) {
-      const user = await db.Users.findById(req.session.user.id).exec();
+    if (sessionUser._id !== config.discord.ownerId) {
+      const user = await db.Users.findById(sessionUser._id).exec();
       if (!user || !user.details.role || user.details.role < 1) {
         res.sendStatus(403);
         return;
@@ -49,14 +49,14 @@ module.exports = (config, db) => {
         res.render('message', { message: `O bot ${userToString(bot)} já está aprovado.`, url: '/staff/bots' });
         return;
       }
-      bot.approvedBy = req.session.user.id;
+      bot.approvedBy = sessionUser._id;
       bot.save();
-      discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi aprovado por \`${userToString(req.session.user)}\`\n`
+      discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi aprovado por \`${userToString(sessionUser)}\`\n`
             + `${config.server.root}bots/${bot.id}`);
       discordBot.sendMessageDm(bot.owner, {
         title: 'Sucesso',
         color: 0x7ED321,
-        description: `O seu bot \`${userToString(bot)}\` foi aprovado por \`${userToString(req.session.user)}\``,
+        description: `O seu bot \`${userToString(bot)}\` foi aprovado por \`${userToString(sessionUser)}\``,
       });
       const allOwners = [...(bot.details.otherOwners || []), bot.owner];
       for (let i = 0; i < allOwners.length; i += 1) {
@@ -74,13 +74,14 @@ module.exports = (config, db) => {
     });
   });
   router.get('/bots/:id/rejeitar', async (req, res) => {
-    if (!req.session.user) {
+    const sessionUser = await api.getMe(req.session.token);
+    if (!sessionUser) {
       req.session.path = req.originalUrl;
       res.redirect('/oauth2/login');
       return;
     }
-    if (req.session.user.id !== config.discord.ownerId) {
-      const user = await db.Users.findById(req.session.user.id).exec();
+    if (sessionUser._id !== config.discord.ownerId) {
+      const user = await db.Users.findById(sessionUser._id).exec();
       if (!user || !user.details.role || user.details.role < 1) {
         res.sendStatus(403);
         return;
@@ -89,13 +90,14 @@ module.exports = (config, db) => {
     res.render('staff/reject', { id: req.params.id });
   });
   router.post('/bots/rejeitar', async (req, res) => {
-    if (!req.session.user) {
+    const sessionUser = await api.getMe(req.session.token);
+    if (!sessionUser) {
       req.session.path = req.originalUrl;
       res.redirect('/oauth2/login');
       return;
     }
-    if (req.session.user.id !== config.discord.ownerId) {
-      const user = await db.Users.findById(req.session.user.id).exec();
+    if (sessionUser._id !== config.discord.ownerId) {
+      const user = await db.Users.findById(sessionUser._id).exec();
       if (!user || !user.details.role || user.details.role < 1) {
         res.sendStatus(403);
         return;
@@ -111,12 +113,12 @@ module.exports = (config, db) => {
         return;
       }
       db.Bots.deleteOne({ _id: bot.id }).exec();
-      discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(req.session.user)}\`\n`
+      discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(sessionUser)}\`\n`
             + `Motivo: \`${req.body.reason}\``);
       discordBot.sendMessageDm(bot.owner, {
         title: 'Não foi dessa vez',
         color: 0xff0000,
-        description: `O seu bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(req.session.user)}\``,
+        description: `O seu bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(sessionUser)}\``,
         fields: [
           {
             name: 'Motivo:',
@@ -133,13 +135,14 @@ module.exports = (config, db) => {
   });
 
   router.get('/edit', async (req, res) => {
-    if (!req.session.user) {
+    const sessionUser = await api.getMe(req.session.token);
+    if (!sessionUser) {
       req.session.path = req.originalUrl;
       res.redirect('/oauth2/login');
       return;
     }
-    if (req.session.user.id !== config.discord.ownerId) {
-      const user = await db.Users.findById(req.session.user.id).exec();
+    if (sessionUser._id !== config.discord.ownerId) {
+      const user = await db.Users.findById(sessionUser._id).exec();
       if (!user || !user.details.role || user.details.role < 2) {
         res.sendStatus(403);
         return;
@@ -150,14 +153,15 @@ module.exports = (config, db) => {
   });
 
   router.post('/edit', async (req, res) => {
-    if (!req.session.user) {
+    const sessionUser = await api.getMe(req.session.token);
+    if (!sessionUser) {
       req.session.path = req.originalUrl;
       res.redirect('/oauth2/login');
       return;
     }
-    let perm = req.session.user.id === config.discord.ownerId ? 3 : 0;
+    let perm = sessionUser._id === config.discord.ownerId ? 3 : 0;
     if (!perm) {
-      const user = await db.Users.findById(req.session.user.id).exec();
+      const user = await db.Users.findById(sessionUser._id).exec();
       if (user && user.details) { perm = user.details.role; }
     }
     if (!perm || perm < 2 || (req.body.role === 2 && perm !== 3)) {

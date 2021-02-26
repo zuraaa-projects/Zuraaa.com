@@ -1,25 +1,26 @@
 .bot-card
-  .avatar-box(title=bot.name)
+  .avatar-box(title=bot.username)
     //- a(href="#" onclick="showModal('" + bot.id + "')")
     //-   span Ver
     
-    .avatar(style="background-image: url('" + bot.avatar + "')")
+    .avatar(style="background-image: url('/avatars/" + bot._id + "')")
   .details
-    p.heading(title="Tags") #{bot.tags[Math.floor(Math.random() * bot.tags.length)]} |  #{bot.guilds || "???"} servidores | #{bot.votes} votos
-    p.title.is-size-4(title=bot.name)
+    - const baseUrl = "/bots/" + (bot.details.customURL || bot._id) + "/"
+    p.heading(title="Tags") #{bot.details.tags[Math.floor(Math.random() * bot.details.tags.length)]} |  #{bot.details.guilds || "???"} servidores | #{bot.votes.current} votos
+    p.title.is-size-4(title=bot.username)
       img(title="Online" src="/img/icons/" + bot.status + ".png" oncontextmenu="return false;")
-      | #{bot.name}
-    p.subtitle.is-size-6(title="Descrição")=bot.description
+      | #{bot.username}
+    p.subtitle.is-size-6(title="Descrição")=bot.details.shortDescription
 
     .links
-      a.page(title="Página" href=bot.baseUrl)
+      a.page(title="Página" href=baseUrl)
         span
         p Página
       
-      a.invite(title="Adicionar" href=bot.baseUrl + "add")
+      a.invite(title="Adicionar" href=baseUrl + "add")
         span
         p Adicionar
       
-      a.invite(title="Votar" href=bot.baseUrl + "votar")
+      a.invite(title="Votar" href=baseUrl + "votar")
         span
         p Votar

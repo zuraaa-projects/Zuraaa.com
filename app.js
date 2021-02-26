@@ -6,6 +6,9 @@ const logger = require('morgan');
 const session = require('express-session');
 const Mongosession = require('connect-mongodb-session')(session);
 const helmet = require('helmet');
+const { ZuraaaApi } = require('./modules/api/zuraaaapi.js');
+
+const api = new ZuraaaApi();
 
 const Mongo = require('./modules/mongo');
 const indexRouter = require('./routes/index');
@@ -14,10 +17,9 @@ const discordRouter = require('./routes/discord');
 const oauth = require('./routes/oauth2');
 const user = require('./routes/user');
 const staff = require('./routes/staff');
-const api = require('./routes/api');
 const avatars = require('./routes/avatars');
-
 const admvaga = require('./routes/vaga-adm');
+const tag = require('./routes/tag');
 
 const config = require('./config');
 
@@ -27,8 +29,6 @@ const storesession = new Mongosession({
 });
 
 const app = express();
-
-const tag = require('./routes/tag');
 
 const db = new Mongo(config);
 
@@ -87,15 +87,14 @@ app.use(cookiesession({
 }));
 */
 
-app.use('/', indexRouter(db));
-app.use('/bots', botsRouter(config, db));
+app.use('/', indexRouter(db, api));
+app.use('/bots', botsRouter(config, api));
 app.use('/discord', discordRouter(config));
-app.use('/oauth2', oauth(config, db));
-app.use('/user', user(db, config));
+app.use('/oauth2', oauth(config, api));
+app.use('/user', user(api));
 app.use('/tag', tag(db));
-app.use('/staff', staff(config, db));
-app.use('/api', api(db));
-app.use('/avatars', avatars(db));
+app.use('/staff', staff(config, db, api));
+app.use('/avatars', avatars(api));
 app.use('/', admvaga);
 
 // catch 404 and forward to error handler
