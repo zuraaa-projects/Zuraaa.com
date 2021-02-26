@@ -9,7 +9,6 @@ module.exports = (config) => {
     const user = await app.fetchUser(element.id || element._id);
     element.username = user.username;
     element.discriminator = user.discriminator;
-    console.log(user, element);
     if (user
       && (user.avatar !== element.avatar
         || !(element.avatarBuffer && element.avatarBuffer.contentType))) {
