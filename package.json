@@ -18,6 +18,7 @@
     "mongoose": "^5.11.15",
     "morgan": "~1.10.0",
     "mquery": ">=3.2.3",
+    "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "pug": "^3.0.0",
     "valid-url": "^1.0.9"
