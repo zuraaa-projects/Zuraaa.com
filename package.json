@@ -13,7 +13,7 @@
     "express": "~4.17.1",
     "express-session": "^1.17.1",
     "helmet": "^4.4.1",
-    "http-errors": "~1.6.3",
+    "http-errors": "~1.8.0",
     "markdown-it": "^12.0.4",
     "mongoose": "^5.11.15",
     "morgan": "~1.10.0",
