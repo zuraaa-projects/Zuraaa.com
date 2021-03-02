@@ -324,7 +324,16 @@ module.exports = (config, db) => {
           res.sendStatus(404);
           return;
         }
+
         const { reason, topic, attachment } = req.body;
+        let image = {};
+        const validURL = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\\+\\$,\w]+@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:www.|[-;:&=\\+\\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\\+~%\\/.\w-_]*)?\??(?:[-\\+=&;%@.\w_]*)#?(?:[\w]*))?)\.(?:png|jpg|jpeg|gif|png|svg)/.test(attachment);
+        if (validURL) {
+          image = {
+            url: attachment,
+          };
+        }
+
         db.Users.findById(req.session.user.id).then((user) => {
           dBot.sendMessage(config.discord.bot.channels.botLogs,
             {
@@ -346,13 +355,11 @@ module.exports = (config, db) => {
                   value: reason,
                 },
               ],
-              image: {
-                url: attachment,
-              },
+              image,
             }, false, true, true, `<@&${config.discord.bot.roles.admin}>`); // <@&${config.discord.bot.roles.mod}>`);
           res.render('message', {
             title: 'Sucesso',
-            message: `Você denunciou o bot ${dbot.username} com sucesso.`,
+            message: `Você denunciou o bot ${dbot.username} com sucesso. ${!validURL ? 'Aviso: O URL do seu Anexo é inválido!' : ''}`,
           });
         });
       });
