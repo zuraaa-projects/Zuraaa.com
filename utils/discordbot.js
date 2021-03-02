@@ -38,27 +38,45 @@ module.exports = (config) => {
     return undefined;
   }
 
-  async function sendMessageDm(id, content) {
-    const dmCriada = await criarDm(id);
-    if (dmCriada) {
-      fetch(`${baseUrl}channels/${dmCriada.id}/messages`, {
+  async function sendMessage(channelId, content, isDM = false, isEmbed = false, hasExtraText = false, extraText = '') {
+    function send(id) {
+      if (isEmbed) {
+        if (hasExtraText) {
+          fetch(`${baseUrl}channels/${id}/messages`, {
+            headers,
+            method: 'POST',
+            body: JSON.stringify({
+              content: extraText,
+              embed: content,
+            }),
+          });
+          return;
+        }
+        fetch(`${baseUrl}channels/${id}/messages`, {
+          headers,
+          method: 'POST',
+          body: JSON.stringify({
+            embed: content,
+          }),
+        });
+        return;
+      }
+
+      fetch(`${baseUrl}channels/${id}/messages`, {
         headers,
         method: 'POST',
         body: JSON.stringify({
-          embed: content,
+          content,
         }),
       });
     }
-  }
 
-  function sendMessage(channelId, content) {
-    fetch(`${baseUrl}channels/${channelId}/messages`, {
-      headers,
-      method: 'POST',
-      body: JSON.stringify({
-        content,
-      }),
-    });
+    if (isDM) {
+      const dm = await criarDm(channelId);
+      send(dm.id);
+    } else {
+      send(channelId);
+    }
   }
 
   function addRole(guildId, memberId, roleId) {
@@ -81,7 +99,6 @@ module.exports = (config) => {
     addRole,
     removeBot,
     criarDm,
-    sendMessageDm,
     fetchUserDiscord,
   };
 };

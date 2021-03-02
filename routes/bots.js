@@ -275,6 +275,96 @@ module.exports = (config, db) => {
     });
   });
 
+  router.get('/:id/report', (req, res) => {
+    const topics = [
+      'Uso indevido de dados',
+      'Spam',
+      'MassDM',
+      'Bot de baixa qualidade',
+      'Vazamento de Token',
+      'Outro',
+    ];
+    if (!req.session.user) {
+      req.session.path = req.originalUrl;
+      res.redirect('/oauth2/login');
+      return;
+    }
+    getBotBy(req.params.id).then((dbot) => {
+      if (!dbot) {
+        res.sendStatus(404);
+        return;
+      }
+      res.render('bots/report',
+        {
+          captcha: config.recaptcha.public,
+          title: `Denunciar ${dbot.username}`,
+          bot: { id: dbot.id, name: dbot.username },
+          topics,
+        });
+    });
+  });
+
+  router.post('/:id/report', async (req, res) => {
+    try {
+      if (!req.session.user) {
+        req.session.path = req.originalUrl;
+        res.redirect('/oauth2/login');
+        return;
+      }
+      if (!(await captchaIsValid(config.recaptcha, req.body['g-recaptcha-response']))) {
+        res.render('message', {
+          message: 'O Captcha precisa ser validado.',
+          url: req.originalUrl,
+        });
+        return;
+      }
+
+      getBotBy(req.params.id).then((dbot) => {
+        if (!dbot) {
+          res.sendStatus(404);
+          return;
+        }
+        const { reason, topic, attachment } = req.body;
+        db.Users.findById(req.session.user.id).then((user) => {
+          dBot.sendMessage(config.discord.bot.channels.botLogs,
+            {
+              title: `Denúncia contra: ${dbot.username}`,
+              color: 0xff0000,
+              fields: [
+                {
+                  name: 'Enviada por:',
+                  value: `${userToString(user)} (${user.id})`,
+                  inline: true,
+                },
+                {
+                  name: 'Tópico:',
+                  value: topic,
+                  inline: true,
+                },
+                {
+                  name: 'Motivo:',
+                  value: reason,
+                },
+              ],
+              image: {
+                url: attachment,
+              },
+            }, false, true, true, `<@&${config.discord.bot.roles.admin}>`); // <@&${config.discord.bot.roles.mod}>`);
+          res.render('message', {
+            title: 'Sucesso',
+            message: `Você denunciou o bot ${dbot.username} com sucesso.`,
+          });
+        });
+      });
+    } catch (error) {
+      console.error(error);
+      res.render('message', {
+        title: 'Erro interno',
+        message: 'Ocorreu um erro interno enquanto processávamos sua solicitação, pedimos desculpas pela incoveniência.',
+      });
+    }
+  });
+
   router.get('/:id/votar', (req, res) => {
     if (!req.session.user) {
       req.session.path = req.originalUrl;
@@ -443,11 +533,11 @@ module.exports = (config, db) => {
                 }
 
                 dBot.sendMessage(config.discord.bot.channels.botLogs, `\`${userToString(req.session.user)}\` enviou o bot **\`${userToString(user)}\`** (${b.id}) para a aprovação. <@&${config.discord.bot.roles.verifier}>`);
-                dBot.sendMessageDm(req.session.user.id, {
+                dBot.sendMessage(req.session.user.id, {
                   title: 'O seu bot foi enviado para aprovação',
                   color: 0xfbff00,
                   description: `O seu bot \`${userToString(user)}\` foi para a fila de aprovação`,
-                });
+                }, true, true);
                 saveBot(
                   b,
                   user,

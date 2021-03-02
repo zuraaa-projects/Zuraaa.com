@@ -39,7 +39,9 @@
                 "botLogs": "canal de log de eventos do site"
             },
             "roles": {
-                "developer": "developper role",
+                "admin": "admin role",
+                "mod": "mod role",
+                "developer": "developer role",
                 "verifier": "id do cargo de verificador"
             }
         },

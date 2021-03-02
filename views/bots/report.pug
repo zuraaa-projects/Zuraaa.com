@@ -1,0 +1,40 @@
+extends ../layouts/layout
+
+block head
+    script(src="https://www.google.com/recaptcha/api.js" async defer)
+    script(src="/js/report.js")
+    link(rel="stylesheet", href="/css/report.css")
+
+block content
+    .container.main-container
+        p#reporttitle.title.is-size-4 DENUNCIAR BOT
+        p.subtitle.is-size-6 Preencha o formulário para enviar sua denúncia ao bot #{bot.name}.
+
+        form#form(action="/bots/" + bot.id + "/report" method="POST")
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Tópico *
+                .field-body
+                    .field.has-addons
+                        .control
+                            .select
+                                select#topic(name="topic")
+                                    option(value="")="Escolha um tópico..."
+                                    for topic in topics
+                                        option=topic
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Motivo *
+                .field-body
+                    .field
+                        .control
+                            textarea.input#reason.textarea(minlength="3" maxlength="300" name="reason" type="text" placeholder="Defina o motivo de sua denúncia." rows="2" )
+                        p.help Digite de 3 até 300 caracteres.
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Anexos (Opcional)
+                .field-body
+                    .field
+                        .control
+                            input.input#attachment(name="attachment" placeholder="Insira links de imagens")
+            button.button.g-recaptcha(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar
