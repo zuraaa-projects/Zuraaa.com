@@ -337,7 +337,7 @@ module.exports = (config, db) => {
         db.Users.findById(req.session.user.id).then((user) => {
           dBot.sendMessage(config.discord.bot.channels.botLogs,
             {
-              title: `Denúncia contra: ${dbot.username}`,
+              title: `Denúncia contra: ${userToString(dbot)}`,
               color: 0xff0000,
               fields: [
                 {
@@ -355,7 +355,10 @@ module.exports = (config, db) => {
                   value: reason
                 }
               ],
-              image
+              image,
+              footer: {
+                text: `ID: ${dbot.id}`
+              }
             }, false, true, true, `<@&${config.discord.bot.roles.admin}>`) // <@&${config.discord.bot.roles.mod}>`);
           res.render('message', {
             title: 'Sucesso',
