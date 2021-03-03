@@ -30,5 +30,5 @@ module.exports = [
   'AckCord',
   'Bot Designer',
   'DBM',
-  'Outro',
-];
+  'Outro'
+]

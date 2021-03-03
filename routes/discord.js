@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require('express')
 
-const router = express.Router();
+const router = express.Router()
 
 module.exports = (config) => {
   router.get('/', (req, res) => {
-    res.redirect(config.discord.servers.support);
-  });
+    res.redirect(config.discord.servers.support)
+  })
 
-  return router;
-};
+  return router
+}

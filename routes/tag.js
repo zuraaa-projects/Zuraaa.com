@@ -1,22 +1,22 @@
-const express = require('express');
+const express = require('express')
 
-const router = express.Router();
-const tags = require('../utils/tags');
-const { partialBotObject, partialSelect } = require('../utils/bot');
-const colors = require('../utils/colors');
+const router = express.Router()
+const tags = require('../utils/tags')
+const { partialBotObject, partialSelect } = require('../utils/bot')
+const colors = require('../utils/colors')
 
 module.exports = (db) => {
   router.get('/:tag', (req, res) => {
-    const tagName = req.params.tag;
-    const tagFormated = tags[tagName];
-    let { page } = req.query;
+    const tagName = req.params.tag
+    const tagFormated = tags[tagName]
+    let { page } = req.query
     if (!page || Number.isNaN(page) || page < 1) {
-      page = 1;
+      page = 1
     }
     db.Bots.find({ 'details.tags': tagName }).sort({ 'dates.sent': -1 }).select(partialSelect).limit(18)
       .skip((page - 1) * 18)
       .setOptions({
-        allowDiskUse: true,
+        allowDiskUse: true
       })
       .exec()
       .then((bots) => {
@@ -26,10 +26,10 @@ module.exports = (db) => {
           page,
           bots: (bots || []).map(partialBotObject),
           tags,
-          colors,
-        });
-      });
-  });
+          colors
+        })
+      })
+  })
 
-  return router;
-};
+  return router
+}

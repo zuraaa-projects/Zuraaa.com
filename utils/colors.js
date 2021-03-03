@@ -13,5 +13,5 @@ module.exports = [
   'darkmagenta',
   'darkviolet',
   'violet',
-  'pink',
-];
+  'pink'
+]

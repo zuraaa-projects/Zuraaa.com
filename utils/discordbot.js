@@ -1,45 +1,45 @@
-const fetch = require('node-fetch');
-const NodeCache = require('node-cache');
+const fetch = require('node-fetch')
+const NodeCache = require('node-cache')
 
-const cache = new NodeCache();
+const cache = new NodeCache()
 
 module.exports = (config) => {
-  const baseUrl = 'https://discord.com/api/v8/';
+  const baseUrl = 'https://discord.com/api/v8/'
   const headers = {
     Authorization: `Bot ${config.discord.bot.token}`,
-    'Content-Type': 'application/json',
-  };
-
-  async function fetchUserDiscord(id) {
-    let user = cache.get(id);
-    if (!user) {
-      const response = await fetch(`${baseUrl}users/${id}`, {
-        headers,
-      });
-      if (response.status === 200) {
-        user = await response.json();
-        cache.set(id, user, 3600);
-      }
-    }
-    return user;
+    'Content-Type': 'application/json'
   }
 
-  async function criarDm(id) {
+  async function fetchUserDiscord (id) {
+    let user = cache.get(id)
+    if (!user) {
+      const response = await fetch(`${baseUrl}users/${id}`, {
+        headers
+      })
+      if (response.status === 200) {
+        user = await response.json()
+        cache.set(id, user, 3600)
+      }
+    }
+    return user
+  }
+
+  async function criarDm (id) {
     const response = await fetch(`${baseUrl}users/@me/channels`, {
       headers,
       method: 'POST',
       body: JSON.stringify({
-        recipient_id: id,
-      }),
-    });
+        recipient_id: id
+      })
+    })
     if (response.status === 200) {
-      return response.json();
+      return response.json()
     }
-    return undefined;
+    return undefined
   }
 
-  async function sendMessage(channelId, content, isDM = false, isEmbed = false, hasExtraText = false, extraText = '') {
-    function send(id) {
+  async function sendMessage (channelId, content, isDM = false, isEmbed = false, hasExtraText = false, extraText = '') {
+    function send (id) {
       if (isEmbed) {
         if (hasExtraText) {
           fetch(`${baseUrl}channels/${id}/messages`, {
@@ -47,50 +47,50 @@ module.exports = (config) => {
             method: 'POST',
             body: JSON.stringify({
               content: extraText,
-              embed: content,
-            }),
-          });
-          return;
+              embed: content
+            })
+          })
+          return
         }
         fetch(`${baseUrl}channels/${id}/messages`, {
           headers,
           method: 'POST',
           body: JSON.stringify({
-            embed: content,
-          }),
-        });
-        return;
+            embed: content
+          })
+        })
+        return
       }
 
       fetch(`${baseUrl}channels/${id}/messages`, {
         headers,
         method: 'POST',
         body: JSON.stringify({
-          content,
-        }),
-      });
+          content
+        })
+      })
     }
 
     if (isDM) {
-      const dm = await criarDm(channelId);
-      send(dm.id);
+      const dm = await criarDm(channelId)
+      send(dm.id)
     } else {
-      send(channelId);
+      send(channelId)
     }
   }
 
-  function addRole(guildId, memberId, roleId) {
+  function addRole (guildId, memberId, roleId) {
     fetch(`${baseUrl}guilds/${guildId}/members/${memberId}/roles/${roleId}`, {
       headers,
-      method: 'PUT',
-    });
+      method: 'PUT'
+    })
   }
 
-  function removeBot(guildId, memberId) {
+  function removeBot (guildId, memberId) {
     fetch(`${baseUrl}guilds/${guildId}/members/${memberId}`, {
       headers,
-      method: 'DELETE',
-    });
+      method: 'DELETE'
+    })
   }
 
   return {
@@ -99,6 +99,6 @@ module.exports = (config) => {
     addRole,
     removeBot,
     criarDm,
-    fetchUserDiscord,
-  };
-};
+    fetchUserDiscord
+  }
+}

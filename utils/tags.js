@@ -13,5 +13,5 @@ module.exports = {
   minecraft: 'Minecraft',
   hytale: 'Hytale',
   nsfw: 'NSFW',
-  outros: 'Outros',
-};
+  outros: 'Outros'
+}

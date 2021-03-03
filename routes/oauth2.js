@@ -1,9 +1,9 @@
-const express = require('express');
-const fetch = require('node-fetch');
+const express = require('express')
+const fetch = require('node-fetch')
 
-const router = express.Router();
-const cache = require('../utils/imageCache');
-const { captchaIsValid } = require('../utils/captcha');
+const router = express.Router()
+const cache = require('../utils/imageCache')
+const { captchaIsValid } = require('../utils/captcha')
 
 /**
  *
@@ -11,42 +11,42 @@ const { captchaIsValid } = require('../utils/captcha');
  * @param {Mongo} mongo
  */
 module.exports = (config, mongo) => {
-  function generateUrl() {
-    return `${config.oauth.urls.authorization}?client_id=${config.oauth.client.id}`
-        + `&redirect_uri=${encodeURIComponent(config.oauth.urls.redirect)}&response_type=code&scope=identify`;
+  function generateUrl () {
+    return `${config.oauth.urls.authorization}?client_id=${config.oauth.client.id}` +
+        `&redirect_uri=${encodeURIComponent(config.oauth.urls.redirect)}&response_type=code&scope=identify`
   }
 
-  async function saveData(user) {
-    let userFind = await mongo.Users.findById(user.id).exec()
-            || new mongo.Users({
-              _id: user.id,
-            });
-    userFind = await cache(config).saveCached(userFind);
-    userFind.username = user.username;
-    userFind.discriminator = user.discriminator;
-    userFind.avatar = user.avatar;
-    userFind.save();
-    return userFind;
+  async function saveData (user) {
+    let userFind = await mongo.Users.findById(user.id).exec() ||
+            new mongo.Users({
+              _id: user.id
+            })
+    userFind = await cache(config).saveCached(userFind)
+    userFind.username = user.username
+    userFind.discriminator = user.discriminator
+    userFind.avatar = user.avatar
+    userFind.save()
+    return userFind
   }
 
   router.get('/login', (req, res) => {
-    res.redirect(generateUrl(config));
-  });
+    res.redirect(generateUrl(config))
+  })
 
   router.get('/callback', (req, res) => {
-    const { code } = req.query;
+    const { code } = req.query
     if (code) {
       res.render('login', {
         captcha: config.recaptcha.public,
-        code,
-      });
+        code
+      })
     } else {
-      res.redirect('/oauth2/login');
+      res.redirect('/oauth2/login')
     }
-  });
+  })
 
   router.post('/callback', (req, res) => {
-    const { code, ...captcha } = req.body;
+    const { code, ...captcha } = req.body
     if (code && captchaIsValid(config.recaptcha, captcha)) {
       fetch(config.oauth.urls.token, {
         method: 'post',
@@ -56,39 +56,39 @@ module.exports = (config, mongo) => {
           grant_type: 'authorization_code',
           scope: 'identify',
           code,
-          redirect_uri: config.oauth.urls.redirect,
+          redirect_uri: config.oauth.urls.redirect
         }),
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
       }).then((discordToken) => {
         discordToken.text().then((aa) => {
-          const jsonToken = JSON.parse(aa);
+          const jsonToken = JSON.parse(aa)
           fetch(config.discord.endpoints.userMe, {
             method: 'get',
             headers: {
-              Authorization: `Bearer ${jsonToken.access_token}`,
-            },
+              Authorization: `Bearer ${jsonToken.access_token}`
+            }
           }).then((discordUser) => discordUser.json()).then(async (jsonUser) => {
-            req.session.user = jsonUser;
-            const x = await saveData(jsonUser);
-            req.session.user.role = x.id === config.discord.ownerId ? 3 : x.details.role;
-            req.session.user.buffer = (x.avatarBuffer && x.avatarBuffer.contentType)
-                        && `data:${x.avatarBuffer.contentType};base64, ${x.avatarBuffer.data}`;
-            req.session.save();
-            res.redirect(req.session.path || '/');
-          });
-        });
-      });
+            req.session.user = jsonUser
+            const x = await saveData(jsonUser)
+            req.session.user.role = x.id === config.discord.ownerId ? 3 : x.details.role
+            req.session.user.buffer = (x.avatarBuffer && x.avatarBuffer.contentType) &&
+                        `data:${x.avatarBuffer.contentType};base64, ${x.avatarBuffer.data}`
+            req.session.save()
+            res.redirect(req.session.path || '/')
+          })
+        })
+      })
     } else {
-      res.redirect('/oauth2/login');
+      res.redirect('/oauth2/login')
     }
-  });
+  })
 
   router.get('/logout', (req, res) => {
-    req.session.destroy();
-    res.redirect('/');
-  });
+    req.session.destroy()
+    res.redirect('/')
+  })
 
-  return router;
-};
+  return router
+}

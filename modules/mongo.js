@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 module.exports = class Mongo {
-  constructor(config) {
+  constructor (config) {
     mongoose.connect(config.database.mongo.url, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useFindAndModify: false,
-    });
+      useFindAndModify: false
+    })
 
     this.Users = mongoose.model('users', new mongoose.Schema({
       _id: String,
@@ -15,21 +15,21 @@ module.exports = class Mongo {
       avatar: String,
       avatarBuffer: {
         data: Buffer,
-        contentType: String,
+        contentType: String
       },
       dates: {
         firstSeen: {
           default: Date.now,
-          type: Date,
+          type: Date
         },
         lastBotAdd: Date,
-        nextVote: Date,
+        nextVote: Date
       },
       details: {
         description: String,
-        role: Number,
-      },
-    }));
+        role: Number
+      }
+    }))
 
     this.Bots = mongoose.model('bots', new mongoose.Schema({
       _id: String,
@@ -38,19 +38,19 @@ module.exports = class Mongo {
       avatar: String,
       avatarBuffer: {
         data: Buffer,
-        contentType: String,
+        contentType: String
       },
       status: String,
       owner: {
         ref: 'users',
-        type: String,
+        type: String
       },
       dates: {
         sent: {
           default: Date.now,
-          type: Date,
+          type: Date
         },
-        approved: Date,
+        approved: Date
       },
       details: {
         prefix: String,
@@ -66,37 +66,37 @@ module.exports = class Mongo {
         otherOwners: [
           {
             ref: 'users',
-            type: String,
-          },
+            type: String
+          }
         ],
-        customURL: String,
+        customURL: String
       },
       approvedBy: {
         ref: 'users',
-        type: String,
+        type: String
       },
       votes: {
         current: {
           default: 0,
-          type: Number,
+          type: Number
         },
         voteslog: [
           {
             ref: 'users',
-            type: String,
-          },
-        ],
+            type: String
+          }
+        ]
       },
       count: {
-        guild: Number,
+        guild: Number
       },
       tokens: {
-        current: String,
+        current: String
       },
       webhook: {
         url: String,
-        authorization: String,
-      },
-    }));
+        authorization: String
+      }
+    }))
   }
-};
+}

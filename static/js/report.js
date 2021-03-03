@@ -1,3 +1,3 @@
-window.onSubmit = function onSubmit() {
-  $('#form').submit();
-};
+window.onSubmit = function onSubmit () {
+  $('#form').submit()
+}
