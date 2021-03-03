@@ -16,8 +16,6 @@ const user = require('./routes/user')
 const staff = require('./routes/staff')
 const avatars = require('./routes/avatars')
 
-const admvaga = require('./routes/vaga-adm')
-
 const config = require('./config')
 
 const storesession = new Mongosession({
@@ -94,7 +92,6 @@ app.use('/user', user(db, config))
 app.use('/tag', tag(db))
 app.use('/staff', staff(config, db))
 app.use('/avatars', avatars(db))
-app.use('/', admvaga)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
