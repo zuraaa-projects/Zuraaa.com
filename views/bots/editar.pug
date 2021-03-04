@@ -97,7 +97,6 @@ block content
                                 - const values = ['Desativado', 'Discord', 'Servidor próprio']
                                 select#webhook(name="webhook")
                                     for value, index in values
-                                        - console.log(value, index, bot.webhook.type)
                                         option(value=index, selected=(bot.webhook.type == index))=value
             .field.is-horizontal.is-hidden#webhook-url
                 .field-label.is-normal.has-text-left
