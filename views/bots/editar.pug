@@ -89,6 +89,36 @@ block content
                         p.help Digite de 3 até 300 caracteres.
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
+                    label.label Webhook
+                .field-body 
+                    .field.has-addons
+                        .control
+                            .select
+                                - const values = ['Desativado', 'Discord', 'Servidor próprio']
+                                select#webhook(name="webhook")
+                                    for value, index in values
+                                        - console.log(value, index, bot.webhook.type)
+                                        option(value=index, selected=(bot.webhook.type == index))=value
+            .field.is-horizontal.is-hidden#webhook-url
+                .field-label.is-normal.has-text-left
+                    label.label Webhook Url
+                .field-body
+                    .field
+                        .control
+                            input.input#webhook(maxlength="2083" name="webhookurl" type="url" placeholder="https://sitedomeubot.com.br/webhook" value=bot.webhook.url)
+                        a.help(href="https://github.com/zuraaa-projects/Zuraaa.com/wiki/Votos-Webhook" target="_blank") Documentação
+                        if bot.webhook.type && bot.webhook.lastError
+                            p.help.has-text-danger Foram detectados erros no seu WebHook
+            .field.is-horizontal.is-hidden#webhook-header
+                .field-label.is-normal.has-text-left
+                    label.label Webhook Authentication header
+                .field-body
+                    .field
+                        .control
+                            input.input#authorization(maxlength="2083" name="authorization" type="text" value=bot.webhook.authorization)
+                        p.help Header "Authorization" que será enviado junto
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
                     label.label Descrição longa
                 .field-body
                     .field

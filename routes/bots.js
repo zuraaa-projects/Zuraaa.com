@@ -6,11 +6,12 @@ const md = require('markdown-it')()
 const tags = require('../utils/tags')
 const bot = require('../utils/discordbot')
 const httpExtensions = require('../utils/httpExtensions')
-const { userToString } = require('../utils/user')
+const { userToString, avatarFormat } = require('../utils/user')
 const libraries = require('../utils/libraries')
 const { captchaIsValid } = require('../utils/captcha')
 const cache = require('../utils/imageCache')
 const colors = require('../utils/colors')
+const fetch = require('node-fetch')
 const { partialBotObject, partialSelect } = require('../utils/bot')
 
 function defaultInvite (id) {
@@ -60,20 +61,28 @@ module.exports = (config, db) => {
       })
       return false
     }
-    if (body.webhook) {
-      if (!validUrl.isUri(body.webhook)) {
+    if (body.webhook !== '0') {
+      if (!validUrl.isUri(body.webhookurl)) {
         res.render('message', {
           message: 'O url do webhook não é valido.',
           url: req.originalUrl
         })
         return false
       }
-      if (!body.authorization) {
+      if (!['1', '2'].includes(body.webhook)) {
         res.render('message', {
-          message: 'Você tem que especificar o Authorization a ser enviado.',
-          url: req.originalUrl
+          message: 'O tipo de WebHook escolhido é inválido.'
         })
         return false
+      }
+      if (body.webhook === '2') {
+        if (!body.authorization) {
+          res.render('message', {
+            message: 'Você tem que especificar o Authorization a ser enviado.',
+            url: req.originalUrl
+          })
+          return false
+        }
       }
     }
     if (body.support && body.support.length > 2083) {
@@ -124,8 +133,16 @@ module.exports = (config, db) => {
     botModel.discriminator = botUser.discriminator
     botModel.avatar = botUser.avatar
     botModel.owner = userId
-    botModel.webhook.url = b.webhook
-    botModel.webhook.authorization = b.authorization
+    console.log(b.webhook)
+    if (b.webhook !== '0') {
+      botModel.webhook = {
+        url: b.webhookurl,
+        authorization: b.authorization,
+        type: Number.parseInt(b.webhook)
+      }
+    } else {
+      botModel.webhook = null
+    }
     botModel.status = 'online' // alterar
     botModel.details = botModel.details || {}
     botModel.details.prefix = b.prefix
@@ -430,6 +447,69 @@ module.exports = (config, db) => {
           dot.save()
           dBot.sendMessage(config.discord.bot.channels.botLogs, `${userToString(user)} (${user.id}) votou no bot \`${userToString(dot)}\`\n` +
                         `${config.server.root}bots/${dot.details.customURL || dot.id}`)
+          const setError = (error) => {
+            getBotBy(dot.id).then(setBot => {
+              setBot.webhook.lastError = error
+              setBot.save()
+            }
+            )
+          }
+          if (dot.webhook) {
+            switch (dot.webhook.type) {
+              case 1: {
+                const webhookMessage = {
+                  embeds: [
+                    {
+                      title: 'Voto no Zuraaa! List',
+                      description: `**${userToString(user)}** votou no bot **${userToString(dot)}**`,
+                      color: 16777088,
+                      footer: {
+                        text: user.id
+                      },
+                      timestamp: new Date().toISOString(),
+                      thumbnail: {
+                        url: avatarFormat(user)
+                      }
+                    }
+                  ]
+                }
+                fetch(dot.webhook.url, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(webhookMessage)
+                }).then(res => {
+                  setError(res.status >= 400)
+                }).catch(() => {
+                  setError(true)
+                })
+                break
+              }
+              case 2: {
+                fetch(dot.webhook.url, {
+                  method: 'POST',
+                  headers: {
+                    Authorization: dot.webhook.authorization,
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    type: 'vote',
+                    data: {
+                      user_id: user.id,
+                      bot_id: dot.id,
+                      votes: dot.votes.current
+                    }
+                  })
+                }).then(res => {
+                  setError(res.status >= 400)
+                }).catch(() => {
+                  setError(true)
+                })
+                break
+              }
+            }
+          }
           res.render('message', {
             title: 'Sucesso',
             message: `Você votou em ${dot.username} com sucesso.`

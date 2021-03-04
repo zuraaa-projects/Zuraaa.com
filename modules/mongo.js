@@ -94,8 +94,16 @@ module.exports = class Mongo {
         current: String
       },
       webhook: {
+        authorization: String,
         url: String,
-        authorization: String
+        type: {
+          type: Number,
+          default: 0
+        },
+        lastError: {
+          type: Boolean,
+          default: false
+        }
       }
     }))
   }

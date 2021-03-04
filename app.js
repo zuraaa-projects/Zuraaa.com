@@ -99,7 +99,6 @@ app.use((req, res, next) => {
 })
 
 // error handler
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, _next) => {
   // set locals, only providing error in development
   res.locals.message = err.message
