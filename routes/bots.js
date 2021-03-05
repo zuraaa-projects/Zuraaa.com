@@ -154,6 +154,7 @@ module.exports = (config, db) => {
     botModel.details.htmlDescription = md.render(b.longdesc)
     botModel.details.otherOwners = owners.filter((owner) => owner !== userId)
     botModel.details.website = b.website
+    botModel.details.donate = b.donate
     botModel.details.supportServer = b.server
     if (config.discord.atualizarServidores) {
       botModel.details.guilds = servidores
@@ -265,6 +266,7 @@ module.exports = (config, db) => {
                 url: `/bots/${dbot.details.customURL || dbot.id}/`,
                 support: dbot.details.supportServer,
                 website: dbot.details.website,
+                donate: dbot.details.donate,
                 owners,
                 prefix: dbot.details.prefix,
                 library: dbot.details.library,

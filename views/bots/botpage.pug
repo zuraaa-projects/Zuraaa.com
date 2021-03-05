@@ -43,6 +43,8 @@ block content
             a.button(href=bot.url + "report") Denunciar
             if bot.website
                 a.button(href=bot.website) Site
+            if bot.donate
+                a.button(href=bot.donate) Doar
             if bot.support
                 a.button(href="https://discord.gg/" + bot.support) Suporte
             if user && bot.owners.some(x => x.id == user.id)
