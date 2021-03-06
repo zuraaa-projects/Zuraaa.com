@@ -81,6 +81,15 @@ block content
                             p.help Digite o link em que os usuários poderão doar para o seu projeto.
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
+                    label.label GitHub
+                .field-body
+                    .field.has-addons
+                        p.control
+                            a.button.is-static https://github.com/
+                        p.control
+                            input.input(maxlength="100" name="github" type="text" placeholder="zuraaa-projects/ZuraaaBot" value=bot.details.github)
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
                     label.label Prefixo *
                 .field-body
                     .field.is-narrow
