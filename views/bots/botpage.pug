@@ -46,7 +46,7 @@ block content
             if bot.donate
                 a.button(href=bot.donate) Doar
             if bot.github
-                a.button(href=bot.github) GitHub
+                a.button(href="https://github.com/" + bot.github) GitHub
             if bot.support
                 a.button(href="https://discord.gg/" + bot.support) Suporte
             if user && bot.owners.some(x => x.id == user.id)

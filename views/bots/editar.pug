@@ -71,6 +71,8 @@ block content
                     .field
                         .control
                             input.input#site(maxlength="2083" name="website" type="text" placeholder="https://sitedomeubot.com.br/" value=bot.details.website)
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
                     label.label Link de doação
                 .field-body
                     .field
@@ -85,7 +87,7 @@ block content
                         p.control
                             a.button.is-static https://github.com/
                         p.control
-                            input.input#support(maxlength="20" name="github" type="text" value=bot.details.github)
+                            input.input(maxlength="100" name="github" type="text" placeholder="zuraaa-projects/ZuraaaBot" value=bot.details.github)
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
                     label.label Prefixo *
