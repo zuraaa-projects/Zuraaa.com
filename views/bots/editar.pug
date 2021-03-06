@@ -72,10 +72,13 @@ block content
                         .control
                             input.input#site(maxlength="2083" name="website" type="text" placeholder="https://sitedomeubot.com.br/" value=bot.details.website)
                     label.label Link de doação
+            .field.is-horizontal
+                .field-label.is-normal.has-text-left
+                    label.label Link de doação
                 .field-body
                     .field
                         .control
-                            input.input#site(maxlength="2083" name="donate" type="text" placeholder="https://paypal.com/")
+                            input.input#site(maxlength="2083" name="donate" type="text" placeholder="https://paypal.com/" value=bot.details.donate)
                             p.help Digite o link em que os usuários poderão doar para o seu projeto.
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
