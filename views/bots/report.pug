@@ -10,7 +10,7 @@ block content
         p#reporttitle.title.is-size-4 DENUNCIAR BOT
         p.subtitle.is-size-6 Preencha o formulário para enviar sua denúncia ao bot #{bot.name}.
 
-        form#form(action="/bots/" + bot.id + "/report" method="POST")
+        form#form(action="/bots/" + bot.id + "/report" method="POST" enctype="multipart/form-data")
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
                     label.label Tópico *
@@ -36,5 +36,13 @@ block content
                 .field-body
                     .field
                         .control
-                            input.input#attachment(name="attachment" placeholder="Insira links de imagens")
+                            .file.has-name
+                                label.file-label
+                                    input#file.file-input(type="file" name="attachments" multiple)
+                                    span.file-cta
+                                        span.file-label
+                                            | Enviar anexos (máximo 5)
+                                    span.file-name#name
+                                        | Nenhum arquivo selecionado...
+                                        
             button.button.g-recaptcha(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar

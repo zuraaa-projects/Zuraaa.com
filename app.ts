@@ -1,36 +1,42 @@
-const createError = require('http-errors')
-const express = require('express')
-const path = require('path')
-const cookieParser = require('cookie-parser')
-const logger = require('morgan')
-const session = require('express-session')
-const Mongosession = require('connect-mongodb-session')(session)
-const helmet = require('helmet')
+import createError from 'http-errors'
+import express, { NextFunction, Request, Response } from 'express'
+import path from 'path'
+import cookieParser from 'cookie-parser'
+import logger from 'morgan'
+import session from 'express-session'
+import MongoDBSession from 'connect-mongodb-session'
+import helmet from 'helmet'
+import fileUpload from 'express-fileupload'
 
-const Mongo = require('./modules/mongo')
-const indexRouter = require('./routes/index')
-const botsRouter = require('./routes/bots')
-const discordRouter = require('./routes/discord')
-const oauth = require('./routes/oauth2')
-const user = require('./routes/user')
-const staff = require('./routes/staff')
-const avatars = require('./routes/avatars')
+import Mongo from './modules/mongo'
+import indexRouter from './routes/index'
+import botsRouter from './routes/bots'
+import discordRouter from './routes/discord'
+import oauth from './routes/oauth2'
+import user from './routes/user'
+import staff from './routes/staff'
+import avatars from './routes/avatars'
 
-const config = require('./config')
+import config from './config.json'
 
-const storesession = new Mongosession({
+import tag from './routes/tag'
+import Api from './modules/api'
+
+const MongoSession = MongoDBSession(session)
+
+const storesession = new MongoSession({
   uri: config.database.mongo.url,
   collection: 'usersession'
 })
 
 const app = express()
 
-const tag = require('./routes/tag')
-
 const db = new Mongo(config)
 
+const base = process.cwd()
+
 // view engine setup
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(base, 'views'))
 app.set('view engine', 'pug')
 
 app.use(logger('dev'))
@@ -62,7 +68,7 @@ app.use(helmet.xssFilter())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'static')))
+app.use(express.static(path.join(base, 'static')))
 
 app.use(session({
   secret: config.server.session.secret,
@@ -70,9 +76,11 @@ app.use(session({
   saveUninitialized: false,
   store: storesession,
   cookie: {
-    expires: 604800000
+    maxAge: 604800000
   }
 }))
+
+app.use(fileUpload())
 
 /*
 
@@ -84,10 +92,12 @@ app.use(cookiesession({
 }));
 */
 
+const api = new Api()
+
 app.use('/', indexRouter(db))
-app.use('/bots', botsRouter(config, db))
+app.use('/bots', botsRouter(config, db, api))
 app.use('/discord', discordRouter(config))
-app.use('/oauth2', oauth(config, db))
+app.use('/oauth2', oauth(config, db, api))
 app.use('/user', user(db, config))
 app.use('/tag', tag(db))
 app.use('/staff', staff(config, db))
@@ -99,17 +109,17 @@ app.use((req, res, next) => {
 })
 
 // error handler
-app.use((err, req, res, _next) => {
+app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
 
   // render the error page
-  res.status(err.status || 500)
+  res.status(err.status ?? 500)
   res.render('error')
 })
 
-module.exports = {
+export default {
   app,
   config
 }

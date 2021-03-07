@@ -22,8 +22,9 @@ function defaultInvite (id) {
  *
  * @param {*} config
  * @param {Mongo} db
+ * @param {Api} api
  */
-module.exports = (config, db) => {
+module.exports = (config, db, api) => {
   const dBot = bot(config)
 
   async function getBotBy (idOrName) {
@@ -327,7 +328,7 @@ module.exports = (config, db) => {
 
   router.post('/:id/report', async (req, res) => {
     try {
-      if (!req.session.user) {
+      if (!req.session.user || !req.session.token) {
         req.session.path = req.originalUrl
         res.redirect('/oauth2/login')
         return
@@ -340,53 +341,25 @@ module.exports = (config, db) => {
         return
       }
 
-      getBotBy(req.params.id).then((dbot) => {
-        if (!dbot) {
-          res.sendStatus(404)
-          return
-        }
-
-        const { reason, topic, attachment } = req.body
-        let image = {}
-        const validURL = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\\+\\$,\w]+@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:www.|[-;:&=\\+\\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\\+~%\\/.\w-_]*)?\??(?:[-\\+=&;%@.\w_]*)#?(?:[\w]*))?)\.(?:png|jpg|jpeg|gif|png|svg)/.test(attachment)
-        if (validURL) {
-          image = {
-            url: attachment
-          }
-        }
-
-        db.Users.findById(req.session.user.id).then((user) => {
-          dBot.sendMessage(config.discord.bot.channels.botLogs,
-            {
-              title: `Denúncia contra: ${userToString(dbot)}`,
-              color: 0xff0000,
-              fields: [
-                {
-                  name: 'Enviada por:',
-                  value: `${userToString(user)} (${user.id})`,
-                  inline: true
-                },
-                {
-                  name: 'Tópico:',
-                  value: topic,
-                  inline: true
-                },
-                {
-                  name: 'Motivo:',
-                  value: reason
-                }
-              ],
-              image,
-              footer: {
-                text: `ID: ${dbot.id}`
-              }
-            }, false, true, true, `<@&${config.discord.bot.roles.admin}>`) // <@&${config.discord.bot.roles.mod}>`);
+      api
+        .report(
+          req.session.token,
+          req.params.id,
+          req.body.topic,
+          req.body.reason,
+          req.files?.attachments)
+        .then(({ bot }) => {
           res.render('message', {
             title: 'Sucesso',
-            message: `Você denunciou o bot ${dbot.username} com sucesso. ${!validURL ? 'Aviso: O URL do seu Anexo é inválido!' : ''}`
+            message: `Você denunciou o bot ${userToString(bot)} com sucesso.`
           })
         })
-      })
+        .catch((e) => {
+          console.log(e)
+          res.render('message', {
+            message: 'Ocorreu um erro durante sua solicitação.'
+          })
+        })
     } catch (error) {
       console.error(error)
       res.render('message', {

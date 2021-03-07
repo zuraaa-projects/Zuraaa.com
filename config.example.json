@@ -52,5 +52,9 @@
         "servers": {
             "support": "https://discord.gg/t5qzWQB"
         }
+    },
+    "api": {
+        "baseURL": "https://api.zuraaa.com",
+        "secret": "bolinho444"
     }
 }
