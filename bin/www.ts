@@ -34,6 +34,7 @@ function onError (error: any): void {
   }
 
   const type = typeof port === 'string' ? 'Pipe' : 'Port'
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   const bind = `${type} ${port}`
 
   // handle specific listen errors with friendly messages
