@@ -91,6 +91,9 @@ module.exports = (config) => {
       headers,
       method: 'DELETE'
     })
+      .catch(err => {
+        console.error('Error removing bot: ', err)
+      })
   }
 
   return {
