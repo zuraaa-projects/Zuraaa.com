@@ -91,8 +91,10 @@ module.exports = (config) => {
       headers,
       method: 'DELETE'
     })
-      .catch(err => {
-        console.error('Error removing bot: ', err)
+      .then(res => {
+        if (res.status >= 400) {
+          console.error('Error deleting bot:', res.status)
+        }
       })
   }
 
