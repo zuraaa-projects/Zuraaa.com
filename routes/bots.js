@@ -134,7 +134,6 @@ module.exports = (config, db, api) => {
     botModel.discriminator = botUser.discriminator
     botModel.avatar = botUser.avatar
     botModel.owner = userId
-    console.log(b.webhook)
     if (b.webhook !== '0') {
       botModel.webhook = {
         url: b.webhookurl,
@@ -355,7 +354,6 @@ module.exports = (config, db, api) => {
           })
         })
         .catch((e) => {
-          console.log(e)
           res.render('message', {
             message: 'Ocorreu um erro durante sua solicitação.'
           })

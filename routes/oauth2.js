@@ -37,10 +37,8 @@ module.exports = (config, mongo, api) => {
   })
 
   router.post('/callback', (req, res) => {
-    console.log('aqui?')
     const { code, ...captcha } = req.body
     if (code && captchaIsValid(config.recaptcha, captcha)) {
-      console.log(2)
       try {
         api.login(code).then(({ access_token: token }) => {
           api.getMe(token).then(async user => {
@@ -55,7 +53,6 @@ module.exports = (config, mongo, api) => {
             req.session.user.role = x.id === config.discord.ownerId ? 3 : x.details.role
             req.session.user.buffer = (x.avatarBuffer && x.avatarBuffer.contentType) &&
                         `data:${x.avatarBuffer.contentType};base64, ${x.avatarBuffer.data}`
-            console.log('caiu na net')
             req.session.save(() => res.redirect(req.session.path || '/'))
           })
         })
