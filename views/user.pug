@@ -13,17 +13,18 @@ block content
             p.about.is-size-5.has-text-grey-light #{user.bio}
         br
         .buttons.is-centered
-            if logged.id === user.id
-                a.button(href=user.url + "edit") Editar
-            if logged.role > 2
-                if user.banned
-                    a.button(href=user.url + "unban") Desbanir
-                else
-                    a.button(href=user.url + "ban") Banir
+            if logged !== undefined
+                if logged.id === user.id
+                    a.button(href=user.url + "edit") Editar
+                if logged.role > 2
+                    if user.banned
+                        a.button(href=user.url + "unban") Desbanir
+                    else
+                        a.button(href=user.url + "ban") Banir
     .container.main-container
         .bots
             if user.banned
-                p.is-size-1.has-text-centered Este usuário foi banido :D
+                p.is-size-1.has-text-centered Este usuário foi banido 🙂
             else
                 h2.is-size-3 BOTS
                 if bots.length != 0

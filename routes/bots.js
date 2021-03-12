@@ -353,7 +353,14 @@ module.exports = (config, db, api) => {
             message: `Você denunciou o bot ${userToString(bot)} com sucesso.`
           })
         })
-        .catch((e) => {
+        .catch((error) => {
+          const { data } = error.response
+          if (data.statusCode === 403) {
+            return res.render('message', {
+              title: data.statusCode,
+              message: data.message
+            })
+          }
           res.render('message', {
             message: 'Ocorreu um erro durante sua solicitação.'
           })
@@ -396,6 +403,12 @@ module.exports = (config, db, api) => {
     }
     db.Users.findById(req.session.user.id).then((user) => {
       if (user) {
+        if (user.banned) {
+          return res.render('message', {
+            title: '403',
+            message: 'You have been banned'
+          })
+        }    
         const next = user.dates.nextVote
         const now = new Date()
         if (next && next > now) {
@@ -563,6 +576,17 @@ module.exports = (config, db, api) => {
         res.redirect('/oauth2/login')
         return
       }
+
+      // Puxadinho pra n deixar a pessoa adicionar bot enquanto o .Com não é conectado ao Core
+      db.Users.findById(req.session.user.id).then((user) => {
+        if (user.banned) {
+          return res.render('message', {
+            title: '403',
+            message: 'You have been banned'
+          })
+        }
+      })
+
       const b = req.body
       const botTags = stringToArray(b.tags)
       const owners = stringToArray(b.owners)

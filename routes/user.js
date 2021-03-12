@@ -200,6 +200,13 @@ module.exports = (mongo, config, api) => {
         }
       }
     } catch (error) {
+      const { data } = error.response
+      if (data.statusCode === 403) {
+        return res.render('message', {
+          title: data.statusCode,
+          message: data.message
+        })
+      }
       console.error(error)
       res.render('message', {
         title: 'Erro interno',
