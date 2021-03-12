@@ -11,3 +11,8 @@ nav.navbar {
 .main-container {
     min-height: 48.9vh;
 }
+
+.buttons {
+    padding-bottom: 10px;
+    display: inline-block;
+}

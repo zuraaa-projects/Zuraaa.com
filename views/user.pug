@@ -9,12 +9,25 @@ block content
         h1.username.is-size-1.has-text-white
             | #{user.name}
             span.is-size-4.has-text-grey-light ##{user.tag}
-        p.about.is-size-5.has-text-grey-light #{user.bio}
+        if !user.banned
+            p.about.is-size-5.has-text-grey-light #{user.bio}
+        br
+        .buttons.is-centered
+            if logged.id === user.id
+                a.button(href=user.url + "edit") Editar
+            if logged.role > 2
+                if user.banned
+                    a.button(href=user.url + "unban") Desbanir
+                else
+                    a.button(href=user.url + "ban") Banir
     .container.main-container
         .bots
-            h2.is-size-3 BOTS
-            if bots.length != 0
-                for bot in bots
-                    include layouts/bot
+            if user.banned
+                p.is-size-1.has-text-centered Este usuário foi banido :D
             else
-                p.is-size-5 Esse usuário não possui nenhum bot listado publicamente no sistema.
+                h2.is-size-3 BOTS
+                if bots.length != 0
+                    for bot in bots
+                        include layouts/bot
+                else
+                    p.is-size-5 Esse usuário não possui nenhum bot listado publicamente no sistema.

@@ -12,6 +12,7 @@ module.exports = class Mongo {
       _id: String,
       username: String,
       discriminator: String,
+      banned: { type: Boolean, default: false },
       avatar: String,
       avatarBuffer: {
         data: Buffer,
