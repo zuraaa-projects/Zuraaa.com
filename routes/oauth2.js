@@ -56,16 +56,16 @@ module.exports = (config, mongo, api) => {
             req.session.save(() => res.redirect(req.session.path || '/'))
           })
         })
-        .catch((error) => {
-          const { data } = error.response
-          if (data.statusCode === 403) {
-            return res.render('message', {
-              title: data.statusCode,
-              message: data.message
-            })
-          }
-        })
-      } catch {
+          .catch((error) => {
+            const { data } = error.response
+            if (data.statusCode === 403) {
+              return res.render('message', {
+                title: data.statusCode,
+                message: data.message
+              })
+            }
+          })
+      } catch (error) {
         const { data } = error.response
         if (data.statusCode === 403) {
           return res.render('message', {

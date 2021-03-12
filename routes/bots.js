@@ -408,7 +408,7 @@ module.exports = (config, db, api) => {
             title: '403',
             message: 'You have been banned'
           })
-        }    
+        }
         const next = user.dates.nextVote
         const now = new Date()
         if (next && next > now) {
@@ -578,14 +578,13 @@ module.exports = (config, db, api) => {
       }
 
       // Puxadinho pra n deixar a pessoa adicionar bot enquanto o .Com não é conectado ao Core
-      db.Users.findById(req.session.user.id).then((user) => {
-        if (user.banned) {
-          return res.render('message', {
-            title: '403',
-            message: 'You have been banned'
-          })
-        }
-      })
+      const user = await db.Users.findById(req.session.user.id)
+      if (user.banned) {
+        return res.render('message', {
+          title: '403',
+          message: 'You have been banned'
+        })
+      }
 
       const b = req.body
       const botTags = stringToArray(b.tags)
