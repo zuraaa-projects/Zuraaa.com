@@ -47,76 +47,82 @@ module.exports = (mongo, config, api) => {
     const { user } = req.session
     const { id, action } = req.params
 
-    if (action === 'ban' || action === 'unban') {
-      if (user.role > 2) {
-        mongo.Users.findById(id).exec().then((userb) => {
-          if (id === user.id) {
-            res.render('message', {
-              message: 'Você não pode banir ou desbanir à si mesmo.'
-            })
-          }
-          if (userb) {
-            if (action === 'ban') {
-              if (userb.banned) {
-                return res.render('message', {
-                  message: 'O usuário ja se encontra banido!'
+    mongo.Users.findById(id).exec().then((userb) => {
+      if (userb) {
+        if (action === 'ban' || action === 'unban') {
+          if (user.role > 2) {
+              if (id === user.id) {
+                res.render('message', {
+                  message: 'Você não pode banir ou desbanir à si mesmo.'
                 })
               }
-              res.render('action', {
-                user: {
-                  id: userb.id,
-                  name: userb.username,
-                  tag: userb.discriminator
-                },
-                title: `Banir ${userb.username}`,
-                type: 'Banir',
-                action
-              })
-            } else {
-              if (!userb.banned) {
-                return res.render('message', {
-                  message: 'O usuário não se encontra banido!'
-                })
-              }
-              res.render('action', {
-                user: {
-                  id: userb.id,
-                  name: userb.username,
-                  tag: userb.discriminator
-                },
-                title: `Desbanir ${userb.username}`,
-                type: 'Desbanir',
-                action
-              })
-            }
+                if (action === 'ban') {
+                  if (userb.banned) {
+                    return res.render('message', {
+                      message: 'O usuário ja se encontra banido!'
+                    })
+                  }
+                  res.render('action', {
+                    user: {
+                      id: userb.id,
+                      name: userb.username,
+                      tag: userb.discriminator
+                    },
+                    title: `Banir ${userb.username}`,
+                    type: 'Banir',
+                    action
+                  })
+                } else {
+                  if (!userb.banned) {
+                    return res.render('message', {
+                      message: 'O usuário não se encontra banido!'
+                    })
+                  }
+                  res.render('action', {
+                    user: {
+                      id: userb.id,
+                      name: userb.username,
+                      tag: userb.discriminator
+                    },
+                    title: `Desbanir ${userb.username}`,
+                    type: 'Desbanir',
+                    action
+                  })
+                }
           } else {
             res.render('message', {
-              message: 'Usuário não encontrado!'
+              title: 'Acesso negado',
+              message: 'Você não tem permissão de acessar este endpoint'
             })
           }
-        })
+        } else if (action === 'edit') {
+          if (id === user.id) {
+            res.render('action', {
+              user: {
+                id: userb.id,
+                name: userb.username,
+                tag: userb.discriminator
+              },
+              title: `Editar ${userb.username}`,
+              type: 'Editar',
+              action
+            })
+          } else {
+            res.render('message', {
+              title: 'Acesso negado',
+              message: 'Você não tem permissão de acessar este endpoint'
+            })
+          }
+        }
       } else {
         res.render('message', {
-          title: 'Acesso negado',
-          message: 'Você não tem permissão de acessar este endpoint'
+        message: 'Usuário não encontrado!'
         })
       }
-    } else if (action === 'edit') {
-      if (id === user.id) {
-        res.render('message', {
-          title: 'Não Implementado',
-          message: 'Este recurso ainda não foi implementado'
-        })
-      } else {
-        res.render('message', {
-          title: 'Acesso negado',
-          message: 'Você não tem permissão de acessar este endpoint'
-        })
-      }
-    }
+    })
   })
 
-  router.post('/:id/:action', (req, res) => {
+  router.post('/:id/:action', async (req, res) => {
     try {
       if (!req.session.user) {
         req.session.path = req.originalUrl
@@ -125,7 +131,7 @@ module.exports = (mongo, config, api) => {
       }
 
       const { user, token } = req.session
-      let { reason } = req.body
+      let { reason, bio } = req.body
       const { id, action } = req.params
       if (action === 'ban' || action === 'unban') {
         if (user.role > 2) {
@@ -178,9 +184,13 @@ module.exports = (mongo, config, api) => {
         }
       } else if (action === 'edit') {
         if (id === user.id) {
+          if(bio === undefined) {
+            bio = null
+          }
+          await api.updateMe(token, bio)
           res.render('message', {
-            title: 'Não Implementado',
-            message: 'Este recurso ainda não foi implementado'
+            title: 'Sucesso!',
+            message: 'Você editou sua biografia com sucesso!'
           })
         } else {
           res.render('message', {

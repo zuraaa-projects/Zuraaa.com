@@ -70,6 +70,17 @@ export default class Api {
       })).data
   }
 
+  async updateMe (token: string, newBio: string): Promise<User> {
+    return (await this.api.put('/users/@me', 
+    {
+      bio: newBio
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })).data
+  }
+
   async getMe (token: string): Promise<User> {
     return (await this.api.get('/users/@me', {
       headers: {
