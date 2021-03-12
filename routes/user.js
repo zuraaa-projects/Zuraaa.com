@@ -77,7 +77,7 @@ module.exports = (mongo, config, api) => {
                 return res.render('message', {
                   message: 'O usuário não se encontra banido!'
                 })
-              } 
+              }
               res.render('action', {
                 user: {
                   id: userb.id,
@@ -157,7 +157,7 @@ module.exports = (mongo, config, api) => {
                   return res.render('message', {
                     message: 'O usuário não se encontra banido!'
                   })
-                } 
+                }
                 await api.unban(token, id)
                 res.render('message', {
                   title: 'Sucesso!',
