@@ -51,44 +51,44 @@ module.exports = (mongo, config, api) => {
       if (userb) {
         if (action === 'ban' || action === 'unban') {
           if (user.role > 2) {
-              if (id === user.id) {
-                res.render('message', {
-                  message: 'Você não pode banir ou desbanir à si mesmo.'
+            if (id === user.id) {
+              res.render('message', {
+                message: 'Você não pode banir ou desbanir à si mesmo.'
+              })
+            }
+            if (action === 'ban') {
+              if (userb.banned) {
+                return res.render('message', {
+                  message: 'O usuário ja se encontra banido!'
                 })
               }
-                if (action === 'ban') {
-                  if (userb.banned) {
-                    return res.render('message', {
-                      message: 'O usuário ja se encontra banido!'
-                    })
-                  }
-                  res.render('action', {
-                    user: {
-                      id: userb.id,
-                      name: userb.username,
-                      tag: userb.discriminator
-                    },
-                    title: `Banir ${userb.username}`,
-                    type: 'Banir',
-                    action
-                  })
-                } else {
-                  if (!userb.banned) {
-                    return res.render('message', {
-                      message: 'O usuário não se encontra banido!'
-                    })
-                  }
-                  res.render('action', {
-                    user: {
-                      id: userb.id,
-                      name: userb.username,
-                      tag: userb.discriminator
-                    },
-                    title: `Desbanir ${userb.username}`,
-                    type: 'Desbanir',
-                    action
-                  })
-                }
+              res.render('action', {
+                user: {
+                  id: userb.id,
+                  name: userb.username,
+                  tag: userb.discriminator
+                },
+                title: `Banir ${userb.username}`,
+                type: 'Banir',
+                action
+              })
+            } else {
+              if (!userb.banned) {
+                return res.render('message', {
+                  message: 'O usuário não se encontra banido!'
+                })
+              }
+              res.render('action', {
+                user: {
+                  id: userb.id,
+                  name: userb.username,
+                  tag: userb.discriminator
+                },
+                title: `Desbanir ${userb.username}`,
+                type: 'Desbanir',
+                action
+              })
+            }
           } else {
             res.render('message', {
               title: 'Acesso negado',
@@ -116,7 +116,7 @@ module.exports = (mongo, config, api) => {
         }
       } else {
         res.render('message', {
-        message: 'Usuário não encontrado!'
+          message: 'Usuário não encontrado!'
         })
       }
     })
@@ -184,7 +184,7 @@ module.exports = (mongo, config, api) => {
         }
       } else if (action === 'edit') {
         if (id === user.id) {
-          if(bio === undefined) {
+          if (bio === undefined) {
             bio = null
           }
           await api.updateMe(token, bio)

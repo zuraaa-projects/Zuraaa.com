@@ -71,14 +71,14 @@ export default class Api {
   }
 
   async updateMe (token: string, newBio: string): Promise<User> {
-    return (await this.api.put('/users/@me', 
-    {
-      bio: newBio
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })).data
+    return (await this.api.put('/users/@me',
+      {
+        bio: newBio
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })).data
   }
 
   async getMe (token: string): Promise<User> {
