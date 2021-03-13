@@ -58,6 +58,40 @@ export default class Api {
     }
   }
 
+  async ban (token: string, id: string, reason: string): Promise<User> {
+    return (await this.api.put(`/users/${id}`,
+      {
+        banned: true,
+        banReason: reason
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })).data
+  }
+
+  async unban (token: string, id: string): Promise<User> {
+    return (await this.api.put(`/users/${id}`,
+      {
+        banned: false
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })).data
+  }
+
+  async updateMe (token: string, newBio: string): Promise<User> {
+    return (await this.api.put('/users/@me',
+      {
+        bio: newBio
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })).data
+  }
+
   async getMe (token: string): Promise<User> {
     return (await this.api.get('/users/@me', {
       headers: {

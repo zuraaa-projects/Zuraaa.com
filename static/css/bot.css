@@ -2,6 +2,7 @@
 
 .buttons {
     padding-top: 10px;
+    padding-bottom: 10px;
     display: inline-block;
 }
 
@@ -27,10 +28,6 @@
 
 .align {
     vertical-align: top;
-}
-
-.buttons {
-    padding-bottom: 10px;
 }
 
 .about {

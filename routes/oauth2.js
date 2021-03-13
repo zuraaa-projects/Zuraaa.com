@@ -57,7 +57,23 @@ module.exports = (config, mongo, api) => {
             req.session.save(() => res.redirect(req.session.path || '/'))
           })
         })
-      } catch {
+          .catch((error) => {
+            const { data } = error.response
+            if (data.statusCode === 403) {
+              return res.render('message', {
+                title: data.statusCode,
+                message: data.message
+              })
+            }
+          })
+      } catch (error) {
+        const { data } = error.response
+        if (data.statusCode === 403) {
+          return res.render('message', {
+            title: data.statusCode,
+            message: data.message
+          })
+        }
         res.redirect('/oauth2/login')
       }
     } else {
