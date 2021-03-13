@@ -1,6 +1,6 @@
 import Axios, { AxiosInstance } from 'axios'
 import config from '../../config.json'
-import { Auth, Bot, User } from './types'
+import { Auth, Avatar, Bot, User } from './types'
 import FormData from 'form-data'
 
 export default class Api {
@@ -47,11 +47,30 @@ export default class Api {
     })).data
   }
 
+  async getAvatar (id: string): Promise<Avatar> {
+    const avatar = await this.api.get('/avatars/' + id, {
+      responseType: 'arraybuffer'
+    })
+    return {
+      data: avatar.data,
+      type: avatar.headers['content-type'],
+      length: avatar.headers['content-length']
+    }
+  }
+
   async getMe (token: string): Promise<User> {
     return (await this.api.get('/users/@me', {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })).data
+  }
+
+  async getBot (id: string): Promise<Bot> {
+    return (await this.api.get('/bots/' + id)).data
+  }
+
+  async getUser (id: string): Promise<User> {
+    return (await this.api.get('/users/' + id)).data
   }
 }

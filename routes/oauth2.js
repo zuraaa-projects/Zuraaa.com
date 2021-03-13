@@ -1,7 +1,7 @@
 const express = require('express')
 
 const router = express.Router()
-const cache = require('../utils/imageCache')
+const ImageCache = require('../utils/ImageCache').default
 const { captchaIsValid } = require('../utils/captcha')
 
 /**
@@ -10,6 +10,8 @@ const { captchaIsValid } = require('../utils/captcha')
  * @param {Mongo} mongo
  */
 module.exports = (config, mongo, api) => {
+  const cache = new ImageCache(api)
+
   function generateUrl () {
     return `${config.oauth.urls.authorization}?client_id=${config.oauth.client.id}` +
         `&redirect_uri=${encodeURIComponent(config.oauth.urls.redirect)}&response_type=code&scope=identify`
@@ -17,7 +19,7 @@ module.exports = (config, mongo, api) => {
 
   async function saveData (user) {
     const userFind = await mongo.Users.findById(user._id).exec()
-    return await (await cache(config).saveCached(userFind)).save()
+    return await (await cache.saveCached(userFind, false)).save()
   }
 
   router.get('/login', (req, res) => {
@@ -51,8 +53,7 @@ module.exports = (config, mongo, api) => {
             }
             const x = await saveData(user)
             req.session.user.role = x.id === config.discord.ownerId ? 3 : x.details.role
-            req.session.user.buffer = (x.avatarBuffer && x.avatarBuffer.contentType) &&
-                        `data:${x.avatarBuffer.contentType};base64, ${x.avatarBuffer.data}`
+            req.session.user.buffer = `/avatars/${x.id}`
             req.session.save(() => res.redirect(req.session.path || '/'))
           })
         })

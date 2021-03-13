@@ -13,21 +13,25 @@ module.exports = class Mongo {
       username: String,
       discriminator: String,
       avatar: String,
-      avatarBuffer: {
-        data: Buffer,
-        contentType: String
-      },
       dates: {
         firstSeen: {
           default: Date.now,
           type: Date
         },
-        lastBotAdd: Date,
-        nextVote: Date
+        nextVote: {
+          default: null,
+          type: Date
+        }
       },
       details: {
-        description: String,
-        role: Number
+        description: {
+          default: null,
+          type: String
+        },
+        role: {
+          default: null,
+          type: Number
+        }
       }
     }))
 
@@ -35,10 +39,9 @@ module.exports = class Mongo {
       _id: String,
       username: String,
       discriminator: String,
-      avatar: String,
-      avatarBuffer: {
-        data: Buffer,
-        contentType: String
+      avatar: {
+        default: null,
+        type: String
       },
       status: String,
       owner: {
@@ -50,28 +53,57 @@ module.exports = class Mongo {
           default: Date.now,
           type: Date
         },
-        approved: Date
+        approved: {
+          default: null,
+          type: Date
+        }
       },
       details: {
         prefix: String,
         tags: Array,
         library: String,
-        customInviteLink: String,
+        customInviteLink: {
+          default: null,
+          type: String
+        },
         shortDescription: String,
-        longDescription: String,
-        htmlDescription: String,
-        supportServer: String,
-        website: String,
-        github: String,
-        donate: String,
-        guilds: Number,
-        otherOwners: [
-          {
-            ref: 'users',
-            type: String
-          }
-        ],
-        customURL: String
+        longDescription: {
+          default: null,
+          type: String
+        },
+        htmlDescription: {
+          default: null,
+          type: String
+        },
+        supportServer: {
+          default: null,
+          type: String
+        },
+        website: {
+          default: null,
+          type: String
+        },
+        github: {
+          default: null,
+          type: String
+        },
+        donate: {
+          default: null,
+          type: String
+        },
+        otherOwners: {
+          default: [],
+          type: [
+            {
+              ref: 'users',
+              type: String
+            }
+          ]
+        },
+        customURL: {
+          default: null,
+          type: String
+        }
       },
       approvedBy: {
         ref: 'users',
@@ -89,22 +121,22 @@ module.exports = class Mongo {
           }
         ]
       },
-      count: {
-        guild: Number
-      },
-      tokens: {
-        current: String
-      },
       webhook: {
-        authorization: String,
-        url: String,
+        authorization: {
+          default: null,
+          type: String
+        },
+        url: {
+          default: null,
+          type: String
+        },
         type: {
-          type: Number,
-          default: 0
+          default: 0,
+          type: Number
         },
         lastError: {
-          type: Boolean,
-          default: false
+          default: false,
+          type: Boolean
         }
       }
     }))

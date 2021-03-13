@@ -20,3 +20,9 @@ export interface Bot {
   username: string
   discriminator: string
 }
+
+export interface Avatar {
+  type: string
+  length: string
+  data: Buffer
+}

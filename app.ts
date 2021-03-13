@@ -98,10 +98,10 @@ app.use('/', indexRouter(db))
 app.use('/bots', botsRouter(config, db, api))
 app.use('/discord', discordRouter(config))
 app.use('/oauth2', oauth(config, db, api))
-app.use('/user', user(db, config))
+app.use('/user', user(db, config, api))
 app.use('/tag', tag(db))
 app.use('/staff', staff(config, db))
-app.use('/avatars', avatars(db))
+app.use('/avatars', avatars(api))
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -30,10 +30,7 @@ block content
         each owner in bot.owners
             .owner
                 figure.image.is-32x32
-                    if owner.avatarBuffer && owner.avatarBuffer.data
-                        img.is-rounded(src="data:" + owner.avatarBuffer.contentType + ";base64, " + owner.avatarBuffer.data)
-                    else
-                        img.is-rounded(src="https://cdn.discordapp.com/embed/avatars/4.png")
+                    img.is-rounded(src="/avatars/" + owner.id)
 
                 a(href="/user/" + owner.id) #{owner.username}##{owner.discriminator}
         br

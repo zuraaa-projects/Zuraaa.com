@@ -9,7 +9,7 @@ const httpExtensions = require('../utils/httpExtensions')
 const { userToString, avatarFormat } = require('../utils/user')
 const libraries = require('../utils/libraries')
 const { captchaIsValid } = require('../utils/captcha')
-const cache = require('../utils/imageCache')
+const ImageCache = require('../utils/ImageCache').default
 const colors = require('../utils/colors')
 const fetch = require('node-fetch')
 const { partialBotObject, partialSelect } = require('../utils/bot')
@@ -26,6 +26,7 @@ function defaultInvite (id) {
  */
 module.exports = (config, db, api) => {
   const dBot = bot(config)
+  const cache = new ImageCache(api)
 
   async function getBotBy (idOrName) {
     return db.Bots.findOne({
@@ -132,13 +133,12 @@ module.exports = (config, db, api) => {
   function saveBot (b, botUser, userId, owners, botTags, botModel, servidores) {
     botModel.username = botUser.username
     botModel.discriminator = botUser.discriminator
-    botModel.avatar = botUser.avatar
     botModel.owner = userId
     if (b.webhook !== '0') {
       botModel.webhook = {
-        url: b.webhookurl,
-        authorization: b.authorization,
-        type: Number.parseInt(b.webhook)
+        url: b.webhookurl || null,
+        authorization: b.authorization || null,
+        type: Number.parseInt(b.webhook) || 0
       }
     } else {
       botModel.webhook = null
@@ -147,21 +147,20 @@ module.exports = (config, db, api) => {
     botModel.details = botModel.details || {}
     botModel.details.prefix = b.prefix
     botModel.details.tags = botTags
-    botModel.details.customInviteLink = b.custominvite
+    botModel.details.customInviteLink = b.custominvite || null
     botModel.details.library = b.library
     botModel.details.shortDescription = b.shortdesc
-    botModel.details.longDescription = b.longdesc
+    botModel.details.longDescription = b.longdesc || null
     botModel.details.htmlDescription = md.render(b.longdesc)
     botModel.details.otherOwners = owners.filter((owner) => owner !== userId)
-    botModel.details.website = b.website
-    botModel.details.github = b.github
-    botModel.details.donate = b.donate
-    botModel.details.supportServer = b.server
+    botModel.details.website = b.website || null
+    botModel.details.github = b.github || null
+    botModel.details.donate = b.donate || null
+    botModel.details.supportServer = b.server || null
     if (config.discord.atualizarServidores) {
       botModel.details.guilds = servidores
     }
-
-    cache(config).saveCached(botModel).then((dbBot) => dbBot.save())
+    botModel.save().then(() => cache.saveCached(botModel))
   }
   function stringToArray (string) {
     return [
@@ -207,7 +206,7 @@ module.exports = (config, db, api) => {
 
     db.Bots.findOne({
       $or: [{ _id: req.params.id }, { 'details.customURL': req.params.id }]
-    }).populate('owner', '_id username discriminator avatarBuffer').populate('details.otherOwners', '_id username discriminator avatarBuffer').exec()
+    }).populate('owner', '_id username discriminator').populate('details.otherOwners', '_id username discriminator').exec()
       .then(async (dbot) => {
         if (dbot != null) {
           if (!dbot || !dbot.approvedBy) {
@@ -223,41 +222,27 @@ module.exports = (config, db, api) => {
           }
 
           if (!dbot.details.htmlDescription) {
-            dbot.details.htmlDescription = md.render(dbot.details.longDescription)
+            dbot.details.htmlDescription = md.render(dbot.details.longDescription || '')
           }
-          /*
-                        eh serio vei
-                        eh impossivel adicionar ou fazer manutenção nessa porra
-                        so n da, n da pra entender nada
-                        eu desejo morte a os envolvidos que fizerem isso
-                        enquanto isso eu choro
-                        tentanto achar onde eu faço essa merda atualizar
-                        pf alguem me ajuda
-                        eu peço que deus me ajuda com o doçe abraço da morte
-                        eu nem sei como essa merda de codigo ainda funciona
-                        me impressiono todo dia q ele n pego fogo
-                    */
+
           if (config.discord.atualizarServidores) {
             dbot.details.guilds = await httpExtensions(config).pegarServidores(dbot._id)
           }
-          cache(config).saveCached(dbot).then((element) => {
+          cache.saveCached(dbot).then((element) => {
             if (!element) {
               res.sendStatus(404)
               return
             }
             element.save()
             const botTags = dbot.details.tags
-            const avatarUrl = (typeof element.avatarBuffer.data === 'string') ? Buffer.from(element.avatarBuffer.data).toString('base64') : element.avatarBuffer.data
+            const avatar = `/avatars/${dbot.id}`
             const owners = [...(dbot.details.otherOwners || []), dbot.owner].filter(
               (x, index, self) => self.findIndex((y) => y.id === x.id) === index
             )
 
-            owners.forEach((o) => {
-              o.avatarBuffer.data = (typeof element.avatarBuffer.data === 'string') ? Buffer.from(o.avatarBuffer.data).toString('base64') : o.avatarBuffer.data
-            })
             res.render(`bots/bot${req.query.frame ? 'frame' : ''}`, {
               bot: {
-                avatar: `data:${element.avatarBuffer.contentType};base64, ${avatarUrl}`,
+                avatar,
                 name: dbot.username,
                 tag: dbot.discriminator,
                 bio: dbot.details.shortDescription,
@@ -374,9 +359,16 @@ module.exports = (config, db, api) => {
       return
     }
     getBotBy(req.params.id).then((dbot) => {
-      cache(config).saveCached(dbot).then((element) => {
+      cache.saveCached(dbot).then((element) => {
         element.save()
-        res.render('bots/votar', { captcha: config.recaptcha.public, title: `Vote em ${dbot.username}`, bot: { name: dbot.username, avatar: `data:${element.avatarBuffer.contentType};base64, ${element.avatarBuffer.data}` } })
+        res.render('bots/votar', {
+          captcha: config.recaptcha.public,
+          title: `Vote em ${dbot.username}`,
+          bot: {
+            name: dbot.username,
+            avatar: `/avatars/${dbot.id}`
+          }
+        })
       })
     })
   })
