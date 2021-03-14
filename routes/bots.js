@@ -13,6 +13,7 @@ const ImageCache = require('../utils/ImageCache').default
 const colors = require('../utils/colors')
 const fetch = require('node-fetch')
 const { partialBotObject, partialSelect } = require('../utils/bot')
+const { formatUrl } = require('../utils/avatar')
 
 function defaultInvite (id) {
   return `https://discord.com/api/v6/oauth2/authorize?client_id=${id}&scope=bot`
@@ -241,10 +242,15 @@ module.exports = (config, db, api) => {
             }
             element.save()
             const botTags = dbot.details.tags
-            const avatar = `/avatars/${dbot.id}`
+            const avatar = formatUrl(dbot.id)
             const owners = [...(dbot.details.otherOwners || []), dbot.owner].filter(
               (x, index, self) => self.findIndex((y) => y.id === x.id) === index
             )
+            for (let i = 0; i < owners.length; i++) {
+              const owner = owners[i]
+              owner.avatarUrl = formatUrl(owner.id)
+              owners[i] = owner
+            }
 
             res.render(`bots/bot${req.query.frame ? 'frame' : ''}`, {
               bot: {
@@ -396,7 +402,7 @@ module.exports = (config, db, api) => {
           title: `Vote em ${dbot.username}`,
           bot: {
             name: dbot.username,
-            avatar: `/avatars/${dbot.id}`
+            avatar: formatUrl(dbot.id)
           }
         })
       })

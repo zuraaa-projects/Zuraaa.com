@@ -15,7 +15,6 @@ import discordRouter from './routes/discord'
 import oauth from './routes/oauth2'
 import user from './routes/user'
 import staff from './routes/staff'
-import avatars from './routes/avatars'
 
 import config from './config.json'
 
@@ -101,7 +100,6 @@ app.use('/oauth2', oauth(config, db, api))
 app.use('/user', user(db, api))
 app.use('/tag', tag(db))
 app.use('/staff', staff(config, db))
-app.use('/avatars', avatars(api))
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

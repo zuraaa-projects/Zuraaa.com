@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const { partialBotObject } = require('../utils/bot')
 const ImageCache = require('../utils/ImageCache').default
+const { formatUrl } = require('../utils/avatar')
 
 /**
  *
@@ -18,7 +19,7 @@ module.exports = (mongo, api) => {
           res.render('user', {
             logged: req.session.user,
             user: {
-              avatar: `/avatars/${user.id}`,
+              avatar: formatUrl(user.id),
               banned: user.banned,
               id: user.id,
               name: user.username,

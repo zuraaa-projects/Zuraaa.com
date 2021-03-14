@@ -55,6 +55,7 @@
     },
     "api": {
         "baseURL": "https://api.zuraaa.com",
-        "secret": "bolinho444"
+        "secret": "bolinho444",
+        "outerBase": "https://api.zuraaa.com"
     }
 }

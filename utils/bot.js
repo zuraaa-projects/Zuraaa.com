@@ -1,8 +1,10 @@
+const { formatUrl } = require('./avatar')
+
 function partialBotObject (bot) {
   const id = bot.id || bot._id
   return {
     tags: bot.details.tags,
-    avatar: `/avatars/${id}`,
+    avatar: formatUrl(id),
     name: bot.username,
     id,
     status: bot.status,

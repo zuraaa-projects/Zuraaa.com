@@ -30,7 +30,7 @@ block content
         each owner in bot.owners
             .owner
                 figure.image.is-32x32
-                    img.is-rounded(src="/avatars/" + owner.id)
+                    img.is-rounded(src=owner.avatarUrl)
 
                 a(href="/user/" + owner.id) #{owner.username}##{owner.discriminator}
         br
