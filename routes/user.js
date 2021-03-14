@@ -26,7 +26,12 @@ module.exports = (mongo, api) => {
               url: `/user/${user.details.customURL || user.id}/`,
               bio: user.details.description || 'Esse usuário ainda não definiu uma biografia.'
             },
-            bots: (await mongo.Bots.find().or([{ owner: user.id }, { 'details.otherOwners': user.id }]).exec()).map(partialBotObject),
+            bots: (await mongo.Bots
+              .find()
+              .or([{ owner: user.id }, { 'details.otherOwners': user.id }])
+              .exec())
+              .filter(bot => bot.approvedBy || (req.session.user && (req.session.user.id === bot.owner || req.session.user.role < 1)))
+              .map(partialBotObject),
             title: user.username
           })
         } else {

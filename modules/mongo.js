@@ -104,6 +104,10 @@ module.exports = class Mongo {
         customURL: {
           default: null,
           type: String
+        },
+        guilds: {
+          default: null,
+          type: Number
         }
       },
       approvedBy: {

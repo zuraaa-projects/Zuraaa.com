@@ -168,6 +168,17 @@ module.exports = (config, db, api) => {
     ]
   }
 
+  async function isAdm (sessionUser, bot, disableOwner = false) {
+    if (!sessionUser) {
+      return false
+    }
+    const user = await db.Users.findById(sessionUser.id).exec()
+    if (!user || user.details.role < 1 || (disableOwner && sessionUser.id === bot.owner)) {
+      return false
+    }
+    return true
+  }
+
   router.get('/', (req, res) => {
     let { page } = req.query
     if (!page || Number.isNaN(page) || page < 1) { page = 1 }
@@ -210,12 +221,7 @@ module.exports = (config, db, api) => {
       .then(async (dbot) => {
         if (dbot != null) {
           if (!dbot || !dbot.approvedBy) {
-            if (!req.session.user) {
-              res.sendStatus(404)
-              return
-            }
-            const user = await db.Users.findById(req.session.user.id).exec()
-            if (!user || !user.details.role || user.details.role < 1) {
+            if (!(await isAdm(req.session.user))) {
               res.sendStatus(404)
               return
             }
@@ -272,10 +278,16 @@ module.exports = (config, db, api) => {
   })
 
   router.get('/:id/add', (req, res) => {
-    getBotBy(req.params.id).then((dbot) => {
+    getBotBy(req.params.id).then(async (dbot) => {
       if (!dbot) {
         res.sendStatus(404)
         return
+      }
+      if (!dbot.approvedBy) {
+        if (!(await isAdm(req.session.user))) {
+          res.sendStatus(404)
+          return
+        }
       }
       res.redirect(dbot.details.customInviteLink || defaultInvite(dbot.id))
     })
@@ -295,10 +307,16 @@ module.exports = (config, db, api) => {
       res.redirect('/oauth2/login')
       return
     }
-    getBotBy(req.params.id).then((dbot) => {
+    getBotBy(req.params.id).then(async (dbot) => {
       if (!dbot) {
         res.sendStatus(404)
         return
+      }
+      if (!dbot || !dbot.approvedBy) {
+        if (!(await isAdm(req.session.user))) {
+          res.sendStatus(404)
+          return
+        }
       }
       res.render('bots/report',
         {
@@ -365,9 +383,14 @@ module.exports = (config, db, api) => {
       res.redirect('/oauth2/login')
       return
     }
-    getBotBy(req.params.id).then((dbot) => {
-      cache.saveCached(dbot).then((element) => {
-        element.save()
+    getBotBy(req.params.id).then(async (dbot) => {
+      if (!dbot || !dbot.approvedBy) {
+        if (!(await isAdm(req.session.user, dbot, true))) {
+          res.sendStatus(404)
+          return
+        }
+      }
+      cache.saveCached(dbot).then(() => {
         res.render('bots/votar', {
           captcha: config.recaptcha.public,
           title: `Vote em ${dbot.username}`,
@@ -414,10 +437,16 @@ module.exports = (config, db, api) => {
           })
           return
         }
-        getBotBy(req.params.id).then((dot) => {
+        getBotBy(req.params.id).then(async (dot) => {
           if (!dot) {
             res.sendStatus(404)
             return
+          }
+          if (!dot || !dot.approvedBy) {
+            if (!(await isAdm(req.session.user, dot, true))) {
+              res.sendStatus(404)
+              return
+            }
           }
           now.setHours(now.getHours() + 8)
           user.dates.nextVote = now
