@@ -191,10 +191,7 @@ module.exports = (mongo, api) => {
         }
       } else if (action === 'edit') {
         if (id === user.id) {
-          if (bio === undefined) {
-            bio = null
-          }
-          await api.updateMe(token, bio)
+          await api.updateMe(token, bio || null)
           res.render('message', {
             title: 'Sucesso!',
             message: 'Você editou sua biografia com sucesso!'
@@ -209,10 +206,13 @@ module.exports = (mongo, api) => {
     } catch (error) {
       const { data } = error.response
       if (data.statusCode === 403) {
-        return res.render('message', {
-          title: data.statusCode,
-          message: data.message
+        req.session.destroy(() => {
+          return res.render('message', {
+            title: 'BANIDO',
+            message: 'Você está banido! 🙂'
+          })
         })
+        return
       }
       console.error(error)
       res.render('message', {

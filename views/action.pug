@@ -18,10 +18,10 @@ block content
                 else if action === 'edit'
                     .field.is-horizontal
                         .field-label.is-normal.has-text-left
-                            label.label Nova Biografia *
+                            label.label Nova Biografia
                         .field-body
                             .field.is-narrow
                                 .control
                                     input.input#bio(maxlength="255" name="bio" placeholder="Insira sua nova biografia")
-                                    p.help Máximo de 255 caracteres.
+                                    p.help Máximo de 255 caracteres. Deixe vazio para remover a biografia.
                 button.button #{type}
