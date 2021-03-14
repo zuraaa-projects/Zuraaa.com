@@ -371,8 +371,7 @@ module.exports = (config, db, api) => {
                 message: 'Você está banido! 🙂'
               })
             })
-            return
-          } else {  
+          } else {
             res.render('message', {
               message: 'Ocorreu um erro durante sua solicitação.'
             })
@@ -429,8 +428,8 @@ module.exports = (config, db, api) => {
     db.Users.findById(req.session.user.id).then((user) => {
       if (user) {
         if (user.banned) {
-        req.session.destroy(() => {
-          return res.render('message', {
+          req.session.destroy(() => {
+            return res.render('message', {
               title: 'BANIDO',
               message: 'Você está banido! 🙂'
             })
@@ -616,10 +615,10 @@ module.exports = (config, db, api) => {
       if (user.banned) {
         req.session.destroy(() => {
           return res.render('message', {
-              title: 'BANIDO',
-              message: 'Você está banido! 🙂'
-            })
+            title: 'BANIDO',
+            message: 'Você está banido! 🙂'
           })
+        })
         return
       }
 

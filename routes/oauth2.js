@@ -70,7 +70,6 @@ module.exports = (config, mongo, api) => {
                   message: 'Você está banido! 🙂'
                 })
               })
-              return
             }
           })
       } catch (error) {
