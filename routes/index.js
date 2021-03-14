@@ -5,7 +5,20 @@ const { partialBotObject } = require('../utils/bot')
 const tags = require('../utils/tags')
 const colors = require('../utils/colors')
 
-module.exports = (mongo) => {
+module.exports = (mongo, api) => {
+  router.use((req, res, next) => {
+    api.getMe(req.session.token).then((session) => {
+      if(session !== undefined) {
+        if (session.banned) {
+          req.session.destroy(() => {
+            next()
+          })
+        }
+      }
+    })
+    next()
+  })
+
   router.get('/', async (req, res) => {
     const filter = { approvedBy: { $ne: null } }
     res.render('index', {

@@ -1,0 +1,21 @@
+extends ../layouts/layout
+
+block head
+    script(src="/js/action.js")
+
+block content
+    .container.main-container
+        .box
+            form#form(method="POST")
+                .field.is-horizontal
+                    .field-label.is-normal.has-text-left
+                        label.label Ação
+                    .field-body
+                        .field
+                            .control
+                                .select
+                                    select#Action(name="role")
+                                        each val, key in roles
+                                            option(value=val)=key
+                                
+                button.button EDITAR

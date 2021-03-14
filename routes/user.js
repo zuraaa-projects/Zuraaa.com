@@ -11,27 +11,37 @@ const { formatUrl } = require('../utils/avatar')
  */
 module.exports = (mongo, api) => {
   const cache = new ImageCache(api)
-  router.get('/:userId', (req, res) => {
-    mongo.Users.findById(req.params.userId).exec().then((user) => {
-      if (!user) { res.sendStatus(404) }
+  
+  router.use((req, res, next) => {
+    api.getMe(req.session.token).then((session) => {
+      if(session !== undefined) {
+        if (session.banned) {
+          req.session.destroy(() => {
+            next()
+          })
+        }
+      }
+    })
+    next()
+  })
+
+  router.get('/:userId', async (req, res) => {
+    const session = await api.getMe(req.session.token)
+    api.getUser(req.params.userId).then((user) => {
       cache.saveCached(user, false).then(async () => {
         if (user) {
-          res.render('user', {
-            logged: req.session.user,
+          res.render('users/user', {
+            session,
             user: {
-              avatar: formatUrl(user.id),
-              banned: user.banned,
-              id: user.id,
+              avatar: formatUrl(user._id),
+              id: user._id,
               name: user.username,
               tag: user.discriminator,
-              url: `/user/${user.details.customURL || user.id}/`,
+              url: `/user/${user.details.customURL || user._id}/`,
               bio: user.details.description || 'Esse usuário ainda não definiu uma biografia.'
             },
-            bots: (await mongo.Bots
-              .find()
-              .or([{ owner: user.id }, { 'details.otherOwners': user.id }])
-              .exec())
-              .filter(bot => bot.approvedBy || (req.session.user && (req.session.user.id === bot.owner || req.session.user.role < 1)))
+            bots: (await api.getUserBots(user._id))
+              .filter(bot => bot.approvedBy || (session && (session._id === bot.owner || session.details.role < 1)))
               .map(partialBotObject),
             title: user.username
           })
@@ -44,58 +54,23 @@ module.exports = (mongo, api) => {
     })
   })
 
-  router.get('/:id/:action', (req, res) => {
+  router.get('/:id/:action', async (req, res) => {
     if (!req.session.user) {
       req.session.path = req.originalUrl
       res.redirect('/oauth2/login')
       return
     }
-
-    const { user } = req.session
     const { id, action } = req.params
+    const session = await api.getMe(req.session.token)
 
-    mongo.Users.findById(id).exec().then((userb) => {
-      if (userb) {
-        if (action === 'ban' || action === 'unban') {
-          if (user.role > 2) {
-            if (id === user.id) {
-              res.render('message', {
-                message: 'Você não pode banir ou desbanir à si mesmo.'
-              })
-            }
-            if (action === 'ban') {
-              if (userb.banned) {
-                return res.render('message', {
-                  message: 'O usuário ja se encontra banido!'
-                })
-              }
-              res.render('action', {
-                user: {
-                  id: userb.id,
-                  name: userb.username,
-                  tag: userb.discriminator
-                },
-                title: `Banir ${userb.username}`,
-                type: 'Banir',
-                action
-              })
-            } else {
-              if (!userb.banned) {
-                return res.render('message', {
-                  message: 'O usuário não se encontra banido!'
-                })
-              }
-              res.render('action', {
-                user: {
-                  id: userb.id,
-                  name: userb.username,
-                  tag: userb.discriminator
-                },
-                title: `Desbanir ${userb.username}`,
-                type: 'Desbanir',
-                action
-              })
-            }
+     api.getUser(req.params.userId).then((user) => {
+      if (user) {
+        if (action === 'action') {
+          if (session.details.role > 2) {
+            res.render('staff/action', {
+              session,
+              user
+            })
           } else {
             res.render('message', {
               title: 'Acesso negado',
@@ -103,16 +78,14 @@ module.exports = (mongo, api) => {
             })
           }
         } else if (action === 'edit') {
-          if (id === user.id) {
-            res.render('action', {
+          if (id === session.id) {
+            res.render('users/edit', {
               user: {
-                id: userb.id,
-                name: userb.username,
-                tag: userb.discriminator
+                id: user._id,
+                name: user.username,
+                tag: user.discriminator
               },
-              title: `Editar ${userb.username}`,
-              type: 'Editar',
-              action
+              title: `Editar ${user.username}`,
             })
           } else {
             res.render('message', {

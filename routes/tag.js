@@ -5,7 +5,20 @@ const tags = require('../utils/tags')
 const { partialBotObject, partialSelect } = require('../utils/bot')
 const colors = require('../utils/colors')
 
-module.exports = (db) => {
+module.exports = (db, api) => {
+  router.use((req, res, next) => {
+    api.getMe(req.session.token).then((session) => {
+      if(session !== undefined) {
+        if (session.banned) {
+          req.session.destroy(() => {
+            next()
+          })
+        }
+      }
+    })
+    next()
+  })
+
   router.get('/:tag', (req, res) => {
     const tagName = req.params.tag
     const tagFormated = tags[tagName]

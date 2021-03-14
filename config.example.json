@@ -3,7 +3,7 @@
         "root": "https://zuraaa.com/",
         "port": 80,
         "session": {
-            "secret": "Insira a chave para criptografar a session aqui"
+            "secret": "chave para criptografar a session"
         }
     },
 
@@ -30,9 +30,9 @@
         "public": "chave publica do captcha"
     },
     "discord": {
-        "bpdId": "guild da botlist",
-        "addId": "guild do servidor de teste de bot",
-        "atualizarServidores": "se a quantidade de servidores deve ser atualizada, o padrão é false",
+        "bpdId": "servidor da botlist",
+        "addId": "servidor de teste de bot",
+        "atualizarServidores": false,
         "bot": {
             "token": "token bot",
             "channels": {
@@ -42,7 +42,7 @@
                 "admin": "admin role",
                 "mod": "mod role",
                 "developer": "developer role",
-                "verifier": "id do cargo de verificador"
+                "verifier": "verifier role"
             }
         },
         "ownerId": "",

@@ -10,9 +10,14 @@ export interface User {
   details: UserDetails
 }
 
+export interface UserMe extends User {
+  banned: boolean
+}
+
 export interface UserDetails {
   description: string
   role: number
+  customURL: string
 }
 
 export interface Bot {

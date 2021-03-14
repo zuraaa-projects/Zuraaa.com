@@ -93,12 +93,12 @@ app.use(cookiesession({
 
 const api = new Api()
 
-app.use('/', indexRouter(db))
+app.use('/', indexRouter(db, api))
 app.use('/bots', botsRouter(config, db, api))
 app.use('/discord', discordRouter(config))
 app.use('/oauth2', oauth(config, db, api))
 app.use('/user', user(db, api))
-app.use('/tag', tag(db))
+app.use('/tag', tag(db, api))
 app.use('/staff', staff(config, db))
 
 // catch 404 and forward to error handler

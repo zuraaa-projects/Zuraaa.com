@@ -180,6 +180,19 @@ module.exports = (config, db, api) => {
     return true
   }
 
+  router.use((req, res, next) => {
+    api.getMe(req.session.token).then((session) => {
+      if(session !== undefined) {
+        if (session.banned) {
+          req.session.destroy(() => {
+            next()
+          })
+        }
+      }
+    })
+    next()
+  })
+
   router.get('/', (req, res) => {
     let { page } = req.query
     if (!page || Number.isNaN(page) || page < 1) { page = 1 }

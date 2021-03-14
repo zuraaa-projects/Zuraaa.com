@@ -1,0 +1,17 @@
+extends ../layouts/layout
+
+block content
+    .container.main-container
+        form#banf(action="/user/" + user.id + "/edit" method="POST")
+            .box.has-text-centered
+                h1.title.is-1 Editar #{user.name}##{user.tag}              
+                br
+                .field.is-horizontal
+                    .field-label.is-normal.has-text-left
+                        label.label Nova Biografia
+                    .field-body
+                        .field.is-narrow
+                            .control
+                                input.input#bio(maxlength="255" name="bio" placeholder="Insira sua nova biografia")
+                                p.help Máximo de 255 caracteres. Deixei vazio para remover a biografia.
+            button.button Editar
