@@ -61,19 +61,25 @@ module.exports = (config, mongo, api) => {
           .catch((error) => {
             const { data } = error.response
             if (data.statusCode === 403) {
-              return res.render('message', {
-                title: data.statusCode,
-                message: data.message
+              req.session.destroy(() => {
+                return res.render('message', {
+                  title: 'BANIDO',
+                  message: 'Você está banido! 🙂'
+                })
               })
+              return
             }
           })
       } catch (error) {
         const { data } = error.response
         if (data.statusCode === 403) {
-          return res.render('message', {
-            title: data.statusCode,
-            message: data.message
+          req.session.destroy(() => {
+            return res.render('message', {
+              title: 'BANIDO',
+              message: 'Você está banido! 🙂'
+            })
           })
+          return
         }
         res.redirect('/oauth2/login')
       }

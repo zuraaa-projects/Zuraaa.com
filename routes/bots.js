@@ -365,14 +365,18 @@ module.exports = (config, db, api) => {
         .catch((error) => {
           const { data } = error.response
           if (data.statusCode === 403) {
-            return res.render('message', {
-              title: data.statusCode,
-              message: data.message
+            req.session.destroy(() => {
+              return res.render('message', {
+                title: 'BANIDO',
+                message: 'Você está banido! 🙂'
+              })
+            })
+            return
+          } else {  
+            res.render('message', {
+              message: 'Ocorreu um erro durante sua solicitação.'
             })
           }
-          res.render('message', {
-            message: 'Ocorreu um erro durante sua solicitação.'
-          })
         })
     } catch (error) {
       console.error(error)
@@ -425,10 +429,13 @@ module.exports = (config, db, api) => {
     db.Users.findById(req.session.user.id).then((user) => {
       if (user) {
         if (user.banned) {
+        req.session.destroy(() => {
           return res.render('message', {
-            title: '403',
-            message: 'You have been banned'
+              title: 'BANIDO',
+              message: 'Você está banido! 🙂'
+            })
           })
+          return
         }
         const next = user.dates.nextVote
         const now = new Date()
@@ -607,10 +614,13 @@ module.exports = (config, db, api) => {
       // Puxadinho pra n deixar a pessoa adicionar bot enquanto o .Com não é conectado ao Core
       const user = await db.Users.findById(req.session.user.id)
       if (user.banned) {
-        return res.render('message', {
-          title: '403',
-          message: 'You have been banned'
-        })
+        req.session.destroy(() => {
+          return res.render('message', {
+              title: 'BANIDO',
+              message: 'Você está banido! 🙂'
+            })
+          })
+        return
       }
 
       const b = req.body

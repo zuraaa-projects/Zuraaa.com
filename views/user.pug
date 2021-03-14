@@ -23,12 +23,9 @@ block content
                         a.button(href=user.url + "ban") Banir
     .container.main-container
         .bots
-            if user.banned
-                p.is-size-1.has-text-centered Este usuário foi banido 🙂
+            h2.is-size-3 BOTS
+            if bots.length != 0
+                for bot in bots
+                    include layouts/bot
             else
-                h2.is-size-3 BOTS
-                if bots.length != 0
-                    for bot in bots
-                        include layouts/bot
-                else
-                    p.is-size-5 Esse usuário não possui nenhum bot listado publicamente no sistema.
+                p.is-size-5 Esse usuário não possui nenhum bot listado publicamente no sistema.
