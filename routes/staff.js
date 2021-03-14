@@ -111,8 +111,9 @@ module.exports = (config, db) => {
         return
       }
       db.Bots.deleteOne({ _id: bot.id }).exec()
+      const reason = req.body.reason || 'Nenhum motivo informado.'
       discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi rejeitado por \`${userToString(req.session.user)}\`\n` +
-            `Motivo: \`${req.body.reason}\``)
+            `Motivo: \`${reason}\``)
       discordBot.sendMessage(bot.owner, {
         title: 'Não foi dessa vez',
         color: 0xff0000,
@@ -120,7 +121,7 @@ module.exports = (config, db) => {
         fields: [
           {
             name: 'Motivo:',
-            value: req.body.reason
+            value: reason
           }
         ],
         footer: {

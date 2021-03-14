@@ -39,12 +39,16 @@ export default class Api {
     })).data
   }
 
-  async login (code: string): Promise<Auth> {
-    return (await this.api.post('/auth/user', {
-      type: 'code',
-      identify: config.api.secret,
-      data: code
-    })).data
+  async login (code: string): Promise<Auth | undefined> {
+    try {
+      return (await this.api.post('/auth/user', {
+        type: 'code',
+        identify: config.api.secret,
+        data: code
+      })).data
+    } catch (error) {
+      console.error('error during login:', error.response.data)
+    }
   }
 
   async getAvatar (id: string): Promise<Avatar> {
