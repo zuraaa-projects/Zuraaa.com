@@ -44,6 +44,9 @@ module.exports = (config, mongo, api) => {
     if (code && captchaIsValid(config.recaptcha, captcha)) {
       try {
         api.login(code).then(({ access_token: token }) => {
+          if (!token) {
+            res.redirect('/oauth2/login')
+          }
           api.getMe(token).then(async user => {
             req.session.token = token
             req.session.user = {

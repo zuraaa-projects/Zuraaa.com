@@ -32,43 +32,46 @@ module.exports = (config) => {
         recipient_id: id
       })
     })
+    const json = await response.json()
     if (response.status === 200) {
-      return response.json()
+      return json
+    } else {
+      console.error('Error creating DM with', id, response.status, json)
     }
     return undefined
   }
 
   async function sendMessage (channelId, content, isDM = false, isEmbed = false, hasExtraText = false, extraText = '') {
     function send (id) {
+      let body
       if (isEmbed) {
         if (hasExtraText) {
-          fetch(`${baseUrl}channels/${id}/messages`, {
-            headers,
-            method: 'POST',
-            body: JSON.stringify({
-              content: extraText,
-              embed: content
-            })
-          })
-          return
-        }
-        fetch(`${baseUrl}channels/${id}/messages`, {
-          headers,
-          method: 'POST',
-          body: JSON.stringify({
+          body = {
+            content: extraText,
             embed: content
-          })
-        })
-        return
+          }
+        } else {
+          body = {
+            embed: content
+          }
+        }
+      } else {
+        body = {
+          content
+        }
       }
-
       fetch(`${baseUrl}channels/${id}/messages`, {
         headers,
         method: 'POST',
-        body: JSON.stringify({
-          content
-        })
+        body: JSON.stringify(body)
       })
+        .then(res => {
+          if (res.status !== 200) {
+            res.json().then(json => {
+              console.error('Error sending message to', channelId, json)
+            })
+          }
+        })
     }
 
     if (isDM) {
