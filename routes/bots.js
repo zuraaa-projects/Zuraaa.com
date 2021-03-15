@@ -175,7 +175,7 @@ module.exports = (config, db, api) => {
     }
     const user = await db.Users.findById(sessionUser.id).exec()
     if (!user || user.details.role < 1) {
-      if(!disableOwner && sessionUser.id === bot.owner._id) {
+      if (!disableOwner && sessionUser.id === bot.owner._id) {
         return true
       }
       return false
