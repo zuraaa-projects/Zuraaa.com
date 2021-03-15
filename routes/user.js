@@ -192,10 +192,7 @@ module.exports = (mongo, api) => {
       } else if (action === 'edit') {
         if (id === user.id) {
           await api.updateMe(token, bio || null)
-          res.render('message', {
-            title: 'Sucesso!',
-            message: 'Você editou sua biografia com sucesso!'
-          })
+          res.redirect('/user/' + user.id)
         } else {
           res.render('message', {
             title: 'Acesso negado',
