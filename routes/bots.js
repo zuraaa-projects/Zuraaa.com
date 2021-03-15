@@ -225,7 +225,7 @@ module.exports = (config, db, api) => {
       .then(async (dbot) => {
         if (dbot != null) {
           if (!dbot || !dbot.approvedBy) {
-            if (!(await isAdm(req.session.user))) {
+            if (!(await isAdm(req.session.user, dbot))) {
               res.sendStatus(404)
               return
             }
@@ -293,7 +293,7 @@ module.exports = (config, db, api) => {
         return
       }
       if (!dbot.approvedBy) {
-        if (!(await isAdm(req.session.user))) {
+        if (!(await isAdm(req.session.user, dbot))) {
           res.sendStatus(404)
           return
         }
@@ -322,7 +322,7 @@ module.exports = (config, db, api) => {
         return
       }
       if (!dbot || !dbot.approvedBy) {
-        if (!(await isAdm(req.session.user))) {
+        if (!(await isAdm(req.session.user, dbot))) {
           res.sendStatus(404)
           return
         }
