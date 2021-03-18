@@ -4,8 +4,6 @@ Site que tem como objetivo divulgar aplicações (bots, servers e serviços) par
 
 Acompanhe o desenvolvimento [clicando aqui](https://github.com/zuraaa-projects)
 
-Agradecimento especial ao Naegin pela base do Design.
-
 [Docs Oficiais Zuraaa](https://github.com/zuraaa-projects/Zuraaa.com/wiki#zuraaa-docs)
 
 [Complementos da comunidade](https://github.com/zuraaa-projects/Zuraaa.com/wiki#projetos-da-comunidade)
@@ -14,20 +12,41 @@ Agradecimento especial ao Naegin pela base do Design.
 
 [![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](http://standardjs.com)
 
-## Como usar:
+## Agradecimentos
 
-**⚠O Zuraaa.com precisa de uma instância do [ZuraaaCore](https://github.com/zuraaa-projects/ZuraaaCore) e de uma do [MongoDB](https://www.mongodb.com/) para poder funcionar.⚠**
+Agradecimento especial ao Naegin pela base do design.
 
-- Clone o código fonte usando o [Git](https://git-scm.com/downloads)
+## Como usar
+
+**⚠ Esse projeto precisa de uma instância do [ZuraaaCore](https://github.com/zuraaa-projects/ZuraaaCore) e do [MongoDB](https://www.mongodb.com/) para poder funcionar ⚠**
+
+- Primeiro clone o repositório:
 ```sh
 $ git clone https://github.com/zuraaa-projects/Zuraaa.com.git
 ```
 
-- Copie o arquivo "config.example.json" e renomeie para "config.json" e preencha os espaços
-
-- Após configurar a aplicação basta baixar as dependências, compilar e rodar a aplicação:
+- Inicialize as dependências:
 ```sh
 $ npm i
+```
+
+- Copie o arquivo `config.example.json` e renomeie para `config.json` e preencha os espaços
+
+- Compile o projeto: 
+```sh
 $ npm run build
+```
+
+- Por fim, inicie o projeto:
+```sh
 $ npm start
 ```
+
+### Suporte
+
+- Suporte feito através do nosso [Discord](https://www.zuraaa.com/discord)
+
+### Fair Use
+
+- Fica livre o uso desse software bem como modificações no mesmo desde que dentro da licença GPL v3.0.
+
