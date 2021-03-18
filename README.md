@@ -10,7 +10,11 @@ Agradecimento especial ao Naegin pela base do Design.
 
 [Complementos da comunidade](https://github.com/zuraaa-projects/Zuraaa.com/wiki#projetos-da-comunidade)
 
-## Baixar e inicializar a aplicação:
+## Estilo de código
+
+[![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](http://standardjs.com)
+
+## Como usar:
 
 **⚠O Zuraaa.com precisa de uma instância do [ZuraaaCore](https://github.com/zuraaa-projects/ZuraaaCore) e de uma do [MongoDB](https://www.mongodb.com/) para poder funcionar.⚠**
 
