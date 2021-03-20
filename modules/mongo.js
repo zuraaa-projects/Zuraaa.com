@@ -127,21 +127,23 @@ module.exports = class Mongo {
         ]
       },
       webhook: {
-        authorization: {
-          default: null,
-          type: String
-        },
-        url: {
-          default: null,
-          type: String
-        },
         type: {
-          default: 0,
-          type: Number
-        },
-        lastError: {
-          default: false,
-          type: Boolean
+          authorization: {
+            default: null,
+            type: String
+          },
+          url: {
+            default: null,
+            type: String
+          },
+          type: {
+            default: 0,
+            type: Number
+          },
+          lastError: {
+            default: false,
+            type: Boolean
+          }
         }
       }
     }))
