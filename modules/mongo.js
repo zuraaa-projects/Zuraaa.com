@@ -109,10 +109,7 @@ module.exports = class Mongo {
           default: null,
           type: String
         },
-        guilds: {
-          default: null,
-          type: Number
-        }
+        guilds: Number
       },
       approvedBy: {
         ref: 'users',
