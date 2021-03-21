@@ -54,7 +54,7 @@ app.use(
 app.use(helmet.ieNoOpen())
 app.use(
   helmet.frameguard({
-    action: 'sameorigin'
+    action: 'deny'
   })
 )
 app.use(

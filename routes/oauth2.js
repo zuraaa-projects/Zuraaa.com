@@ -62,13 +62,16 @@ module.exports = (config, mongo, api) => {
           })
         })
           .catch((error) => {
-            const { data } = error.response
-            if (data.statusCode === 403) {
-              req.session.destroy(() => {
-                return res.render('message', {
-                  title: 'BANIDO',
-                  message: 'Você está banido! 🙂'
-                })
+            console.error('Error during login', error.message, error.response?.data)
+            if (error.response?.status === 403) {
+              req.session.destroy()
+              res.render('message', {
+                title: 'BANIDO',
+                message: 'Você está banido! 🙂'
+              })
+            } else {
+              res.render('message', {
+                message: 'Ocorreu um erro durante o login.'
               })
             }
           })

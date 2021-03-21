@@ -1,6 +1,6 @@
 import Axios, { AxiosInstance } from 'axios'
 import config from '../../config.json'
-import { Auth, Avatar, Bot, User } from './types'
+import { Auth, Avatar, Bot, SendBot, User } from './types'
 import FormData from 'form-data'
 
 export default class Api {
@@ -40,15 +40,11 @@ export default class Api {
   }
 
   async login (code: string): Promise<Auth | undefined> {
-    try {
-      return (await this.api.post('/auth/user', {
-        type: 'code',
-        identify: config.api.secret,
-        data: code
-      })).data
-    } catch (error) {
-      console.error('error during login:', error.response.data)
-    }
+    return (await this.api.post('/auth/user', {
+      type: 'code',
+      identify: config.api.secret,
+      data: code
+    })).data
   }
 
   async getAvatar (id: string): Promise<Avatar> {
@@ -110,5 +106,27 @@ export default class Api {
 
   async getUser (id: string): Promise<User> {
     return (await this.api.get('/users/' + id)).data
+  }
+
+  async sendBot (token: string, bot: SendBot): Promise<Bot> {
+    return (await this.api.post(
+      '/bots',
+      bot,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })).data
+  }
+
+  async editBot (token: string, id: string, bot: SendBot): Promise<Bot> {
+    return (await this.api.put(
+      `/bots/${id}`,
+      bot,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })).data
   }
 }

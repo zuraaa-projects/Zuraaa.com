@@ -16,7 +16,7 @@ block content
             if logged !== undefined
                 if logged.id === user.id
                     a.button(href=user.url + "edit") Editar
-                if logged.role > 2
+                if logged.role >= 2
                     if user.banned
                         a.button(href=user.url + "unban") Desbanir
                     else

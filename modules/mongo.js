@@ -76,6 +76,10 @@ module.exports = class Mongo {
           default: null,
           type: String
         },
+        isHTML: {
+          default: false,
+          type: Boolean
+        },
         supportServer: {
           default: null,
           type: String
@@ -127,23 +131,21 @@ module.exports = class Mongo {
         ]
       },
       webhook: {
+        authorization: {
+          default: null,
+          type: String
+        },
+        url: {
+          default: null,
+          type: String
+        },
         type: {
-          authorization: {
-            default: null,
-            type: String
-          },
-          url: {
-            default: null,
-            type: String
-          },
-          type: {
-            default: 0,
-            type: Number
-          },
-          lastError: {
-            default: false,
-            type: Boolean
-          }
+          default: 0,
+          type: Number
+        },
+        lastError: {
+          default: false,
+          type: Boolean
         }
       }
     }))

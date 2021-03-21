@@ -57,7 +57,7 @@ module.exports = (mongo, api) => {
     mongo.Users.findById(id).exec().then((userb) => {
       if (userb) {
         if (action === 'ban' || action === 'unban') {
-          if (user.role > 2) {
+          if (user.role >= 2) {
             if (id === user.id) {
               res.render('message', {
                 message: 'Você não pode banir ou desbanir à si mesmo.'
@@ -141,7 +141,7 @@ module.exports = (mongo, api) => {
       let { reason, bio } = req.body
       const { id, action } = req.params
       if (action === 'ban' || action === 'unban') {
-        if (user.role > 2) {
+        if (user.role >= 2) {
           mongo.Users.findById(id).exec().then(async (userb) => {
             if (id === user.id) {
               res.render('message', {
