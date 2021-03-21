@@ -172,7 +172,7 @@ module.exports = (config, db, api) => {
     api
       .getBot(req.params.id)
       .then(async apiBot => {
-        if (!bot.approvedBy) {
+        if (!apiBot.approvedBy) {
           if (!(await isAdm(req.session.user, apiBot))) {
             res.sendStatus(404)
             return
