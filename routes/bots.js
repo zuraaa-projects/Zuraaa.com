@@ -58,7 +58,7 @@ module.exports = (config, db, api) => {
         }
       }
     }
-    if (body.support && body.support.length > 2083) {
+    if (body.server && body.server.length > 20) {
       return 'Link do servidor de suporte é inválido.'
     }
     if (!body.prefix || body.prefix.length > 15) {
@@ -67,11 +67,14 @@ module.exports = (config, db, api) => {
     if (!body.shortdesc || body.shortdesc.length < 2 || body.shortdesc.length > 300) {
       return 'Descrição curta é inválida.'
     }
-    if (body.longdesc && body.longdesc.length > 10000) {
+    if (body.longdesc && body.longdesc.length > 100000) {
       return 'Descrição longa é inválida.'
     }
     if (body.donate && !validUrl.isUri(body.donate)) {
       return 'O campo "Doação" precisa ser um link.'
+    }
+    if (b.custominvite && b.custominvite.length > 2083) {
+      return 'Convite customizado é muito grande.'
     }
     const allTags = Object.values(BotsTags)
     if (
