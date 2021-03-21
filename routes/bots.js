@@ -5,7 +5,6 @@ const validUrl = require('valid-url')
 const md = require('markdown-it')()
 const tags = require('../utils/tags')
 const bot = require('../utils/discordbot')
-const httpExtensions = require('../utils/httpExtensions')
 const { userToString, avatarFormat } = require('../utils/user')
 const { captchaIsValid } = require('../utils/captcha')
 const ImageCache = require('../utils/ImageCache').default
@@ -187,9 +186,6 @@ module.exports = (config, db, api) => {
             dbot.details.htmlDescription = md.render(dbot.details.longDescription || '')
           }
 
-          if (config.discord.atualizarServidores) {
-            dbot.details.guilds = await httpExtensions(config).pegarServidores(dbot._id)
-          }
           cache.saveCached(dbot).then((element) => {
             if (!element) {
               res.sendStatus(404)

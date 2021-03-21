@@ -32,7 +32,6 @@
     "discord": {
         "bpdId": "guild da botlist",
         "addId": "guild do servidor de teste de bot",
-        "atualizarServidores": "se a quantidade de servidores deve ser atualizada, o padrão é false",
         "bot": {
             "token": "token bot",
             "channels": {
