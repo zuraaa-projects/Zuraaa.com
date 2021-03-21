@@ -46,7 +46,7 @@ block content
                 a.button(href="https://github.com/" + bot.github) GitHub
             if bot.support
                 a.button(href="https://discord.gg/" + bot.support) Suporte
-            if user && bot.owners.some(x => x.id == user.id)
+            if user && bot.owners.some(x => x._id == user.id)
                 a.button(href=bot.url + "editar") Editar
     .container.main-container
         .box.content !{bot.content}

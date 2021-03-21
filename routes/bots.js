@@ -2,7 +2,6 @@ const express = require('express')
 
 const router = express.Router()
 const validUrl = require('valid-url')
-const md = require('markdown-it')()
 const tags = require('../utils/tags')
 const bot = require('../utils/discordbot')
 const { userToString, avatarFormat } = require('../utils/user')
@@ -170,66 +169,58 @@ module.exports = (config, db, api) => {
       return
     }
 
-    db.Bots.findOne({
-      $or: [{ _id: req.params.id }, { 'details.customURL': req.params.id }]
-    }).populate('owner', '_id username discriminator').populate('details.otherOwners', '_id username discriminator').exec()
-      .then(async (dbot) => {
-        if (dbot != null) {
-          if (!dbot || !dbot.approvedBy) {
-            if (!(await isAdm(req.session.user, dbot))) {
-              res.sendStatus(404)
-              return
-            }
-          }
-
-          if (!dbot.details.htmlDescription) {
-            dbot.details.htmlDescription = md.render(dbot.details.longDescription || '')
-          }
-
-          cache.saveCached(dbot).then((element) => {
-            if (!element) {
-              res.sendStatus(404)
-              return
-            }
-            element.save()
-            const botTags = dbot.details.tags
-            const avatar = formatUrl(dbot.id)
-            const owners = [...(dbot.details.otherOwners || []), dbot.owner].filter(
-              (x, index, self) => self.findIndex((y) => y.id === x.id) === index
-            )
-            for (let i = 0; i < owners.length; i++) {
-              const owner = owners[i]
-              owner.avatarUrl = formatUrl(owner.id)
-              owners[i] = owner
-            }
-
-            res.render(`bots/bot${req.query.frame ? 'frame' : ''}`, {
-              bot: {
-                avatar,
-                name: dbot.username,
-                tag: dbot.discriminator,
-                bio: dbot.details.shortDescription,
-                votes: dbot.votes.current,
-                tags: botTags,
-                content: dbot.details.htmlDescription,
-                url: `/bots/${dbot.details.customURL || dbot.id}/`,
-                support: dbot.details.supportServer,
-                website: dbot.details.website,
-                github: dbot.details.github,
-                donate: dbot.details.donate,
-                owners,
-                prefix: dbot.details.prefix,
-                library: dbot.details.library,
-                guilds: dbot.details.guilds ? `±${dbot.details.guilds}` : '???'
-              },
-              title: dbot.username,
-              colors,
-              tags,
-              user: req.session.user
-            })
-          })
-        } else {
+    api
+      .getBot(req.params.id)
+      .then(async apiBot => {
+        if (!(await isAdm(req.session.user, apiBot))) {
           res.sendStatus(404)
+          return
+        }
+        const owner = await api.getUser(apiBot.owner)
+        owner.avatarUrl = formatUrl(owner._id)
+        const otherOwners = []
+        for (const id of apiBot.details.otherOwners) {
+          try {
+            const otherOwner = await api.getUser(id)
+            otherOwner.avatarUrl = formatUrl(otherOwner._id)
+            otherOwners.push(otherOwner)
+          } catch (err) {
+            console.error('Failed to get user', id, 'info:', err.message)
+          }
+        }
+
+        const avatar = formatUrl(apiBot._id)
+
+        res.render('bots/bot', {
+          bot: {
+            avatar,
+            name: apiBot.username,
+            tag: apiBot.discriminator,
+            bio: apiBot.details.shortDescription,
+            votes: apiBot.votes.current,
+            tags: apiBot.details.tags,
+            content: apiBot.details.htmlDescription,
+            url: `/bots/${apiBot.details.customURL || apiBot._id}/`,
+            support: apiBot.details.supportServer,
+            website: apiBot.details.website,
+            github: apiBot.details.github,
+            donate: apiBot.details.donate,
+            owners: [owner, ...otherOwners],
+            prefix: apiBot.details.prefix,
+            library: apiBot.details.library,
+            guilds: apiBot.details.guilds ? `±${apiBot.details.guilds}` : '???'
+          },
+          title: apiBot.username,
+          colors,
+          tags,
+          user: req.session.user
+        })
+      })
+      .catch(error => {
+        if (error.response?.status === 404) {
+          res.sendStatus(404)
+        } else {
+          console.error('error showing', req.params.id, error.message)
         }
       })
   })
