@@ -32,7 +32,7 @@ block content
                 figure.image.is-32x32
                     img.is-rounded(src=owner.avatarUrl)
 
-                a(href="/user/" + owner.id) #{owner.username}##{owner.discriminator}
+                a(href="/user/" + owner._id) #{owner.username}##{owner.discriminator}
         br
         .buttons.is-centered
             a.button(href=bot.url + "add") Adicionar
