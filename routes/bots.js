@@ -172,9 +172,11 @@ module.exports = (config, db, api) => {
     api
       .getBot(req.params.id)
       .then(async apiBot => {
-        if (!(await isAdm(req.session.user, apiBot))) {
-          res.sendStatus(404)
-          return
+        if (!bot.approvedBy) {
+          if (!(await isAdm(req.session.user, apiBot))) {
+            res.sendStatus(404)
+            return
+          }
         }
         const owner = await api.getUser(apiBot.owner)
         owner.avatarUrl = formatUrl(owner._id)
