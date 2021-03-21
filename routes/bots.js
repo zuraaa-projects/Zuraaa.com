@@ -73,7 +73,7 @@ module.exports = (config, db, api) => {
     if (body.donate && !validUrl.isUri(body.donate)) {
       return 'O campo "Doação" precisa ser um link.'
     }
-    if (b.custominvite && b.custominvite.length > 2083) {
+    if (body.custominvite && body.custominvite.length > 2083) {
       return 'Convite customizado é muito grande.'
     }
     const allTags = Object.values(BotsTags)
