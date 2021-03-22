@@ -18,3 +18,11 @@
     margin-top: .25rem;
     display: none;
 }
+
+.full-width {
+  width: 100%;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}

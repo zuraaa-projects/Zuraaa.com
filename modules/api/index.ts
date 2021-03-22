@@ -1,6 +1,6 @@
 import Axios, { AxiosInstance } from 'axios'
 import config from '../../config.json'
-import { Auth, Avatar, Bot, SendBot, User } from './types'
+import { Auth, Avatar, Bot, SendBot, User, WebhookBody } from './types'
 import FormData from 'form-data'
 
 export default class Api {
@@ -128,5 +128,21 @@ export default class Api {
           Authorization: `Bearer ${token}`
         }
       })).data
+  }
+
+  async testWebhook (token: string, body: WebhookBody): Promise<number> {
+    try {
+      const res = await this.api.post(
+        '/webhook',
+        body,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+      return res.status
+    } catch (err) {
+      return err.response?.status ?? 500
+    }
   }
 }

@@ -5,7 +5,7 @@ const { partialBotObject } = require('../utils/bot')
 const tags = require('../utils/tags')
 const colors = require('../utils/colors')
 
-module.exports = (mongo) => {
+module.exports = (mongo, api) => {
   router.get('/', async (req, res) => {
     const filter = { approvedBy: { $ne: null } }
     res.render('index', {
@@ -28,6 +28,20 @@ module.exports = (mongo) => {
 
   router.get('/userdata', (req, res) => {
     res.send(req.session.user)
+  })
+
+  router.post('/testwebhook', async (req, res) => {
+    if (req.session.token) {
+      const { type, url, authorization } = req.body
+      console.log(req.body)
+      const result = await api.testWebhook(req.session.token, {
+        type,
+        url,
+        authorization
+      })
+      return res.sendStatus(result)
+    }
+    res.sendStatus(401)
   })
   return router
 }

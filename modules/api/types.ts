@@ -101,3 +101,9 @@ export interface SendBot {
     }
   }
 }
+
+export interface WebhookBody {
+  authorization?: string
+  url: string
+  type: 1 | 2
+}

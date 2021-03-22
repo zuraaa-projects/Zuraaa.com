@@ -93,7 +93,7 @@ app.use(cookiesession({
 
 const api = new Api()
 
-app.use('/', indexRouter(db))
+app.use('/', indexRouter(db, api))
 app.use('/bots', botsRouter(config, db, api))
 app.use('/discord', discordRouter(config))
 app.use('/oauth2', oauth(config, db, api))

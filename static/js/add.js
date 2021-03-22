@@ -56,6 +56,10 @@ $(function () {
         break
     }
   }).trigger('change')
+  $('#webhookurl').keydown(function () {
+    resetClasses(this)
+    changeWebhookText('')
+  })
 })
 
 /*
@@ -84,4 +88,48 @@ function nomeLegal(token) {
 
 window.onSubmit = function onSubmit () {
   $('#form').submit()
+}
+
+function changeWebhookText (text, className) {
+  resetClasses('#message')
+  const sel = $('#message')
+  sel.addClass(className)
+  if (text) {
+    sel.text(text)
+  } else {
+    sel.empty()
+  }
+}
+
+function resetClasses (selector) {
+  $(selector).removeClass(['is-warning', 'is-success', 'is-danger'])
+}
+
+window.testWebhook = function testWebhook () {
+  resetClasses('#webhookurl')
+  changeWebhookText('Testando Webhook...', 'is-warning')
+  $('#webhookurl').addClass('is-warning')
+  fetch('/testwebhook', {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      authorization: $('#authorization').val(),
+      type: Number.parseInt($('#webhook').val()),
+      url: $('#webhookurl').val()
+    })
+  }).then(res => {
+    const toAddClass = res.ok ? 'is-success' : 'is-danger'
+    let msg
+    if (res.ok) {
+      msg = 'Webhook enviado com sucesso!'
+    } else {
+      msg = res.status === 429 ? 'Aguarde um pouco para testar novamente.' : 'Erro ao enviar o Webhook.'
+    }
+    changeWebhookText(msg, toAddClass)
+    $('#webhookurl')
+      .removeClass('is-warning')
+      .addClass(toAddClass)
+  })
 }

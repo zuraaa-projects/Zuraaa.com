@@ -127,13 +127,17 @@ block content
                 .field-label.is-normal.has-text-left
                     label.label Webhook Url
                 .field-body
-                    .field
+                    .field.has-addons.flex-wrap
+                        .control.is-expanded
+                            input.input#webhookurl(maxlength="2083" name="webhookurl" type="url" placeholder="https://sitedomeubot.com.br/webhook")
                         .control
-                            input.input#webhook(maxlength="2083" name="webhookurl" type="url" placeholder="https://sitedomeubot.com.br/webhook")
-                        a.help(href="https://github.com/zuraaa-projects/Zuraaa.com/wiki/Votos-Webhook" target="_blank") Documentação
+                            button.button(type="button" onclick="testWebhook()") Testar WebHook
+                        span.help.full-width#message
+                        a.help(href="https://github.com/zuraaa-projects/Zuraaa.com/wiki/Votos-Webhook" target="_blank")
+                            | Documentação
             .field.is-horizontal.is-hidden#webhook-header
                 .field-label.is-normal.has-text-left
-                    label.label Webhook Authentication header
+                    label.label Webhook Authorization header
                 .field-body
                     .field
                         .control
