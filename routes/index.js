@@ -33,7 +33,6 @@ module.exports = (mongo, api) => {
   router.post('/testwebhook', async (req, res) => {
     if (req.session.token) {
       const { type, url, authorization } = req.body
-      console.log(req.body)
       const result = await api.testWebhook(req.session.token, {
         type,
         url,
