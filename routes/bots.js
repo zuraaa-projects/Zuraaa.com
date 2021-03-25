@@ -247,58 +247,58 @@ module.exports = (config, db, api) => {
     })
   })
 
-  router.get('/:id/remove', async (req, res) => {
-    if (!req.session.user) {
-      req.session.path = req.originalUrl
-      res.redirect('/oauth2/login')
-      return
-    }
+  // router.get('/:id/remove', async (req, res) => {
+  //   if (!req.session.user) {
+  //     req.session.path = req.originalUrl
+  //     res.redirect('/oauth2/login')
+  //     return
+  //   }
 
-    const bot = await getBotBy(req.params.id)
-    if (req.session.user.id !== bot.owner && req.session.user.role < 2) {
-      res.sendStatus(403)
-      return
-    }
+  //   const bot = await getBotBy(req.params.id)
+  //   if (req.session.user.id !== bot.owner && req.session.user.role < 2) {
+  //     res.sendStatus(403)
+  //     return
+  //   }
 
-    res.render('bots/remove', {
-      tag: userToString(bot),
-      id: bot.id
-    })
-  })
+  //   res.render('bots/remove', {
+  //     tag: userToString(bot),
+  //     id: bot.id
+  //   })
+  // })
 
-  router.post('/delete', async (req, res) => {
-    if (!req.session.token) {
-      req.session.path = req.originalUrl
-      res.redirect('/oauth2/login')
-      return
-    }
+  // router.post('/delete', async (req, res) => {
+  //   if (!req.session.token) {
+  //     req.session.path = req.originalUrl
+  //     res.redirect('/oauth2/login')
+  //     return
+  //   }
 
-    api
-      .removeBot(req.session.token, req.body.id)
-      .then(({ deleted }) => {
-        if (deleted) {
-          res.render('message', {
-            title: 'Sucesso',
-            message: 'O bot foi removido com sucesso.'
-          })
-        } else {
-          res.render('message', {
-            message: 'O bot não foi removido'
-          })
-        }
-      })
-      .catch(err => {
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          req.session.path = req.originalUrl
-          res.redirect('/oauth2/login')
-        } else {
-          console.error('Error trying to delete bot', err.message)
-          res.render('message', {
-            message: 'Ocorreu um erro durante a remoção.'
-          })
-        }
-      })
-  })
+  //   api
+  //     .removeBot(req.session.token, req.body.id)
+  //     .then(({ deleted }) => {
+  //       if (deleted) {
+  //         res.render('message', {
+  //           title: 'Sucesso',
+  //           message: 'O bot foi removido com sucesso.'
+  //         })
+  //       } else {
+  //         res.render('message', {
+  //           message: 'O bot não foi removido'
+  //         })
+  //       }
+  //     })
+  //     .catch(err => {
+  //       if (err.response?.status === 401 || err.response?.status === 403) {
+  //         req.session.path = req.originalUrl
+  //         res.redirect('/oauth2/login')
+  //       } else {
+  //         console.error('Error trying to delete bot', err.message)
+  //         res.render('message', {
+  //           message: 'Ocorreu um erro durante a remoção.'
+  //         })
+  //       }
+  //     })
+  // })
 
   router.get('/:id/report', (req, res) => {
     const topics = [
