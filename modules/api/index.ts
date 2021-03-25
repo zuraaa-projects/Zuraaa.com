@@ -145,4 +145,12 @@ export default class Api {
       return err.response?.status ?? 500
     }
   }
+
+  async removeBot (token: string, id: string): Promise<{deleted: boolean}> {
+    return (await this.api.delete(`/bots/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })).data
+  }
 }

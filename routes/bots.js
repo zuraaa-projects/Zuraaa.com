@@ -128,7 +128,7 @@ module.exports = (config, db, api) => {
     }
     const user = await db.Users.findById(sessionUser.id).exec()
     if (!user || user.details.role < 1) {
-      if (!disableOwner && sessionUser.id === bot.owner._id) {
+      if (!disableOwner && sessionUser.id === (bot.owner._id || bot.owner)) {
         return true
       }
       return false
@@ -199,6 +199,7 @@ module.exports = (config, db, api) => {
         res.render('bots/bot', {
           bot: {
             avatar,
+            id: apiBot._id,
             name: apiBot.username,
             tag: apiBot.discriminator,
             bio: apiBot.details.shortDescription,
@@ -244,6 +245,59 @@ module.exports = (config, db, api) => {
       }
       res.redirect(dbot.details.customInviteLink || defaultInvite(dbot.id))
     })
+  })
+
+  router.get('/:id/remove', async (req, res) => {
+    if (!req.session.user) {
+      req.session.path = req.originalUrl
+      res.redirect('/oauth2/login')
+      return
+    }
+
+    const bot = await getBotBy(req.params.id)
+    if (req.session.user.id !== bot.owner && req.session.user.role < 2) {
+      res.sendStatus(403)
+      return
+    }
+
+    res.render('bots/remove', {
+      tag: userToString(bot),
+      id: bot.id
+    })
+  })
+
+  router.post('/delete', async (req, res) => {
+    if (!req.session.token) {
+      req.session.path = req.originalUrl
+      res.redirect('/oauth2/login')
+      return
+    }
+
+    api
+      .removeBot(req.session.token, req.body.id)
+      .then(({ deleted }) => {
+        if (deleted) {
+          res.render('message', {
+            title: 'Sucesso',
+            message: 'O bot foi removido com sucesso.'
+          })
+        } else {
+          res.render('message', {
+            message: 'O bot não foi removido'
+          })
+        }
+      })
+      .catch(err => {
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          req.session.path = req.originalUrl
+          res.redirect('/oauth2/login')
+        } else {
+          console.error('Error trying to delete bot', err.message)
+          res.render('message', {
+            message: 'Ocorreu um erro durante a remoção.'
+          })
+        }
+      })
   })
 
   router.get('/:id/report', (req, res) => {
@@ -488,24 +542,39 @@ module.exports = (config, db, api) => {
   })
 
   router.get('/:id/editar', (req, res) => {
-    if (!req.session.user) {
+    if (!req.session.token) {
       req.session.path = req.originalUrl
       res.redirect('/oauth2/login')
       return
     }
-    getBotBy(req.params.id).then((dbot) => {
-      if (!dbot) {
-        res.sendStatus(404)
-        return
-      }
-      if (!([...dbot.details.otherOwners, dbot.owner].includes(req.session.user.id))) {
-        res.sendStatus(403)
-        return
-      }
-      res.render('bots/editar', {
-        bot: dbot, libraries: AppLibrary, tags: BotsTags, captcha: config.recaptcha.public
+    api
+      .getMe(req.session.token)
+      .then(user => {
+        getBotBy(req.params.id).then((dbot) => {
+          if (!dbot) {
+            res.sendStatus(404)
+            return
+          }
+          if (![...dbot.details.otherOwners, dbot.owner].includes(user._id) && user.details.role < 2) {
+            res.sendStatus(403)
+            return
+          }
+          res.render('bots/editar', {
+            bot: dbot, libraries: AppLibrary, tags: BotsTags, captcha: config.recaptcha.public
+          })
+        })
       })
-    })
+      .catch(err => {
+        if (err.response?.status === 401) {
+          req.session.path = req.originalUrl
+          res.redirect('/oauth2/login')
+        } else {
+          console.log('Error getting user at edit', err.message)
+          res.render('message', {
+            message: 'Ocorreu um erro ao conseguir suas informações.'
+          })
+        }
+      })
   })
 
   router.post('/editar', (req, res) => {
@@ -541,7 +610,9 @@ module.exports = (config, db, api) => {
               break
             case 401:
             case 403:
-              req.session.destroy()
+              req.session.destroy(() => {
+                res.session.path = req.originalUrl
+              })
               res.redirect('/oauth2/login')
               break
             case 404:
