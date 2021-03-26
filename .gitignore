@@ -2,6 +2,5 @@
 /.code
 config.json
 yarn.lock
-package-lock.json
 /.vscode
 /dist
