@@ -32,25 +32,28 @@ $(() => {
   const navbar = $('.navbar')
   const initialNavbarBG = navbar.css('background')
   const initialNavbarBS = navbar.css('boxShadow')
-  let transparentNavbar = initialNavbarBG === 'transparent'
+  let transparentNavbar = false
+
+  console.log(transparentNavbar)
 
   if (window.scrollY > 18) {
     navbar.css('background', 'rgba(0, 0, 0, 0.6)')
     navbar.css('boxShadow', '0 4px #710f4b')
-    transparentNavbar = false
+    transparentNavbar = true
   }
 
   $(window).scroll(() => {
+    console.log(window.scrollY)
     if (window.scrollY > 18) {
-      if (transparentNavbar) {
+      if (!transparentNavbar) {
         navbar.css('background', 'rgba(0, 0, 0, 0.6)')
         navbar.css('boxShadow', '0 4px #710f4b')
-        transparentNavbar = false
+        transparentNavbar = true
       }
-    } else if (!transparentNavbar) {
+    } else if (transparentNavbar) {
       navbar.css('background', initialNavbarBG)
       navbar.css('boxShadow', initialNavbarBS)
-      transparentNavbar = true
+      transparentNavbar = false
     }
   })
 
