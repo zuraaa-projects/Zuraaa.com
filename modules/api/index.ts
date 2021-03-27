@@ -1,6 +1,6 @@
 import Axios, { AxiosInstance } from 'axios'
 import config from '../../config.json'
-import { Auth, Avatar, Bot, SendBot, User, WebhookBody } from './types'
+import { Auth, Avatar, Bot, DeleteResult, SendBot, User, WebhookBody } from './types'
 import FormData from 'form-data'
 
 export default class Api {
@@ -100,8 +100,13 @@ export default class Api {
     })).data
   }
 
-  async getBot (id: string): Promise<Bot> {
-    return (await this.api.get('/bots/' + id)).data
+  async getBot (id: string, token?: string): Promise<Bot> {
+    const headers = token != null
+      ? {
+          Authorization: `Bearer ${token}`
+        }
+      : {}
+    return (await this.api.get('/bots/' + id, { headers })).data
   }
 
   async getUser (id: string): Promise<User> {
@@ -146,8 +151,18 @@ export default class Api {
     }
   }
 
-  async removeBot (token: string, id: string): Promise<{deleted: boolean}> {
+  async removeBot (token: string, id: string): Promise<DeleteResult> {
     return (await this.api.delete(`/bots/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })).data
+  }
+
+  async removeBotReason (token: string, id: string, reason?: string): Promise<DeleteResult> {
+    return (await this.api.post(`/bots/${id}/reason-remove`, {
+      reason
+    }, {
       headers: {
         Authorization: `Bearer ${token}`
       }

@@ -10,9 +10,14 @@ const { formatUrl } = require('../utils/avatar')
  * @param {Mongo} mongo
  */
 module.exports = (mongo, api) => {
+  async function getUserBy (idOrName) {
+    return mongo.Users.findOne({
+      $or: [{ _id: idOrName }, { 'details.customURL': idOrName }]
+    }).exec()
+  }
   const cache = new ImageCache(api)
   router.get('/:userId', (req, res) => {
-    mongo.Users.findById(req.params.userId).exec().then((user) => {
+    getUserBy(req.params.userId).then((user) => {
       if (!user) { res.sendStatus(404) }
       cache.saveCached(user, false).then(async () => {
         if (user) {
@@ -54,7 +59,7 @@ module.exports = (mongo, api) => {
     const { user } = req.session
     const { id, action } = req.params
 
-    mongo.Users.findById(id).exec().then((userb) => {
+    getUserBy(id).then((userb) => {
       if (userb) {
         if (action === 'ban' || action === 'unban') {
           if (user.role >= 2) {
@@ -142,7 +147,7 @@ module.exports = (mongo, api) => {
       const { id, action } = req.params
       if (action === 'ban' || action === 'unban') {
         if (user.role >= 2) {
-          mongo.Users.findById(id).exec().then(async (userb) => {
+          getUserBy(id).then(async (userb) => {
             if (id === user.id) {
               res.render('message', {
                 message: 'Você não pode banir ou desbanir à si mesmo.'

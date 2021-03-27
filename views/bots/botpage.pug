@@ -48,7 +48,7 @@ block content
                 a.button(href="https://discord.gg/" + bot.support) Suporte
             if user && (bot.owners.some(x => x._id == user.id) || user.role >= 2)
                 a.button(href=bot.url + "editar") Editar
-            //- if user && (user.role >= 2 || bot.owners[0]._id == user.id)
-            //-     a.button(href=bot.url + "remove") Remover
+            if user && (user.role >= 2 || bot.owners[0]._id == user.id)
+                a.button(href=bot.url + "remove") Remover
     .container.main-container
         .box.content !{bot.content}

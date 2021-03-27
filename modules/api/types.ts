@@ -107,3 +107,7 @@ export interface WebhookBody {
   url: string
   type: 1 | 2
 }
+
+export interface DeleteResult {
+  deleted: boolean
+}
