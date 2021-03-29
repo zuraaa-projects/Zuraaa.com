@@ -9,7 +9,7 @@ block content
                         figure.image.is-64x64
                             img.is-rounded(src=bot.avatar)
                     p
-                        strong=bot.name
+                        strong #{bot.name} (#{bot.prefix})
                         br
                         | #{bot.description}
                 nav.level
