@@ -19,7 +19,7 @@
     "form-data": "^4.0.0",
     "helmet": "^4.4.1",
     "http-errors": "~1.8.0",
-    "mongoose": "^5.11.18",
+    "mongoose": "^5.12.2",
     "morgan": "~1.10.0",
     "mquery": ">=3.2.3",
     "node-cache": "^5.1.2",
