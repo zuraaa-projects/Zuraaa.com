@@ -7,6 +7,7 @@ function partialBotObject (bot) {
     avatar: formatUrl(id),
     name: bot.username,
     id,
+    prefix: bot.details.prefix,
     status: bot.status,
     description: bot.details.shortDescription,
     votes: bot.votes ? bot.votes.current : -1,
@@ -31,7 +32,6 @@ function botObjectSender (bot) {
       current: bot.votes.current,
       voteslog: bot.votes.voteslog
     }
-
   }
 }
 
