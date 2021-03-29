@@ -31,14 +31,16 @@ $(() => {
   })
   const navbar = $('.navbar')
   const initialNavbarBG = navbar.css('background')
-  const initialNavbarBS = navbar.css('boxShadow')
+  const initialNavbarBS = navbar.css('box-shadow')
   let transparentNavbar = false
 
   console.log(transparentNavbar)
+  console.log(initialNavbarBS)
+  console.log(initialNavbarBG)
 
   if (window.scrollY > 18) {
     navbar.css('background', 'rgba(0, 0, 0, 0.6)')
-    navbar.css('boxShadow', '0 4px #710f4b')
+    navbar.css('box-shadow', '0 4px #710f4b')
     transparentNavbar = true
   }
 
