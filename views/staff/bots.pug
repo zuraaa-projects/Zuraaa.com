@@ -9,9 +9,12 @@ block content
                         figure.image.is-64x64
                             img.is-rounded(src=bot.avatar)
                     p
-                        strong #{bot.name} (#{bot.prefix})
+                        strong=bot.name
                         br
                         | #{bot.description}
+                        br
+                        strong Prefix:
+                        | #{bot.prefix} 
                 nav.level
                     .level-left
                         a.button.level-item(href=bot.baseUrl) Página 
