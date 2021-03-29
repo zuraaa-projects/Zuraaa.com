@@ -5,6 +5,7 @@
   "main": "./dist/bin/www",
   "scripts": {
     "start": "node .",
+    "buildstart": "npm build && npm start",
     "build": "tsc",
     "lint": "eslint ."
   },
