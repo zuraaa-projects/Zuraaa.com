@@ -8,9 +8,9 @@ block head
 block content
     .container.main-container
         p#reporttitle.title.is-size-4 DENUNCIAR BOT
-        p.subtitle.is-size-6 Preencha o formulário para enviar sua denúncia ao bot #{bot.name}.
+        p.subtitle.is-size-6 Preencha o formulário para enviar sua denúncia ao bot #{bot.username}.
 
-        form#form(action="/bots/" + bot.id + "/report" method="POST" enctype="multipart/form-data")
+        form#form(action="/bots/" + bot._id + "/report" method="POST" enctype="multipart/form-data")
             .field.is-horizontal
                 .field-label.is-normal.has-text-left
                     label.label Tópico *

@@ -9,8 +9,8 @@ block content
     .container.main-container
         form#votef(method="POST")
             .box.has-text-centered
-                h1.title.is-1 Vote em #{bot.name}
+                h1.title.is-1 Vote em #{bot.username}
                 figure.image.is-128x128.container
-                    img.is-rounded(src=bot.avatar)                
+                    img.is-rounded(src=genAvatarUrl(bot.username, bot.avatar))                
                 br
                 button.button.g-recaptcha(data-callback="onSubmit" data-sitekey=captcha) Votar

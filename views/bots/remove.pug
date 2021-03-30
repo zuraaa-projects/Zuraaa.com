@@ -7,8 +7,8 @@ block content
     .container.main-container
         form(method="POST" action="/bots/delete")
             .box.has-text-centered
-                h1.title.is-1 Tem certeza que deseja remover #{tag}?
-                input.is-hidden(name="id" value=id)
+                h1.title.is-1 Tem certeza que deseja remover #{bot.username}##{bot.discriminator}?
+                input.is-hidden(name="id" value=bot._id)
                 if hasReason
                     input.input.reason(name="reason" type="text" placeholder="Razão da remoção")
                 button.button Remover
