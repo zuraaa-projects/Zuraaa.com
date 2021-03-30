@@ -1,30 +1,32 @@
+extends ../layouts/layout
+
 block head
     link(rel="stylesheet", href="/css/bot.css")
 
 block content
     #profile.has-text-centered
-        img#avatar.avatar(src=bot.avatar alt=bot.name oncontextmenu="return false;" draggable="false")
+        img#avatar.avatar(src=`${apiBaseURL}/avatars/${bot._id}/${bot.avatar}` alt=bot.username oncontextmenu="return false;" draggable="false")
         h1.username.is-size-1.has-text-white
-            | #{bot.name}
-            span.is-size-4.has-text-grey-light ##{bot.tag}
+            | #{bot.username}
+            span.is-size-4.has-text-grey-light ##{bot.discriminator}
         .about.has-text-justified
-            p.is-size-5.has-text-grey-light #{bot.bio}
+            p.is-size-5.has-text-grey-light #{bot.details.shortDescription}
         #tags.is-inline-block
             span.align.has-text-white Tags: 
             - let i = 0;
-            each tag in bot.tags
+            each tag in bot.details.tags
                 a.tag(title=tag href="/tag/" + tag)
                     span(style="background:" + colors[i] + ";")
                     p=tags[tag]
                 -i ++
         span.has-text-white.align  Prefixo: 
-        code.align=bot.prefix
+        code.align=bot.details.prefix
         span.has-text-white.align  Biblioteca: 
-        code.align=bot.library
+        code.align=bot.details.library
         span.has-text-white.align   Votos: 
-        code.align=bot.votes
+        code.align=bot.votes.current
         span.has-text-white.align   Servidores: 
-        code.align=bot.guilds
+        code.align=bot.details.guilds
         br
         span.has-text-white| Dono#{bot.owners.length > 1 ? "s" : ""}: 
         each owner in bot.owners
@@ -35,20 +37,21 @@ block content
                 a(href="/user/" + owner._id) #{owner.username}##{owner.discriminator}
         br
         .buttons.is-centered
-            a.button(href=bot.url + "add") Adicionar
-            a.button(href=bot.url + "votar") Votar
-            a.button(href=bot.url + "report") Denunciar
-            if bot.website
-                a.button(href=bot.website) Site
-            if bot.donate
-                a.button(href=bot.donate) Doar
-            if bot.github
-                a.button(href="https://github.com/" + bot.github) GitHub
-            if bot.support
-                a.button(href="https://discord.gg/" + bot.support) Suporte
+            - const url = `/bots/${bot.details.customURL || bot._id}`
+            a.button(href=url + "/add") Adicionar
+            a.button(href=url + "/votar") Votar
+            a.button(href=url + "/report") Denunciar
+            if bot.details.website
+                a.button(href=bot.details.website) Site
+            if bot.details.donate
+                a.button(href=bot.details.donate) Doar
+            if bot.details.github
+                a.details.button(href="https://github.com/" + bot.details.github) GitHub
+            if bot.details.support
+                a.button(href="https://discord.gg/" + bot.details.support) Suporte
             if user && (bot.owners.some(x => x._id == user.id) || user.role >= 2)
-                a.button(href=bot.url + "editar") Editar
+                a.button(href=url + "/editar") Editar
             if user && (user.role >= 2 || bot.owners[0]._id == user.id)
-                a.button(href=bot.url + "remove") Remover
+                a.button(href=url + "/remove") Remover
     .container.main-container
         .box.content !{bot.content}

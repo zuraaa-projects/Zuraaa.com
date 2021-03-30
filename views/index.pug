@@ -28,7 +28,7 @@ block content
     //-           p VOTAR
     #tags
       - let i = 0;
-      each tag, key in tags
+      each key, tag in tags
           a.tag(title=tag href="/tag/" + key)
             span(style="background:" + colors[i] + ";")
             p=tag

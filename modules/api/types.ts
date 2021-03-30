@@ -1,30 +1,9 @@
-export interface Auth {
-  access_token: string
-}
-
-export interface User {
-  _id: string
-  username: string
-  discriminator: string
-  avatar: string
-  details: UserDetails
-}
-
-export interface UserDetails {
-  description: string
-  role: number
-}
-
-export interface Bot {
-  _id: string
-  username: string
-  discriminator: string
-}
-
-export interface Avatar {
-  type: string
-  length: string
-  data: Buffer
+export interface FindBotQuery {
+  search?: string
+  type?: string
+  page?: string
+  tags?: string
+  limit?: string
 }
 
 export enum BotsTags {
@@ -45,69 +24,72 @@ export enum BotsTags {
   Outros = 'outros'
 }
 
-export enum AppLibrary {
-  discordjs = 'discord.js',
-  discordpy = 'discord.py',
-  discordCr = 'discordCr',
-  discordio = 'discord.io',
-  eris = 'eris',
-  restCord = 'RestCord',
-  discordia = 'discordia',
-  nxy = 'nxy',
-  serenity = 'serenity',
-  discordie = 'discordie',
-  discordPhp = 'DiscordPHP',
-  sword = 'Sword',
-  discordUnity = 'DiscordUnity',
-  litcord = 'litcord',
-  discordhs = 'discord-hs',
-  discordrb = 'discordrb',
-  discordNet = 'Discord.Net',
-  jda = 'JDA',
-  javaCord = 'Javacord',
-  dSharpPlus = 'DSharpPlus',
-  dscord = 'dscord',
-  discordGo = 'DiscordGo',
-  disGord = 'DisGord',
-  discord4j = 'Discord4j',
-  discordnim = 'discordnim',
-  yasmin = 'Yasmin',
-  disco = 'disco',
-  ackCord = 'AckCord',
-  botDesigner = 'Bot Designer',
-  dbm = 'DBM',
-  outro = 'Outro'
-}
+export const libraries = [
+  'discord.js',
+  'discord.py',
+  'discordCr',
+  'discord.io',
+  'eris',
+  'RestCord',
+  'discordia',
+  'nxy',
+  'serenity',
+  'discordie',
+  'DiscordPHP',
+  'Sword',
+  'DiscordUnity',
+  'litcord',
+  'discord-hs',
+  'discordrb',
+  'Discord.Net',
+  'JDA',
+  'Javacord',
+  'DSharpPlus',
+  'dscord',
+  'DiscordGo',
+  'DisGord',
+  'Discord4j',
+  'discordnim',
+  'Yasmin',
+  'disco',
+  'AckCord',
+  'Bot Designer',
+  'DBM',
+  'Outro'
+] as const
 
-export interface SendBot {
+export type Libraries = typeof libraries
+
+export interface Bot {
   _id: string
+  username: string
+  discriminator: string
+  avatar: string
+  status: string
+  owner: string
+  approvedBy?: string
+  dates: {
+    sent: string
+  }
   details: {
     prefix: string
-    tags: BotsTags[]
-    library: AppLibrary
-    customInviteLink: string
+    tags: BotsTags
+    library: Libraries[keyof Libraries]
+    customInviteLink?: string
     shortDescription: string
     longDescription?: string
+    htmlDescription: string
     isHTML: boolean
     supportServer?: string
     website?: string
-    otherOwners?: string[]
+    customURL? : string
+    otherOwners: string[] // todo
     donate?: string
     github?: string
-    webhook: {
-      authorization?: string
-      url?: string
-      type: number
-    }
+    guilds?: number
   }
-}
-
-export interface WebhookBody {
-  authorization?: string
-  url: string
-  type: 1 | 2
-}
-
-export interface DeleteResult {
-  deleted: boolean
+  votes: {
+    current: number
+    votesLog?: string[]
+  }
 }
