@@ -3,7 +3,7 @@
     //- a(href="#" onclick="showModal('" + bot.id + "')")
     //-   span Ver
     
-    .avatar(style="background-image: url('" + apiBaseURL + "/avatars/" + bot._id + "/" + bot.avatar + "')")
+    .avatar(style=`background-image: url('${genAvatarUrl(bot._id, bot.avatar)}')`)
   .details
     p.heading(title="Tags") #{bot.details.tags[Math.floor(Math.random() * bot.details.tags.length)]} |  #{bot.details.guilds || "???"} servidores | #{bot.votes} votos
     p.title.is-size-4(title=bot.username)

@@ -11,7 +11,10 @@ block content
                     p
                         strong=bot.name
                         br
-                        | #{bot.description}
+                        | #{bot.details.shortDescription}
+                        br
+                        strong Prefix:
+                        |  #{bot.details.prefix}
                 nav.level
                     .level-left
                         a.button.level-item(href=bot.baseUrl) Página 

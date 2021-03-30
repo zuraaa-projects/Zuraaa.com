@@ -5,7 +5,7 @@ block head
 
 block content
     #profile.has-text-centered
-        img#avatar.avatar(src=`${apiBaseURL}/avatars/${bot._id}/${bot.avatar}` alt=bot.username oncontextmenu="return false;" draggable="false")
+        img#avatar.avatar(src=genAvatarUrl(bot._id, bot.avatar) alt=bot.username oncontextmenu="return false;" draggable="false")
         h1.username.is-size-1.has-text-white
             | #{bot.username}
             span.is-size-4.has-text-grey-light ##{bot.discriminator}

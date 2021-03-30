@@ -9,6 +9,7 @@ import ZuraaaApi from './modules/api'
 
 import IndexRouter from './routes'
 import BotsRouter from './routes/bots'
+import { genAvatarUrl } from './utils/gen-avatar-url'
 
 const app = express()
 
@@ -40,6 +41,7 @@ const modules = {
 
 app.use((req, res, next) => {
   res.locals.apiBaseURL = api.outerBase
+  res.locals.genAvatarUrl = genAvatarUrl
   next()
 })
 
