@@ -2,10 +2,7 @@ extends layouts/layout
 
 block head
   script(src="https://www.google.com/recaptcha/api.js" async defer)
-  script.
-    function onSubmit() {
-      document.getElementById('login').submit();
-    }
+  script(src="/js/login.js")
 
 block content
   .container.main-container
