@@ -6,7 +6,6 @@ window.avatarUrl = function avatarUrl (user) {
 }
 
 $.get('/userdata', (user) => {
-  console.log(user)
   $(() => {
     $('#navavatar').prop('src', window.avatarUrl(user))
     $('#navusername').text(user.username)

@@ -46,7 +46,7 @@ app.use(helmet({
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
       'child-src': ["'self'", 'https:'],
       'img-src': ["'self'", 'https:', 'http:', 'data:'],
-      'script-src': ["'self'", 'www.google.com'],
+      'script-src': ["'self'", 'www.google.com', 'www.gstatic.com'],
       'style-src': ["'self'", "'unsafe-inline'"]
     }
   },
