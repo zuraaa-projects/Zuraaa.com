@@ -15,7 +15,7 @@
 <style lang="scss" scoped>
 .layout {
   &__header {
-    position: absolute;
+    position: fixed;
     width: 100%;
   }
 

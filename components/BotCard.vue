@@ -1,8 +1,31 @@
 <template>
   <div class="botcard">
-    <img class="botcard__image" src="https://api.zuraaa.com/avatars/389917977862078484/a7aa2f37230ea0a5c5a0c4c8e824bd87" alt="" srcset="">
+    <img
+      class="botcard__image"
+      :src="bot | genAvatar"
+      alt=""
+      srcset=""
+    >
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import { Bot } from '~/models/bots/bot'
+import { genAvatar } from '~/utils/filters'
+
+@Component({
+  filters: {
+    genAvatar
+  }
+})
+export default class extends Vue {
+  @Prop({
+    required: true
+  })
+  bot!: Bot
+}
+</script>
 
 <style lang="scss" scoped>
 .botcard {

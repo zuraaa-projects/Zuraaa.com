@@ -51,14 +51,36 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:3000/api',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  },
+
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.ZURAAACOM_API_URL
+    }
+  },
+
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: process.env.ZURAAACOM_API_URL_LOCAL
+    }
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },
 
   server: {
-    port: 3000,
-    host: '0.0.0.0'
+    port: process.env.ZURAAACOM_PORT ?? 8000,
+    host: process.env.ZURAAACOM_HOST ?? '0.0.0.0'
+  },
+
+  env: {
+    apiUrl: process.env.ZURAAACOM_API_URL ?? 'http://localhost:3000/api',
+    apiUrlLocal: process.env.ZURAAACOM_API_URL_LOCAL ?? 'http://localhost:3000/api'
   }
 }
