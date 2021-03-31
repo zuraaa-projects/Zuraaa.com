@@ -1,8 +1,8 @@
 <template>
   <b-navbar toggleable="lg" type="dark">
-    <b-navbar-brand href="/">
+    <b-navbar-brand class="navbar__logo" href="/">
       <img
-        class="navbar__logo"
+        class="navbar__logo__image"
         src="~/static/images/logo.png"
         alt="logo"
       >
@@ -43,7 +43,13 @@ export default class Navbar extends Vue {
   min-height: 3.5rem;
 
   &__logo {
-    height: 1.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__image {
+      height: 1.8rem;
+    }
   }
 
   .nav-link {
