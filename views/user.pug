@@ -5,7 +5,7 @@ block head
 
 block content
     #profile.has-text-centered
-        img#avatar.avatar(src=user.avatar alt="Avatar" oncontextmenu="return false;" draggable="false")
+        img#avatar.avatar(src=user.avatar alt="Avatar" draggable="false")
         h1.username.is-size-1.has-text-white
             | #{user.name}
             span.is-size-4.has-text-grey-light ##{user.tag}

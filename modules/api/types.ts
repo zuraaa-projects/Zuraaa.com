@@ -21,12 +21,6 @@ export interface Bot {
   discriminator: string
 }
 
-export interface Avatar {
-  type: string
-  length: string
-  data: Buffer
-}
-
 export enum BotsTags {
   Anime = 'anime',
   Dashboard = 'dashboard',

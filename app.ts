@@ -40,29 +40,22 @@ app.set('view engine', 'pug')
 
 app.use(logger('dev'))
 
-app.use(helmet.hidePoweredBy())
-app.use(helmet.expectCt())
-app.use(helmet.referrerPolicy({
-  policy: 'no-referrer'
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      'child-src': ["'self'", 'https:'],
+      'img-src': ["'self'", 'https:', 'http:', 'data:'],
+      'script-src': ["'self'", 'www.google.com'],
+      'style-src': ["'self'", "'unsafe-inline'"]
+    }
+  },
+  hsts: {
+    maxAge: 15552000,
+    includeSubDomains: true,
+    preload: true
+  }
 }))
-app.use(helmet.noSniff())
-app.use(
-  helmet.dnsPrefetchControl({
-    allow: false
-  })
-)
-app.use(helmet.ieNoOpen())
-app.use(
-  helmet.frameguard({
-    action: 'deny'
-  })
-)
-app.use(
-  helmet.permittedCrossDomainPolicies({
-    permittedPolicies: 'none'
-  })
-)
-app.use(helmet.xssFilter())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))

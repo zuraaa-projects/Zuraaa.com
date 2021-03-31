@@ -60,6 +60,9 @@ $(function () {
     resetClasses(this)
     changeWebhookText('')
   })
+  $('#test').click(function () {
+    window.testWebhook()
+  })
 })
 
 /*

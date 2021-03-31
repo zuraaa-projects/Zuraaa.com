@@ -3,7 +3,7 @@ block head
 
 block content
     #profile.has-text-centered
-        img#avatar.avatar(src=bot.avatar alt=bot.name oncontextmenu="return false;" draggable="false")
+        img#avatar.avatar(src=bot.avatar alt=bot.name draggable="false")
         h1.username.is-size-1.has-text-white
             | #{bot.name}
             span.is-size-4.has-text-grey-light ##{bot.tag}

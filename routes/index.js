@@ -5,6 +5,9 @@ const { partialBotObject } = require('../utils/bot')
 const tags = require('../utils/tags')
 const colors = require('../utils/colors')
 
+const config = require('../config.json')
+const { formatUrl } = require('../utils/avatar')
+
 module.exports = (mongo, api) => {
   router.get('/', async (req, res) => {
     const filter = { approvedBy: { $ne: null } }
@@ -26,8 +29,25 @@ module.exports = (mongo, api) => {
     })
   })
 
-  router.get('/userdata', (req, res) => {
-    res.send(req.session.user)
+  router.get('/userdata', async (req, res) => {
+    try {
+      if (req.session.token) {
+        const me = await api.getMe(req.session.token)
+        res.send({
+          id: me._id,
+          avatar: me.avatar,
+          username: me.username,
+          discriminator: me.discriminator,
+          role: me.id === config.discord.ownerId ? 3 : me.details.role,
+          buffer: formatUrl(me._id, me.avatar)
+        })
+      }
+    } catch (err) {
+      if (err.response?.status === 403 || err.response?.status === 401) {
+        req.session.destroy()
+      }
+    }
+    res.sendStatus(404)
   })
 
   router.post('/testwebhook', async (req, res) => {

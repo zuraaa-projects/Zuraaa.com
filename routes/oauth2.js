@@ -57,7 +57,7 @@ module.exports = (config, mongo, api) => {
             }
             const x = await saveData(user)
             req.session.user.role = x.id === config.discord.ownerId ? 3 : x.details.role
-            req.session.user.buffer = formatUrl(x.id)
+            req.session.user.buffer = formatUrl(x.id, x.avatar)
             req.session.save(() => res.redirect(req.session.path || '/'))
           })
         })

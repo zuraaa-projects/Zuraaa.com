@@ -6,22 +6,25 @@ window.avatarUrl = function avatarUrl (user) {
 }
 
 $.get('/userdata', (user) => {
+  console.log(user)
   $(() => {
-    const navuser = $('#navuser')
-    if (user) {
-      $('#navavatar').prop('src', window.avatarUrl(user))
-      $('#navusername').text(user.username)
-      $('#navprofile').prop('href', `/user/${user.id}`)
-      if (user.role) {
-        const divider = $('#divider')
-        if (user.role > 0) { divider.before($("<a class='navbar-item' href='/staff/bots'>Bots</a>")) }
-        if (user.role > 1) { divider.before($("<a class='navbar-item' href='/staff/edit'>Editar staff</a>")) }
-      }
-    } else {
-      navuser.empty()
-      navuser.append($('<a class="navbar-item" href="/oauth2/login">Login</a>'))
+    $('#navavatar').prop('src', window.avatarUrl(user))
+    $('#navusername').text(user.username)
+    $('#navprofile').prop('href', `/user/${user.id}`)
+    if (user.role) {
+      const divider = $('#divider')
+      if (user.role > 0) { divider.before($("<a class='navbar-item' href='/staff/bots'>Bots</a>")) }
+      if (user.role > 1) { divider.before($("<a class='navbar-item' href='/staff/edit'>Editar staff</a>")) }
     }
-    navuser.removeClass('is-invisible')
+
+    $('#navuser').removeClass('is-invisible')
+  })
+}).fail(() => {
+  $(() => {
+    $('#navuser')
+      .empty()
+      .append($('<a class="navbar-item" href="/oauth2/login">Login</a>'))
+      .removeClass('is-invisible')
   })
 })
 
@@ -41,7 +44,6 @@ $(() => {
   }
 
   $(window).scroll(() => {
-    console.log(window.scrollY)
     if (window.scrollY > 18) {
       if (!transparentNavbar) {
         navbar.css('background', 'rgba(0, 0, 0, 0.6)')

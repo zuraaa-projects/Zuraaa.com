@@ -1,6 +1,6 @@
 import Axios, { AxiosInstance } from 'axios'
 import config from '../../config.json'
-import { Auth, Avatar, Bot, DeleteResult, SendBot, User, WebhookBody } from './types'
+import { Auth, Bot, DeleteResult, SendBot, User, WebhookBody } from './types'
 import FormData from 'form-data'
 
 export default class Api {
@@ -45,17 +45,6 @@ export default class Api {
       identify: config.api.secret,
       data: code
     })).data
-  }
-
-  async getAvatar (id: string): Promise<Avatar> {
-    const avatar = await this.api.get('/avatars/' + id, {
-      responseType: 'arraybuffer'
-    })
-    return {
-      data: avatar.data,
-      type: avatar.headers['content-type'],
-      length: avatar.headers['content-length']
-    }
   }
 
   async ban (token: string, id: string, reason: string): Promise<User> {

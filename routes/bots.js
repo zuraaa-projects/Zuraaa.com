@@ -182,19 +182,19 @@ module.exports = (config, db, api) => {
           }
         }
         const owner = await api.getUser(apiBot.owner)
-        owner.avatarUrl = formatUrl(owner._id)
+        owner.avatarUrl = formatUrl(owner._id, owner.avatar)
         const otherOwners = []
-        for (const id of apiBot.details.otherOwners) {
+        for (const id of apiBot.details.otherOwners || []) {
           try {
             const otherOwner = await api.getUser(id)
-            otherOwner.avatarUrl = formatUrl(otherOwner._id)
+            otherOwner.avatarUrl = formatUrl(otherOwner._id, otherOwner.avatar)
             otherOwners.push(otherOwner)
           } catch (err) {
             console.error('Failed to get user', id, 'info:', err.message)
           }
         }
 
-        const avatar = formatUrl(apiBot._id)
+        const avatar = formatUrl(apiBot._id, apiBot.avatar)
 
         res.render('bots/bot', {
           bot: {
@@ -412,7 +412,7 @@ module.exports = (config, db, api) => {
           title: `Vote em ${dbot.username}`,
           bot: {
             name: dbot.username,
-            avatar: formatUrl(dbot.id)
+            avatar: formatUrl(dbot.id, dbot.avatar)
           }
         })
       })

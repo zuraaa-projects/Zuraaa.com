@@ -4,7 +4,7 @@ function partialBotObject (bot) {
   const id = bot.id || bot._id
   return {
     tags: bot.details.tags,
-    avatar: formatUrl(id),
+    avatar: formatUrl(id, bot.avatar),
     name: bot.username,
     id,
     prefix: bot.details.prefix,
@@ -37,6 +37,6 @@ function botObjectSender (bot) {
 
 module.exports = {
   partialBotObject,
-  partialSelect: 'details.tags username status details.shortDescription votes.current details.customURL details.guilds',
+  partialSelect: 'details.tags username status details.shortDescription votes.current details.customURL details.guilds avatar',
   botObjectSender
 }

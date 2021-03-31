@@ -24,7 +24,7 @@ module.exports = (mongo, api) => {
           res.render('user', {
             logged: req.session.user,
             user: {
-              avatar: formatUrl(user.id),
+              avatar: formatUrl(user.id, user.avatar),
               banned: user.banned,
               id: user.id,
               name: user.username,
