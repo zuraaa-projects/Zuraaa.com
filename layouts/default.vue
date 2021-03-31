@@ -1,13 +1,27 @@
 <template>
-  <div>
-    <header>
+  <div class="layout">
+    <header class="layout__header">
       <Navbar />
     </header>
-    <main>
+    <main class="layout__main">
       <Nuxt />
     </main>
+    <footer class="layout__footer">
+      <Footer />
+    </footer>
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
+.layout {
+  &__header {
+    position: absolute;
+    width: 100%;
+  }
+
+  &__main {
+    padding-top: 3.5rem;
+    min-height: calc(100vh - 3.5rem);
+  }
+}
 </style>

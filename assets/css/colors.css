@@ -1,5 +1,5 @@
 :root {
   --primary-color: #490e2d;
-  --text-color: #fafafc;
-  --text-color-disable: #bbb8b8;
+  --link-color: #bbb8b8;
+  --link-color-hover: #fafafc;
 }

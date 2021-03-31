@@ -20,7 +20,7 @@
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
-        <b-nav-item href="/login">
+        <b-nav-item href="oauth/login">
           Login
         </b-nav-item>
       </b-navbar-nav>
@@ -40,17 +40,31 @@ export default class Navbar extends Vue {
 <style lang="scss" scoped>
 .navbar {
   background-color: var(--primary-color);
+  min-height: 3.5rem;
 
   &__logo {
-    height: 2rem;
+    height: 1.8rem;
   }
 
   .nav-link {
-    color: var(--text-color)
+    color: var(--link-color);
+    font-size: 0.9rem;
+  }
+
+  .nav-link:hover {
+      color: var(--link-color-hover);
+
   }
 
   .navbar-toggler {
     border: none;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar {
+    padding-left: 4rem;
+    padding-right: 4rem;
   }
 }
 </style>
