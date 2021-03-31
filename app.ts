@@ -10,6 +10,7 @@ import ZuraaaApi from './modules/api'
 import IndexRouter from './routes'
 import BotsRouter from './routes/bots'
 import { genAvatarUrl } from './utils/gen-avatar-url'
+import OAuthRouter from './routes/oauth'
 
 const app = express()
 
@@ -47,6 +48,7 @@ app.use((req, res, next) => {
 
 app.use('/', IndexRouter(modules))
 app.use('/bots', BotsRouter(modules))
+app.use('/oauth2', OAuthRouter(modules))
 
 app.listen(server.port, () => {
   console.log('Online na porta', server.port)
