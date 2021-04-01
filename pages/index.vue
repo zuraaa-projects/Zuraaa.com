@@ -69,7 +69,9 @@ export default class extends Vue {
 
 <style lang="scss" scoped>
 .index {
-  width: 98%;
+  max-width: 1300px;
+  width: 95%;
+  margin: 0 auto;
 
   &__title {
     text-align: center;
@@ -80,13 +82,13 @@ export default class extends Vue {
   &__subtitle {
     text-align: center;
   }
-}
 
-.cards {
-  width: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
+  .cards {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
 }
 
 @media (min-width: 992px) {

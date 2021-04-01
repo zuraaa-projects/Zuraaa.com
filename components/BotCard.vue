@@ -39,8 +39,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
-import { Bot } from '~/models/bots/bot'
 import { genAvatar, altBotImage, botStatus } from '~/utils/filters'
+import { Bot } from '~/models/bots/bot'
 
 @Component({
   filters: {
