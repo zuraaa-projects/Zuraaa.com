@@ -1,3 +1,3 @@
-function onSubmit() {
-  document.getElementById('login').submit();
+window.onSubmit = function onSubmit () {
+  document.getElementById('login').submit()
 }
