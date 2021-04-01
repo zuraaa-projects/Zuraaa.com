@@ -84,6 +84,7 @@ export default {
 
   env: {
     apiUrl: process.env.ZURAAACOM_API_URL ?? 'http://localhost:3000/api',
-    apiUrlLocal: process.env.ZURAAACOM_API_URL_LOCAL ?? 'http://localhost:3000/api'
+    apiUrlLocal: process.env.ZURAAACOM_API_URL_LOCAL ?? 'http://localhost:3000/api',
+    invite: process.env.ZURAAACOM_INVITE ?? 'https://discord.com/invite/YrXysT2DHj'
   }
 }

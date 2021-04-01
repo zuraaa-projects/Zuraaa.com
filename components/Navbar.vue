@@ -12,9 +12,15 @@
 
     <b-collapse id="navbar--collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item>Início</b-nav-item>
-        <b-nav-item>Bots</b-nav-item>
-        <b-nav-item>Servidor</b-nav-item>
+        <b-nav-item to="/">
+          Início
+        </b-nav-item>
+        <b-nav-item to="/bots">
+          Bots
+        </b-nav-item>
+        <b-nav-item to="/discord">
+          Servidor
+        </b-nav-item>
         <b-nav-item>Documentação</b-nav-item>
         <b-nav-item>Buscar</b-nav-item>
       </b-navbar-nav>
@@ -64,6 +70,10 @@ export default class Navbar extends Vue {
 
   .navbar-toggler {
     border: none;
+  }
+
+  .nuxt-link-exact-active.nuxt-link-active {
+      color: var(--link-color-hover);
   }
 }
 
