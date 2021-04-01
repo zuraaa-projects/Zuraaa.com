@@ -1,5 +1,6 @@
 <template>
   <div class="bots">
+    <BotTags />
     <div class="cards">
       <BotCard
         v-for="bot in bots"

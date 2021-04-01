@@ -46,7 +46,6 @@ export default class Navbar extends Vue {
 <style lang="scss" scoped>
 .navbar {
   background-color: var(--primary-color);
-  min-height: 3.5rem;
 
   &__logo {
     display: flex;
