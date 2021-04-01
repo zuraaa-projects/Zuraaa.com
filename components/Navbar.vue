@@ -3,8 +3,8 @@
     <b-navbar-brand class="navbar__logo" href="/">
       <img
         class="navbar__logo__image"
-        src="~/static/images/logo.png"
-        alt="logo"
+        src="~/assets/images/logo.png"
+        alt="Logo"
       >
     </b-navbar-brand>
 

@@ -38,6 +38,9 @@ export default {
     icons: {
       brands: [
         'faDiscord'
+      ],
+      solid: [
+        'faLink'
       ]
     }
   },
