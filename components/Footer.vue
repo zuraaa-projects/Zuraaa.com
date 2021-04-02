@@ -28,6 +28,7 @@
     display: flex;
     color: var(--link-color);
     text-decoration: none;
+    outline: none;
 
     &__name {
       padding-left: 0.5rem;

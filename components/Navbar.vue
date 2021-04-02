@@ -60,6 +60,7 @@ export default class Navbar extends Vue {
   .nav-link {
     color: var(--link-color);
     font-size: 0.9rem;
+    outline: none;
   }
 
   .nav-link:hover {
