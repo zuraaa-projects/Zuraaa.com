@@ -129,7 +129,7 @@ block content
                     .field.has-addons
                         .control
                             .select
-                                - const values = ['Desativado', 'Discord', 'Servidor próprio']
+                                - const values = ['Desativado', 'Discord/Guilded', 'Servidor próprio']
                                 select#webhook(name="webhook")
                                     for value, index in values
                                         option(value=index, selected=(bot.webhook.type == index))=value
