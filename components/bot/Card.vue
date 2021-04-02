@@ -3,7 +3,7 @@
     <img
       class="botcard__image"
       :src="bot | genAvatar"
-      :alt="bot | altBotImage"
+      :alt="bot | altName"
     >
     <div class="botcard__details">
       <p class="botcard__details__datas">
@@ -39,13 +39,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
-import { genAvatar, altBotImage, botStatus } from '~/utils/filters'
-import { Bot } from '~/models/bots/bot'
+import { genAvatar, altName, botStatus } from '~/utils/filters'
+import type { Bot } from '~/models/bots/bot'
 
 @Component({
   filters: {
     genAvatar,
-    altBotImage,
+    altName,
     botStatus
   }
 })
@@ -104,6 +104,9 @@ export default class extends Vue {
         font-size: 1.5rem;
         display: inline;
         margin-bottom: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
         @media (max-width: 380px) {
           font-size: 1.2rem;
           text-decoration: underline;

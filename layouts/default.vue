@@ -20,8 +20,8 @@
   }
 
   &__main {
-    padding-top: 3.5rem;
-    min-height: calc(100vh - 3.5rem);
+    padding-top: 3.425rem;
+    min-height: calc(100vh - 3.425rem);
   }
 }
 </style>

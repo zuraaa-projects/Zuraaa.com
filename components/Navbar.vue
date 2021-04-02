@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="lg" type="dark">
-    <b-navbar-brand class="navbar__logo" href="/">
+    <b-navbar-brand class="navbar__logo" to="/">
       <img
         class="navbar__logo__image"
         src="~/assets/images/logo.png"

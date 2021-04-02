@@ -17,7 +17,7 @@
 <style lang="scss" scoped>
 .footer {
   background-color: var(--primary-color);
-  min-height: 3.5rem;
+  min-height: 3.425rem;
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;

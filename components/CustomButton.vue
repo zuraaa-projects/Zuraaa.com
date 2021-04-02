@@ -19,7 +19,7 @@ export default class extends Vue {
 <style lang="scss" scoped>
 .custombutton {
   margin: 0 0.2rem;
-  color: var(--text-ligth);
+  color: var(--text-light);
   background-color: var(--secondary-color);
   padding: 2px 0.5rem;
   border-radius: 5px;
