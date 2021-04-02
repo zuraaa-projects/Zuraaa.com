@@ -10,5 +10,6 @@
   color: var(--text-light);
   width: 100%;
   padding: 1rem;
+  margin-bottom: 1rem;
 }
 </style>

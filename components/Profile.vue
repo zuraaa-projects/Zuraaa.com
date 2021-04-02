@@ -54,13 +54,14 @@ export default class extends Vue {
 
     &__discriminator {
       margin-bottom: 0.1rem;
-      font-size: 14pt;
+      font-size: 1rem;
     }
   }
 
   &__description {
     text-align: justify;
     max-width: 60rem;
+    font-size: 1.3rem;
   }
 }
 </style>
