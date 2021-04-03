@@ -51,6 +51,7 @@ export default class Navbar extends Vue {
     display: flex;
     justify-content: center;
     align-items: center;
+    outline: none;
 
     &__image {
       height: 1.8rem;

@@ -1,8 +1,20 @@
 <template>
   <div class="tags">
-    <Tag />
-    <Tag />
-    <Tag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
+    <BotTag />
   </div>
 </template>
 

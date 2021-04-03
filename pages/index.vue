@@ -48,6 +48,9 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import { Bot } from '~/models/bots/bot'
 
 @Component({
+  head: {
+    title: 'Zuraaa! | Início'
+  },
   async asyncData ({ $axios }: Context) {
     try {
       return {

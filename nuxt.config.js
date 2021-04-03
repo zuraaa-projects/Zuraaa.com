@@ -40,7 +40,9 @@ export default {
         'faDiscord'
       ],
       solid: [
-        'faLink'
+        'faLink',
+        'faAngleRight',
+        'faAngleLeft'
       ]
     }
   },

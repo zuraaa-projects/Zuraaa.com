@@ -10,3 +10,7 @@ export interface Bot {
   details: BotDetails
   status: string
 }
+
+export interface BotCount {
+  'bots_count': number
+}

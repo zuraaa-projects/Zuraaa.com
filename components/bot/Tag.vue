@@ -1,8 +1,8 @@
 <template>
   <div class="bottag">
-    <span class="bottag__name">
+    <p class="bottag__name">
       Teste
-    </span>
+    </p>
   </div>
 </template>
 
@@ -10,11 +10,17 @@
 .bottag {
   height: 1.5rem;
   width: 3rem;
-  background-color: lawngreen;
+  margin: 0 0.3rem;
+  background-color: whitesmoke;
+  border-left: 0.3rem solid springgreen;
+  border-radius: 0.3rem;
 
   &__name {
     height: 100%;
     width: 100%;
+    margin: 0;
+    text-align: center;
+    color: var(--text-dark);
   }
 }
 </style>
