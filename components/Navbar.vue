@@ -30,16 +30,17 @@
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
-        <b-nav-item v-if="me == null" to="/oauth2/login">
+        <img
+          v-if="me !== null"
+          :src="me | genAvatar"
+          :alt="me | altName"
+          class="navbar__dropdown__image"
+        >
+        <b-nav-item v-if="me === null" to="/oauth2/login">
           Login
         </b-nav-item>
         <b-nav-item-dropdown v-else class="navbar__dropdown" right>
           <template #button-content>
-            <img
-              :src="me | genAvatar"
-              :alt="me | altName"
-              class="navbar__dropdown__image"
-            >
             <span class="navbar__dropdown__name">
               {{ me.username }}
             </span>
@@ -133,17 +134,11 @@ export default class Navbar extends Vue {
     }
 
     &__image {
-      width: 2rem;
+      width: 2.2rem;
+      height: 2.2rem;
       border-radius: 50%;
+      margin: auto 0;
       margin-right: 0.5rem;
-    }
-
-    .icon {
-      color: var(--link-color);
-    }
-
-    .icon:hover {
-      color: var(--link-color-hover);
     }
   }
 
