@@ -26,7 +26,7 @@
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
-        <b-nav-item href="oauth/login">
+        <b-nav-item to="/oauth2/login">
           Login
         </b-nav-item>
       </b-navbar-nav>

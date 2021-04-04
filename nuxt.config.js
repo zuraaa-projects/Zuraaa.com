@@ -22,6 +22,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/axios.client.ts'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -87,6 +88,8 @@ export default {
   env: {
     apiUrl: process.env.ZURAAACOM_API_URL ?? 'http://localhost:3000/api',
     apiUrlLocal: process.env.ZURAAACOM_API_URL_LOCAL ?? 'http://localhost:3000/api',
-    invite: process.env.ZURAAACOM_INVITE ?? 'https://discord.com/invite/YrXysT2DHj'
+    apiSecret: process.env.ZURAAACOM_API_SECRET ?? '',
+    invite: process.env.ZURAAACOM_INVITE ?? 'https://discord.com/invite/YrXysT2DHj',
+    oauth2UrlAuth: process.env.ZURAAACOM_OAUTH2_AUTH ?? 'https://discord.com/api/oauth2/authorize'
   }
 }

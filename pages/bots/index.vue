@@ -1,13 +1,7 @@
 <template>
   <div class="bots">
     <BotTags class="bots__tags" />
-    <div class="cards">
-      <BotCard
-        v-for="bot in bots"
-        :key="bot._id"
-        :bot="bot"
-      />
-    </div>
+    <BotCards :bots="bots" />
     <div class="buttons">
       <nuxt-link
         v-if="page >= 1"

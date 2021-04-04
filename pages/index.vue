@@ -6,39 +6,21 @@
     <p class="index__subtitle">
       Os bots que receberam mais votos nesse mês
     </p>
-    <div class="cards">
-      <BotCard
-        v-for="bot in topBots"
-        :key="bot._id"
-        :bot="bot"
-      />
-    </div>
+    <BotCards :bots="topBots" />
     <h2 class="index__title">
       Bots recentemente adicionados
     </h2>
     <p class="index__subtitle">
       Novos bots que foram recentemente adicionados e aprovados em nosso site
     </p>
-    <div class="cards">
-      <BotCard
-        v-for="bot in recentBots"
-        :key="bot._id"
-        :bot="bot"
-      />
-    </div>
+    <BotCards :bots="recentBots" />
     <h2 class="index__title">
       Bots aleatórios
     </h2>
     <p class="index__subtitle">
       Seleção aleatória de bots que estão em nosso sistema
     </p>
-    <div class="cards">
-      <BotCard
-        v-for="bot in randomBots"
-        :key="bot._id"
-        :bot="bot"
-      />
-    </div>
+    <BotCards :bots="randomBots" />
   </div>
 </template>
 
@@ -84,13 +66,6 @@ export default class extends Vue {
 
   &__subtitle {
     text-align: center;
-  }
-
-  .cards {
-    width: 100%;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
   }
 }
 
