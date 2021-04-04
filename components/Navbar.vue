@@ -12,23 +12,47 @@
 
     <b-collapse id="navbar--collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item to="/">
+        <b-nav-item class="navbar__link" to="/">
           Início
         </b-nav-item>
-        <b-nav-item to="/bots">
+        <b-nav-item class="navbar__link" to="/bots">
           Bots
         </b-nav-item>
-        <b-nav-item to="/discord">
+        <b-nav-item class="navbar__link" to="/discord">
           Servidor
         </b-nav-item>
-        <b-nav-item>Documentação</b-nav-item>
-        <b-nav-item>Buscar</b-nav-item>
+        <b-nav-item class="navbar__link">
+          Documentação
+        </b-nav-item>
+        <b-nav-item class="navbar__link">
+          Buscar
+        </b-nav-item>
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
-        <b-nav-item to="/oauth2/login">
+        <b-nav-item v-if="me == null" to="/oauth2/login">
           Login
         </b-nav-item>
+        <b-nav-item-dropdown v-else class="navbar__dropdown" right>
+          <template #button-content>
+            <span class="navbar__dropdown__name">
+              {{ me.username }}
+            </span>
+          </template>
+          <b-dropdown-item href="#">
+            Meu perfil
+          </b-dropdown-item>
+          <b-dropdown-item href="#">
+            Adicionar bot
+          </b-dropdown-item>
+          <b-dropdown-item href="#">
+            Bots
+          </b-dropdown-item>
+          <hr>
+          <b-dropdown-item href="#">
+            Deslogar
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -36,10 +60,25 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
+import type { User } from '~/models/users/user'
 
-@Component
+@Component({
+  fetchOnServer: false
+})
 export default class Navbar extends Vue {
+  me: User | null = null
 
+  async fetch () {
+    try {
+      if (localStorage.getItem('token') != null) {
+        this.me = await this.$axios.$get('/users/@me')
+      }
+    } catch (error) {
+      if (error.response == null || error.response.status >= 500) {
+        throw error
+      }
+    }
+  }
 }
 </script>
 
@@ -58,24 +97,45 @@ export default class Navbar extends Vue {
     }
   }
 
-  .nav-link {
-    color: var(--link-color);
-    font-size: 0.9rem;
-    outline: none;
+  &__link {
+    .nav-link {
+      color: var(--link-color);
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .nav-link:hover {
+      color: var(--link-color-hover);
+    }
+
+    .nuxt-link-active {
+      color: var(--link-color-hover);
+    }
   }
 
-  .nav-link:hover {
-      color: var(--link-color-hover);
+  &__dropdown {
+    font-size: 0.9rem;
 
+    &__name {
+      color: var(--link-color);
+    }
+
+    .icon {
+      color: var(--link-color);
+    }
+
+    .icon:hover {
+      color: var(--link-color-hover);
+    }
   }
 
   .navbar-toggler {
     border: none;
   }
+}
 
-  .nuxt-link-exact-active.nuxt-link-active {
-      color: var(--link-color-hover);
-  }
+.nav-link {
+  color: aqua;
 }
 
 @media (min-width: 992px) {
