@@ -22,6 +22,7 @@
   &__main {
     padding-top: 3.425rem;
     min-height: calc(100vh - 3.425rem);
+    background-color: #f5f5f5;
   }
 }
 </style>

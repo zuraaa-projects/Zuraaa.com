@@ -29,9 +29,9 @@
         {{ bot.details.shortDescription }}
       </p>
       <div class="botcard__details__button">
-        <CustomButton name="Página" />
-        <CustomButton name="Adicionar" />
-        <CustomButton name="Votar" />
+        <CustomButton name="Página" :url="`/bots/${bot._id}`" />
+        <CustomButton name="Adicionar" url="/" />
+        <CustomButton name="Votar" url="/" />
       </div>
     </div>
   </div>
@@ -66,7 +66,7 @@ export default class extends Vue {
   box-shadow: 2px 2px 3px 1px rgba(0,0,0,.6);
   @media (max-width: 380px) {
     flex-direction: column;
-    height: 340px;
+    height: 355px;
   }
 
   &__image {

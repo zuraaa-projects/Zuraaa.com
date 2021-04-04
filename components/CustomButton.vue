@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link class="custombutton" to="/">
+  <nuxt-link class="custombutton" :to="url">
     {{ name }}
   </nuxt-link>
 </template>
@@ -13,15 +13,28 @@ export default class extends Vue {
     required: true
   })
   name!: string
+
+  @Prop({
+    required: true
+  })
+  url!: string
 }
 </script>
 
 <style lang="scss" scoped>
 .custombutton {
   margin: 0 0.2rem;
-  color: var(--text-light);
-  background-color: var(--secondary-color);
+  color: var(--text-dark);
   padding: 2px 0.5rem;
-  border-radius: 5px;
+  border-radius: 0.3rem;
+  border: 1px solid var(--primary-color);
+  border-left: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+  font-size: 0.9rem;
+}
+
+.custombutton:hover {
+  background-color: var(--primary-color);
+  color: var(--text-light);
 }
 </style>

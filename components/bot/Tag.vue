@@ -1,26 +1,36 @@
 <template>
-  <div class="bottag">
-    <p class="bottag__name">
-      Teste
-    </p>
-  </div>
+  <nuxt-link class="bottag" to="/">
+    {{ name }}
+  </nuxt-link>
 </template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
+
+@Component
+export default class extends Vue {
+  @Prop({
+    required: true
+  })
+  name!: string
+}
+</script>
 
 <style lang="scss" scoped>
 .bottag {
   height: 1.5rem;
-  width: 3rem;
-  margin: 0 0.3rem;
-  background-color: whitesmoke;
-  border-left: 0.3rem solid springgreen;
+  margin: 0.3rem;
+  padding: 0 0.2rem;
   border-radius: 0.3rem;
+  border: 1px solid var(--primary-color);
+  border-left: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+  color: var(--text-dark);
+  font-size: 0.9rem;
+}
 
-  &__name {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    text-align: center;
-    color: var(--text-dark);
-  }
+.bottag:hover {
+  background-color: var(--primary-color);
+  color: var(--text-light);
 }
 </style>
