@@ -35,6 +35,11 @@
         </b-nav-item>
         <b-nav-item-dropdown v-else class="navbar__dropdown" right>
           <template #button-content>
+            <img
+              :src="me | genAvatar"
+              :alt="me | altName"
+              class="navbar__dropdown__image"
+            >
             <span class="navbar__dropdown__name">
               {{ me.username }}
             </span>
@@ -45,10 +50,7 @@
           <b-dropdown-item href="#">
             Adicionar bot
           </b-dropdown-item>
-          <b-dropdown-item href="#">
-            Bots
-          </b-dropdown-item>
-          <hr>
+          <hr class="navbar__dropdown__line">
           <b-dropdown-item href="#">
             Deslogar
           </b-dropdown-item>
@@ -60,10 +62,15 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
+import { genAvatar, altName } from '~/utils/filters'
 import type { User } from '~/models/users/user'
 
 @Component({
-  fetchOnServer: false
+  fetchOnServer: false,
+  filters: {
+    genAvatar,
+    altName
+  }
 })
 export default class Navbar extends Vue {
   me: User | null = null
@@ -117,7 +124,18 @@ export default class Navbar extends Vue {
     font-size: 0.9rem;
 
     &__name {
-      color: var(--link-color);
+      color: var(--text-light);
+    }
+
+    &__line {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    &__image {
+      width: 2rem;
+      border-radius: 50%;
+      margin-right: 0.5rem;
     }
 
     .icon {

@@ -1,7 +1,7 @@
 import { Bot } from '~/models/bots/bot'
 import { User } from '~/models/users/user'
 
-export function genAvatar (bot: Bot) {
+export function genAvatar (bot: User | Bot) {
   return `${process.env.apiUrl}/avatars/${bot._id}/${bot.avatar}`
 }
 
