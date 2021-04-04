@@ -30,7 +30,7 @@
       </p>
       <div class="botcard__details__button">
         <CustomButton name="Página" :url="`/bots/${bot._id}`" />
-        <CustomButton name="Adicionar" url="/" />
+        <CustomButton name="Adicionar" :url="`/bots/${bot._id}/add`" />
         <CustomButton name="Votar" url="/" />
       </div>
     </div>

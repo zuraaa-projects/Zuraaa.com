@@ -1,9 +1,10 @@
 export interface BotDetails {
   shortDescription: string
+  customInviteLink: string
 }
 
 export interface Bot {
-  _id: number
+  _id: string
   username: string
   discriminator: string
   avatar: string
