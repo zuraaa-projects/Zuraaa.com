@@ -3,12 +3,12 @@ name: ci
 on:
   push:
     branches:
-      - main
       - master
+      - hello-nuxt
   pull_request:
     branches:
-      - main
       - master
+      - hello-nuxt
 
 jobs:
   ci:
