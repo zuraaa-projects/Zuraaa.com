@@ -1,26 +1,20 @@
 <template>
   <div class="index">
-    <h2 class="index__title">
-      Bots mais votados do mês
-    </h2>
-    <p class="index__subtitle">
-      Os bots que receberam mais votos nesse mês
-    </p>
-    <BotCards :bots="topBots" />
-    <h2 class="index__title">
-      Bots recentemente adicionados
-    </h2>
-    <p class="index__subtitle">
-      Novos bots que foram recentemente adicionados e aprovados em nosso site
-    </p>
-    <BotCards :bots="recentBots" />
-    <h2 class="index__title">
-      Bots aleatórios
-    </h2>
-    <p class="index__subtitle">
-      Seleção aleatória de bots que estão em nosso sistema
-    </p>
-    <BotCards :bots="randomBots" />
+    <BotCards
+      :bots="topBots"
+      title="Bots mais votados do mês"
+      subtitle="Os bots que receberam mais votos nesse mês"
+    />
+    <BotCards
+      :bots="recentBots"
+      title="Bots recentemente adicionados"
+      subtitle="Novos bots que foram recentemente adicionados e aprovados em nosso site"
+    />
+    <BotCards
+      :bots="randomBots"
+      title="Bots aleatórios"
+      subtitle="Seleção aleatória de bots que estão em nosso sistema"
+    />
   </div>
 </template>
 
@@ -64,22 +58,7 @@ export default class extends Vue {
 
 <style lang="scss" scoped>
 .index {
-  max-width: 1300px;
   width: 95%;
   margin: 0 auto;
-
-  &__title {
-    text-align: center;
-    margin: 0;
-    margin-top: 1rem;
-  }
-
-  &__subtitle {
-    text-align: center;
-  }
-}
-
-@media (min-width: 992px) {
-
 }
 </style>

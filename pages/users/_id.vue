@@ -7,12 +7,12 @@
       />
     </Hero>
     <div class="bots">
-      <h1 class="bots__title">
-        Bots
-      </h1>
       <div class="bots-">
         <div v-if="bots.length">
-          <BotCard v-for="bot in bots" :key="bot._id" :bot="bot" />
+          <BotCards
+            :bots="bots"
+            title="Bots"
+          />
         </div>
         <h4 v-else>
           O usuário não tem nenhum bot listado.
