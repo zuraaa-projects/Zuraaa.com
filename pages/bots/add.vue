@@ -8,16 +8,20 @@
             description="Insira o Id do bot"
             label="Bot Id *"
             label-for="bot-id"
+            :validated="validateBotId"
           >
             <b-form-input
               id="bot-id"
+              v-model="bot._id"
               placeholder="Bot Id"
+              :state="validateBotId"
             />
           </b-form-group>
         </b-col>
         <b-col>
           <b-form-group
             id="bot-prefix-group"
+            v-model="bot.details.prefix"
             description="Insira o prefixo do bot"
             label="Prefixo *"
             label-for="bot-prefix"
@@ -49,24 +53,22 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { BotAdd, BotAddDetails } from '~/models/bots/bot-add'
+import { BotAdd } from '~/models/bots/bot-add'
 import { BotLibrary } from '~/models/bots/bot-enum'
 
 @Component({
   head: {
     title: 'Zuraaa! | Adicionar bot'
   },
-  asyncData () {
+  data () {
     const bot = new BotAdd()
-    bot.details = new BotAddDetails()
-    bot.details.library = null
 
     return {
       bot
     }
   }
 })
-export default class extends Vue {
+export default class AddBot extends Vue {
   bot!: BotAdd
 
   libs!: any
@@ -76,6 +78,11 @@ export default class extends Vue {
       { value: null, text: 'Escolha a biblioteca' },
       ...Object.entries(BotLibrary).map(lib => ({ value: lib[0], text: lib[1] }))
     ]
+  }
+
+  get validateBotId () {
+    if (this.bot._id == null || this.bot._id === '') { return null }
+    return !isNaN(Number(this.bot._id))
   }
 }
 </script>
