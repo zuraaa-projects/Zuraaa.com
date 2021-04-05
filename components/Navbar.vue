@@ -48,7 +48,7 @@
           <b-dropdown-item :to="me | myPage">
             Meu perfil
           </b-dropdown-item>
-          <b-dropdown-item href="#">
+          <b-dropdown-item href="/bots/add">
             Adicionar bot
           </b-dropdown-item>
           <hr class="navbar__dropdown__line">

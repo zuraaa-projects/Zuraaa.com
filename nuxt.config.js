@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'zuraaa.com',
+    title: 'Zuraaa!',
     htmlAttrs: {
       lang: 'pt-br'
     },
