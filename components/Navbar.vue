@@ -21,7 +21,7 @@
         <b-nav-item class="navbar__link" to="/discord">
           Servidor
         </b-nav-item>
-        <b-nav-item class="navbar__link">
+        <b-nav-item class="navbar__link" href="https://github.com/zuraaa-projects/Zuraaa.com/wiki">
           Documentação
         </b-nav-item>
         <b-nav-item class="navbar__link">
@@ -45,7 +45,7 @@
               {{ me.username }}
             </span>
           </template>
-          <b-dropdown-item href="#">
+          <b-dropdown-item :to="me | myPage">
             Meu perfil
           </b-dropdown-item>
           <b-dropdown-item href="#">
@@ -63,14 +63,15 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { genAvatar, altName } from '~/utils/filters'
+import { genAvatar, altName, myPage } from '~/utils/filters'
 import type { User } from '~/models/users/user'
 
 @Component({
   fetchOnServer: false,
   filters: {
     genAvatar,
-    altName
+    altName,
+    myPage
   }
 })
 export default class Navbar extends Vue {

@@ -35,10 +35,20 @@ import { Bot } from '~/models/bots/bot'
   },
   async asyncData ({ $axios }: Context) {
     try {
+      const [
+        top,
+        recent,
+        random
+      ] = await Promise.all([
+        $axios.$get('/bots?type=top&limit=6'),
+        $axios.$get('/bots?limit=6'),
+        $axios.$get('/bots?type=random&limit=12')
+      ])
+
       return {
-        topBots: await $axios.$get('/bots?type=top&limit=6'),
-        recentBots: await $axios.$get('/bots?limit=6'),
-        randomBots: await $axios.$get('/bots?type=random&limit=12')
+        topBots: top,
+        recentBots: recent,
+        randomBots: random
       }
     } catch (error) {
       // Pagina de erro

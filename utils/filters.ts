@@ -12,3 +12,7 @@ export function altName (user: User | Bot) {
 export function botStatus (bot: Bot) {
   return require(`~/assets/status/${bot.status}.png`)
 }
+
+export function myPage (user: User) {
+  return `/users/${user._id}`
+}
