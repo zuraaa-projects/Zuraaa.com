@@ -47,6 +47,16 @@
           </b-form-group>
         </b-col>
       </b-form-row>
+      <b-form-group
+        id="bot-owners-group"
+        description="Adicione os outros donos do bot"
+        label="Outros donos"
+        label-for="bot-lib"
+      >
+        <b-form-tags
+          placeholder="Adicionar donos"
+        />
+      </b-form-group>
     </b-form>
   </div>
 </template>
