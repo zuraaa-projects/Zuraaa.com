@@ -21,14 +21,16 @@
         <b-col>
           <b-form-group
             id="bot-prefix-group"
-            v-model="bot.details.prefix"
             description="Insira o prefixo do bot"
             label="Prefixo *"
             label-for="bot-prefix"
+            :validated="validatePrefix"
           >
             <b-form-input
               id="bot-prefix"
+              v-model="bot.details.prefix"
               placeholder="Prefixo"
+              :state="validatePrefix"
             />
           </b-form-group>
         </b-col>
@@ -38,11 +40,13 @@
             description="Escolha a biblioteca que usou para fazer o bot"
             label="Biblioteca *"
             label-for="bot-lib"
+            :validated="validateLib"
           >
             <b-form-select
               id="bot-lib"
               v-model="bot.details.library"
               :options="libs"
+              :state="validateLib"
             />
           </b-form-group>
         </b-col>
@@ -55,6 +59,8 @@
       >
         <b-form-tags
           placeholder="Adicionar donos"
+          tag-pills
+          remove-on-delete
         />
       </b-form-group>
     </b-form>
@@ -91,8 +97,30 @@ export default class AddBot extends Vue {
   }
 
   get validateBotId () {
-    if (this.bot._id == null || this.bot._id === '') { return null }
+    if (this.bot._id == null || this.bot._id === '') {
+      return null
+    }
     return !isNaN(Number(this.bot._id))
+  }
+
+  get validatePrefix () {
+    if (this.bot.details.prefix == null) {
+      return null
+    }
+
+    if (this.bot.details.prefix === '') {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  get validateLib () {
+    if (this.bot.details.library == null) {
+      return null
+    } else {
+      return true
+    }
   }
 }
 </script>
