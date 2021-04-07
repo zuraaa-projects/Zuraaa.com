@@ -12,10 +12,10 @@
 
     <b-collapse id="navbar--collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item class="navbar__link" to="/">
+        <b-nav-item prefetch class="navbar__link" to="/">
           Início
         </b-nav-item>
-        <b-nav-item class="navbar__link" to="/bots">
+        <b-nav-item prefetch class="navbar__link" to="/bots">
           Bots
         </b-nav-item>
         <b-nav-item class="navbar__link" to="/discord">
@@ -48,7 +48,7 @@
           <b-dropdown-item :to="me | myPage">
             Meu perfil
           </b-dropdown-item>
-          <b-dropdown-item href="/bots/add">
+          <b-dropdown-item to="/bots/add">
             Adicionar bot
           </b-dropdown-item>
           <hr class="navbar__dropdown__line">
@@ -117,7 +117,7 @@ export default class Navbar extends Vue {
       color: var(--link-color-hover);
     }
 
-    .nuxt-link-active {
+    .nuxt-link-exact-active {
       color: var(--link-color-hover);
     }
   }
