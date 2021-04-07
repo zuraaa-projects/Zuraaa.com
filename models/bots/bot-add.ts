@@ -5,12 +5,12 @@ export class BotAddDetails {
   tags: BotTag[]
   library: BotLibrary | null
   customInviteLink: string
-  shortDescription: string
-  longDescription: string
+  shortDescription: string | null
+  longDescription: string | null
   isHTML: boolean
   supportServer: string
   website: string
-  otherOwners: string[] | null
+  otherOwners: string[]
   donate: string
   github: string
 
@@ -19,23 +19,23 @@ export class BotAddDetails {
     this.tags = []
     this.library = null
     this.customInviteLink = ''
-    this.shortDescription = ''
-    this.longDescription = ''
+    this.shortDescription = null
+    this.longDescription = null
     this.isHTML = false
     this.supportServer = ''
     this.website = ''
-    this.otherOwners = null
+    this.otherOwners = []
     this.donate = ''
     this.github = ''
   }
 }
 
 export class BotAdd {
-  _id: string
+  _id: string | null
   details: BotAddDetails
 
   constructor () {
-    this._id = ''
+    this._id = null
     this.details = new BotAddDetails()
   }
 }
