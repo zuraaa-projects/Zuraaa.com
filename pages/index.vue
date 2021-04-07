@@ -1,16 +1,19 @@
 <template>
   <div class="index">
     <BotCards
+      class="index__cards"
       :bots="topBots"
       title="Bots mais votados do mês"
       subtitle="Os bots que receberam mais votos nesse mês"
     />
     <BotCards
+      class="index__cards"
       :bots="recentBots"
       title="Bots recentemente adicionados"
       subtitle="Novos bots que foram recentemente adicionados e aprovados em nosso site"
     />
     <BotCards
+      class="index__cards"
       :bots="randomBots"
       title="Bots aleatórios"
       subtitle="Seleção aleatória de bots que estão em nosso sistema"
@@ -60,5 +63,8 @@ export default class extends Vue {
 .index {
   width: 95%;
   margin: 0 auto;
+  &__cards {
+    margin: 0 auto;
+  }
 }
 </style>
