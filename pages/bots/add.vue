@@ -5,7 +5,7 @@
     </h2>
     <b-form class="botform__form">
       <b-container class="botform__container">
-        <b-form-row class="botform__id">
+        <b-form-row class="botform__row">
           <b-col class="botform__id__col">
             <b-form-group
               id="bot-id-group"
@@ -25,7 +25,7 @@
               />
             </b-form-group>
           </b-col>
-          <b-col cols="12" md="auto" class="botform__prefix">
+          <b-col cols="12" md="auto" class="botform__prefix__row">
             <b-form-group
               id="bot-prefix-group"
               class="botform__prefix__group"
@@ -196,7 +196,46 @@
             </b-form-group>
           </b-col>
         </b-form-row>
-        <b-form-row />
+        <b-form-row class="botform__row">
+          <b-col class="botform__support" cols="12" sm="8" md="5" lg="4">
+            <b-form-group
+              class="botform__support__group"
+              description="Servidor de suporte do seu bot."
+              label="Servidor de suporte"
+              label-for="bot-support"
+              :validated="validateSupport"
+            >
+              <b-input-group prepend="https://discord.gg/">
+                <b-form-input
+                  id="bot-support"
+                  v-model="bot.details.supportServer"
+                  class="botform__support__input"
+                  placeholder="YrXysT2DHj"
+                  maxlength="20"
+                  :state="validateSupport"
+                />
+              </b-input-group>
+            </b-form-group>
+          </b-col>
+          <b-col class="botform__invite" cols="12" md="7" lg="8">
+            <b-form-group
+              class="botform__invite__group"
+              description="Link do convite customizado do seu bot."
+              label="Convite customizado"
+              label-for="bot-custom-invite"
+              :validated="validateCustomInvite"
+            >
+              <b-form-input
+                id="bot-custom-invite"
+                v-model="bot.details.customInviteLink"
+                class="botform__invite__input"
+                placeholder="https://sitedomeubot.com.br/adicionar"
+                maxlength="2083"
+                :state="validateCustomInvite"
+              />
+            </b-form-group>
+          </b-col>
+        </b-form-row>
       </b-container>
     </b-form>
   </div>
@@ -204,9 +243,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
+import { isWebUri } from 'valid-url'
 import { BotAdd } from '~/models/bots/bot-add'
 import { BotLibrary, BotTag } from '~/models/bots/bot-enum'
-
 @Component({
   head: {
     title: 'Zuraaa! | Adicionar bot'
@@ -320,6 +359,23 @@ export default class AddBot extends Vue {
     }
     return this.bot.details.tags.length !== 0
   }
+
+  get validateSupport () {
+    const support = this.bot.details.supportServer
+    if (support == null || support === '') {
+      return null
+    }
+
+    return !!support.match(/^[\w-]+$/)
+  }
+
+  get validateCustomInvite () {
+    const link = this.bot.details.customInviteLink
+    if (link == null || link === '') {
+      return null
+    }
+    return !!isWebUri(link)
+  }
 }
 </script>
 
@@ -335,7 +391,7 @@ export default class AddBot extends Vue {
 
       &__radio {
         white-space: break-spaces;
-        text-align: start;
+        text-align: left;
       }
     }
   }
