@@ -142,6 +142,61 @@
             </b-form-group>
           </b-col>
         </b-form-row>
+        <b-form-row class="botform__tags">
+          <b-col class="botform__tags__col">
+            <b-form-group
+              class="botform__tags__group"
+              description="Tags que representam seu bot, mínimo 1 máximo 6."
+              label="Tags *"
+              label-for="bot-tags"
+              :validated="validateTags"
+            >
+              <b-form-tags
+                id="bot-tags"
+                v-model="bot.details.tags"
+                class="botform__tags__tags"
+                tag-pills
+                add-on-change
+                no-outer-focus
+                :limit="6"
+              >
+                <template
+                  #default="{ tags: bTags, inputAttrs, inputHandlers, removeTag }"
+                >
+                  <ul v-if="bTags.length > 0" class="botform__tags__list list-inline d-inline-block">
+                    <li
+                      v-for="tag in bTags"
+                      :key="tag"
+                      class="botform__tags__list__item list-inline-item"
+                    >
+                      <b-form-tag
+                        :title="tagsReverse[tag]"
+                        class="botform__tags__list__tag"
+                        @remove="removeTag(tag)"
+                      >
+                        {{ tagsReverse[tag] }}
+                      </b-form-tag>
+                    </li>
+                  </ul>
+                  <b-form-select
+                    v-bind="inputAttrs"
+                    :options="availableTags"
+                    :disabled="bTags.length === 6"
+                    class="botform__tags__select"
+                    v-on="inputHandlers"
+                  >
+                    <template #first>
+                      <option disabled value="">
+                        Escolha uma tag...
+                      </option>
+                    </template>
+                  </b-form-select>
+                </template>
+              </b-form-tags>
+            </b-form-group>
+          </b-col>
+        </b-form-row>
+        <b-form-row />
       </b-container>
     </b-form>
   </div>
@@ -150,7 +205,7 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { BotAdd } from '~/models/bots/bot-add'
-import { BotLibrary } from '~/models/bots/bot-enum'
+import { BotLibrary, BotTag } from '~/models/bots/bot-enum'
 
 @Component({
   head: {
@@ -162,13 +217,26 @@ export default class AddBot extends Vue {
 
   libs!: any
 
+  tags!: any
+
+  tagsReverse!: any
+
   longDescriptionOptions!: any
 
   created () {
     this.libs = [
       { value: null, text: 'Escolha a biblioteca' },
-      ...Object.entries(BotLibrary).map(lib => ({ value: lib[0], text: lib[1] }))
+      ...this.enumToOptions(BotLibrary)
     ]
+
+    this.tags = this.enumToOptions(BotTag)
+
+    this.tagsReverse = Object
+      .fromEntries(
+        Object
+          .entries(BotTag)
+          .map(([k, v]) => [v, k])
+      )
 
     this.longDescriptionOptions = [
       {
@@ -180,6 +248,17 @@ export default class AddBot extends Vue {
         value: true
       }
     ]
+  }
+
+  enumToOptions (transformEnum: any) {
+    return Object
+      .entries(transformEnum)
+      .map(
+        ([key, value]) => ({
+          value,
+          text: key
+        })
+      )
   }
 
   validateId (id: string | null) {
@@ -227,6 +306,20 @@ export default class AddBot extends Vue {
 
     return true
   }
+
+  get availableTags () {
+    return this.tags
+      .filter(
+        ({ value }: { value: BotTag }) => !this.bot.details.tags?.includes(value)
+      )
+  }
+
+  get validateTags () {
+    if (this.bot.details.tags == null) {
+      return null
+    }
+    return this.bot.details.tags.length !== 0
+  }
 }
 </script>
 
@@ -239,6 +332,11 @@ export default class AddBot extends Vue {
     &__html {
       width: 100%;
       display: block;
+
+      &__radio {
+        white-space: break-spaces;
+        text-align: start;
+      }
     }
   }
 }

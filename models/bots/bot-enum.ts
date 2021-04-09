@@ -1,19 +1,15 @@
 export enum BotTag {
-  anime = 'anime',
-  dashboard = 'dashboard',
-  diversao = 'diversao',
-  utilidades = 'utilidades',
-  social = 'social',
-  jogos = 'jogos',
-  musica = 'musica',
-  moderacao = 'moderacao',
-  economia = 'economia',
-  fortnite = 'fortnite',
-  lol = 'lol',
-  minecraft = 'minecraft',
-  hytale = 'hytale',
-  nsfw = 'nsfw',
-  outros = 'outros'
+  'Anime' = 'anime',
+  'Dashboard' = 'dashboard',
+  'Diversão' = 'diversao',
+  'Utilidades' = 'utilidades',
+  'Social' = 'social',
+  'Jogos' = 'jogos',
+  'Música' = 'musica',
+  'Moderação' = 'moderacao',
+  'Economia' = 'economia',
+  'NSFW' = 'nsfw',
+  'Outros' = 'outros'
 }
 
 export enum BotLibrary {
@@ -43,7 +39,7 @@ export enum BotLibrary {
   'Discord4j' = 'Discord4j',
   'discordnim' = 'discordnim',
   'Yasmin' = 'Yasmin',
-  'disco' = 'disco',
+  'Disco' = 'disco',
   'AckCord' = 'AckCord',
   'Bot Designer' = 'Bot Designer',
   'DBM' = 'DBM',

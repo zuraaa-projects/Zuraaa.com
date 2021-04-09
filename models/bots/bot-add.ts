@@ -2,7 +2,7 @@ import { BotLibrary, BotTag } from './bot-enum'
 
 export class BotAddDetails {
   prefix: string | null
-  tags: BotTag[]
+  tags: BotTag[] | null
   library: BotLibrary | null
   customInviteLink: string
   shortDescription: string | null
@@ -16,7 +16,7 @@ export class BotAddDetails {
 
   constructor () {
     this.prefix = null
-    this.tags = []
+    this.tags = null
     this.library = null
     this.customInviteLink = ''
     this.shortDescription = null
