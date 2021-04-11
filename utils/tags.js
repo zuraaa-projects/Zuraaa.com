@@ -7,7 +7,7 @@ module.exports = {
   jogos: 'Jogos',
   musica: 'Música',
   moderacao: 'Moderação',
-  economia: 'Economia',  
+  economia: 'Economia',
   nsfw: 'NSFW',
   outros: 'Outros'
 }
