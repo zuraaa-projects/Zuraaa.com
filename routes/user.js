@@ -65,13 +65,15 @@ module.exports = (mongo, api) => {
           if (user.role >= 2) {
             if (id === user.id) {
               res.render('message', {
-                message: 'Você não pode banir ou desbanir à si mesmo.'
+                message: 'Você não pode banir ou desbanir à si mesmo.',
+                url: '/user/' + req.params.id
               })
             }
             if (action === 'ban') {
               if (userb.banned) {
                 return res.render('message', {
-                  message: 'O usuário ja se encontra banido!'
+                  message: 'O usuário ja se encontra banido!',
+                  url: '/user/' + req.params.id
                 })
               }
               res.render('action', {
@@ -87,7 +89,8 @@ module.exports = (mongo, api) => {
             } else {
               if (!userb.banned) {
                 return res.render('message', {
-                  message: 'O usuário não se encontra banido!'
+                  message: 'O usuário não se encontra banido!',
+                  url: '/user/' + req.params.id
                 })
               }
               res.render('action', {
@@ -104,7 +107,8 @@ module.exports = (mongo, api) => {
           } else {
             res.render('message', {
               title: 'Acesso negado',
-              message: 'Você não tem permissão de acessar este endpoint'
+              message: 'Você não tem permissão de acessar este endpoint',
+              url: '/user/' + req.params.id
             })
           }
         } else if (action === 'edit') {
@@ -122,7 +126,8 @@ module.exports = (mongo, api) => {
           } else {
             res.render('message', {
               title: 'Acesso negado',
-              message: 'Você não tem permissão de acessar este endpoint'
+              message: 'Você não tem permissão de acessar este endpoint',
+              url: '/user/' + req.params.id
             })
           }
         }
@@ -150,14 +155,16 @@ module.exports = (mongo, api) => {
           getUserBy(id).then(async (userb) => {
             if (id === user.id) {
               res.render('message', {
-                message: 'Você não pode banir ou desbanir à si mesmo.'
+                message: 'Você não pode banir ou desbanir à si mesmo.',
+                url: '/user/' + id
               })
             }
             if (userb) {
               if (action === 'ban') {
                 if (userb.banned) {
                   return res.render('message', {
-                    message: 'O usuário ja se encontra banido!'
+                    message: 'O usuário ja se encontra banido!',
+                    url: '/user/' + id
                   })
                 }
 
@@ -168,18 +175,21 @@ module.exports = (mongo, api) => {
                 await api.ban(token, id, reason)
                 res.render('message', {
                   title: 'Sucesso!',
-                  message: 'Você baniu o usuário com sucesso!'
+                  message: 'Você baniu o usuário com sucesso!',
+                  url: '/user/' + id
                 })
               } else {
                 if (!userb.banned) {
                   return res.render('message', {
-                    message: 'O usuário não se encontra banido!'
+                    message: 'O usuário não se encontra banido!',
+                    url: '/user/' + id
                   })
                 }
                 await api.unban(token, id)
                 res.render('message', {
                   title: 'Sucesso!',
-                  message: 'Você desbaniu o usuário com sucesso!'
+                  message: 'Você desbaniu o usuário com sucesso!',
+                  url: '/user/' + id
                 })
               }
             } else {
@@ -191,7 +201,8 @@ module.exports = (mongo, api) => {
         } else {
           res.render('message', {
             title: 'Acesso negado',
-            message: 'Você não tem permissão de acessar este endpoint'
+            message: 'Você não tem permissão de acessar este endpoint',
+            url: '/user/' + id
           })
         }
       } else if (action === 'edit') {
@@ -201,7 +212,8 @@ module.exports = (mongo, api) => {
         } else {
           res.render('message', {
             title: 'Acesso negado',
-            message: 'Você não tem permissão de acessar este endpoint'
+            message: 'Você não tem permissão de acessar este endpoint',
+            url: '/user/' + id
           })
         }
       }
@@ -219,7 +231,8 @@ module.exports = (mongo, api) => {
       console.error(error)
       res.render('message', {
         title: 'Erro interno',
-        message: 'Ocorreu um erro interno enquanto processávamos sua solicitação, pedimos desculpas pela incoveniência.'
+        message: 'Ocorreu um erro interno enquanto processávamos sua solicitação, pedimos desculpas pela incoveniência.',
+        url: '/user/' + req.params.id
       })
     }
   })

@@ -71,7 +71,8 @@ module.exports = (config, mongo, api) => {
               })
             } else {
               res.render('message', {
-                message: 'Ocorreu um erro durante o login.'
+                message: 'Ocorreu um erro durante o login.',
+                url: '/oauth2/login'
               })
             }
           })

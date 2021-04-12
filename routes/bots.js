@@ -290,7 +290,8 @@ module.exports = (config, db, api) => {
         })
       } else {
         res.render('message', {
-          message: 'O bot não foi removido'
+          message: 'O bot não foi removido',
+          url: '/bots/' + id
         })
       }
     } catch (err) {
@@ -300,7 +301,8 @@ module.exports = (config, db, api) => {
       } else {
         console.error('Error trying to delete bot', err.message, err.response?.data)
         res.render('message', {
-          message: 'Ocorreu um erro durante a remoção.'
+          message: 'Ocorreu um erro durante a remoção.',
+          url: '/bots/' + id
         })
       }
     }
@@ -366,7 +368,8 @@ module.exports = (config, db, api) => {
         .then(({ bot }) => {
           res.render('message', {
             title: 'Sucesso',
-            message: `Você denunciou o bot ${userToString(bot)} com sucesso.`
+            message: `Você denunciou o bot ${userToString(bot)} com sucesso.`,
+            url: '/bots/' + req.params.id
           })
         })
         .catch((error) => {
@@ -380,7 +383,8 @@ module.exports = (config, db, api) => {
             })
           } else {
             res.render('message', {
-              message: 'Ocorreu um erro durante sua solicitação.'
+              message: 'Ocorreu um erro durante sua solicitação.',
+              url: '/oauth2/login'
             })
           }
         })
@@ -388,7 +392,8 @@ module.exports = (config, db, api) => {
       console.error(error)
       res.render('message', {
         title: 'Erro interno',
-        message: 'Ocorreu um erro interno enquanto processávamos sua solicitação, pedimos desculpas pela incoveniência.'
+        message: 'Ocorreu um erro interno enquanto processávamos sua solicitação, pedimos desculpas pela incoveniência.',
+        url: '/oauth2/login'
       })
     }
   })
@@ -438,7 +443,8 @@ module.exports = (config, db, api) => {
           req.session.destroy(() => {
             return res.render('message', {
               title: 'BANIDO',
-              message: 'Você está banido! 🙂'
+              message: 'Você está banido! 🙂',
+              url: `/bots/${req.params.id}`
             })
           })
           return
@@ -452,7 +458,8 @@ module.exports = (config, db, api) => {
             time += `${minutes.toString().padStart(2, 0)}min`
           }
           res.render('message', {
-            message: `Você precisa esperar até ás ${time} para poder votar novamente.`
+            message: `Você precisa esperar até ás ${time} para poder votar novamente.`,
+            url: `/bots/${req.params.id}`
           })
           return
         }
@@ -540,7 +547,8 @@ module.exports = (config, db, api) => {
           }
           res.render('message', {
             title: 'Sucesso',
-            message: `Você votou em ${dot.username} com sucesso.`
+            message: `Você votou em ${dot.username} com sucesso.`,
+            url: `/bots/${req.params.id}`
           })
         })
       }
@@ -594,7 +602,8 @@ module.exports = (config, db, api) => {
     validateForm(req.body, botTags, owners).then(async (result) => {
       if (result) {
         res.render('message', {
-          message: result
+          message: result,
+          url: '/bots/add'
         })
         return
       }
@@ -603,7 +612,8 @@ module.exports = (config, db, api) => {
         .then(bot => {
           res.render('message', {
             title: 'Sucesso',
-            message: `Você editou o bot ${userToString(bot)} com sucesso.`
+            message: `Você editou o bot ${userToString(bot)} com sucesso.`,
+            url: `/bots/${req.body.id}`
           })
         })
         .catch((error) => {
@@ -611,7 +621,8 @@ module.exports = (config, db, api) => {
             case 400:
               console.error('Error 400 in edit bot:', error.response.data)
               res.render('message', {
-                message: 'Erro durante a validação. Tem certeza que todos os campos estão corretos?'
+                message: 'Erro durante a validação. Tem certeza que todos os campos estão corretos?',
+                url: `/bots/${req.body.id}/editar`
               })
               break
             case 401:
@@ -629,7 +640,8 @@ module.exports = (config, db, api) => {
             default:
               console.error('Error in edit bot:', error.message)
               res.render('message', {
-                message: 'Erro na aplicação.'
+                message: 'Erro na aplicação.',
+                url: `/bots/${req.body.id}/editar`
               })
               break
           }
@@ -660,7 +672,8 @@ module.exports = (config, db, api) => {
         .then(bot => {
           res.render('message', {
             title: 'Sucesso',
-            message: `O bot ${userToString(bot)} foi enviado para a fila de verificação.`
+            message: `O bot ${userToString(bot)} foi enviado para a fila de verificação.`,
+            url: `/bots/${b.id}`
           })
         })
         .catch(error => {
@@ -669,12 +682,14 @@ module.exports = (config, db, api) => {
               const { data } = error.response
               if (data.idError) {
                 res.render('message', {
-                  message: `O ${data.bot ? 'bot' : 'usuário'} de ID ${data.id} é inválido.`
+                  message: `O ${data.bot ? 'bot' : 'usuário'} de ID ${data.id} é inválido.`,
+                  url: '/bots/add'
                 })
                 return
               }
               res.render('message', {
-                message: 'Ocorreu um erro durante a validação dos dados.'
+                message: 'Ocorreu um erro durante a validação dos dados.',
+                url: '/bots/add'
               })
               break
             }
@@ -686,7 +701,8 @@ module.exports = (config, db, api) => {
             default:
               console.error('Error adding bot: ', error.message, error.response?.status, error.response?.data)
               res.render('message', {
-                message: 'Ocorreu um erro na aplicação.'
+                message: 'Ocorreu um erro na aplicação.',
+                url: '/bots/add'
               })
               break
           }

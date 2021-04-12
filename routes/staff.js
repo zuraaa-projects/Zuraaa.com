@@ -42,16 +42,24 @@ module.exports = (config, db) => {
 
     db.Bots.findById(req.params.id).then((bot) => {
       if (!bot) {
-        res.render('message', { message: 'O bot não existe.', url: '/staff/bots' })
+        res.render('message', {
+          message: 'O bot não existe.',
+          url: '/staff/bots'
+        })
         return
       }
       if (bot.approvedBy) {
-        res.render('message', { message: `O bot ${userToString(bot)} já está aprovado.`, url: '/staff/bots' })
+        res.render('message', {
+          message: `O bot ${userToString(bot)} já está aprovado.`,
+          url: '/staff/bots'
+        })
         return
       }
       bot.approvedBy = req.session.user.id
       bot.save()
-      discordBot.sendMessage(config.discord.bot.channels.botLogs, `<@${bot.owner}> O bot \`${userToString(bot)}\` foi aprovado por \`${userToString(req.session.user)}\`\n` +
+      discordBot.sendMessage(
+        config.discord.bot.channels.botLogs,
+        `<@${bot.owner}> O bot \`${userToString(bot)}\` foi aprovado por \`${userToString(req.session.user)}\`\n` +
             `${config.server.root}bots/${bot.id}`)
       discordBot.sendMessage(bot.owner, {
         title: 'Sucesso',
@@ -70,7 +78,11 @@ module.exports = (config, db) => {
       }
 
       discordBot.removeBot(config.discord.addId, bot.id)
-      res.render('message', { title: 'Sucesso', message: `O bot ${userToString(bot)} foi aprovado com sucesso.`, url: '/staff/bots' })
+      res.render('message', {
+        title: 'Sucesso',
+        message: `O bot ${userToString(bot)} foi aprovado com sucesso.`,
+        url: '/staff/bots'
+      })
     })
   })
   router.get('/bots/:id/rejeitar', async (req, res) => {
@@ -103,11 +115,17 @@ module.exports = (config, db) => {
     }
     db.Bots.findById(req.body.id).then((bot) => {
       if (!bot) {
-        res.render('message', { message: 'O bot não existe.', url: '/staff/bots' })
+        res.render('message', {
+          message: 'O bot não existe.',
+          url: '/staff/bots'
+        })
         return
       }
       if (bot.approvedBy) {
-        res.render('message', { message: `O bot ${userToString(bot)} foi aprovado.`, url: '/staff/bots' })
+        res.render('message', {
+          message: `O bot ${userToString(bot)} foi aprovado.`,
+          url: '/staff/bots'
+        })
         return
       }
       db.Bots.deleteOne({ _id: bot.id }).exec()
@@ -129,7 +147,11 @@ module.exports = (config, db) => {
         }
       }, true, true)
       discordBot.removeBot(config.discord.addId, bot.id)
-      res.render('message', { title: 'Sucesso', message: `O bot ${userToString(bot)} foi rejeitado com sucesso.`, url: '/staff/bots' })
+      res.render('message', {
+        title: 'Sucesso',
+        message: `O bot ${userToString(bot)} foi rejeitado com sucesso.`,
+        url: '/staff/bots'
+      })
     })
   })
 
@@ -147,7 +169,13 @@ module.exports = (config, db) => {
       }
     }
 
-    res.render('staff/edit', { roles: { nenhum: 0, aprovador: 1, administrador: 2 } })
+    res.render('staff/edit', {
+      roles: {
+        nenhum: 0,
+        aprovador: 1,
+        administrador: 2
+      }
+    })
   })
 
   router.post('/edit', async (req, res) => {
@@ -168,7 +196,11 @@ module.exports = (config, db) => {
 
     db.Users.findByIdAndUpdate(req.body.id, { 'details.role': req.body.role }).exec()
 
-    res.render('message', { message: `Você alterou as permissões do usuário ${req.body.id} com sucesso.`, title: 'Sucesso' })
+    res.render('message', {
+      message: `Você alterou as permissões do usuário ${req.body.id} com sucesso.`,
+      title: 'Sucesso',
+      url: `/user/${req.body.id}`
+    })
   })
 
   return router

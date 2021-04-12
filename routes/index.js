@@ -33,7 +33,7 @@ module.exports = (mongo, api) => {
     try {
       if (req.session.token) {
         const me = await api.getMe(req.session.token)
-        res.send({
+        return res.send({
           id: me._id,
           avatar: me.avatar,
           username: me.username,
