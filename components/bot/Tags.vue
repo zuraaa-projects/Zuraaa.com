@@ -1,22 +1,32 @@
 <template>
   <div class="tags">
-    <BotTag name="Anime" />
-    <BotTag name="Dashboard" />
-    <BotTag name="Diversão" />
-    <BotTag name="Utilidades" />
-    <BotTag name="Social" />
-    <BotTag name="Jogos" />
-    <BotTag name="Música" />
-    <BotTag name="Moderação" />
-    <BotTag name="Economia" />
-    <BotTag name="Fortnite" />
-    <BotTag name="League of Legends" />
-    <BotTag name="Minecraft" />
-    <BotTag name="Hytale" />
-    <BotTag name="NSFW" />
-    <BotTag name="Outros" />
+    <BotTag
+      v-for="tag in tags"
+      :key="tag.value"
+      :name="tag.text"
+    />
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+import { BotTag } from '~/models/bots/bot-enum'
+
+@Component
+export default class BotTags extends Vue {
+  tags!: any
+
+  created () {
+    this.tags = Object.entries(BotTag)
+      .map(
+        ([key, value]) => ({
+          value,
+          text: key
+        })
+      )
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .tags {
