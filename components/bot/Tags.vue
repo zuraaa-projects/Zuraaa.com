@@ -4,6 +4,7 @@
       v-for="tag in tags"
       :key="tag.value"
       :tag-info="tag"
+      @click="click"
     />
   </div>
 </template>
@@ -25,6 +26,10 @@ export default class BotTags extends Vue {
           text: key
         })
       )
+  }
+
+  click (value: string) {
+    this.$emit('click', value)
   }
 }
 </script>

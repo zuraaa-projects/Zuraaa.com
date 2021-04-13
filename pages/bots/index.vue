@@ -1,6 +1,6 @@
 <template>
   <div class="bots">
-    <BotTags class="bots__tags" />
+    <BotTags class="bots__tags" @click="tagClick" />
     <BotCards :bots="bots" />
     <div class="buttons">
       <nuxt-link
@@ -63,18 +63,17 @@ export default class extends Vue {
   count!: BotCount
   tags!: string
 
-  async fetch () {
-    const page = parseInt(this.$route.query.page as string)
-    this.page = isNaN(page) ? 1 : page
+  tagClick (value: string) {
+    this.tags = value
 
-    this.tags = this.$route.query.tags as string
+    const query = {
+      tags: this.tags,
+      page: '1'
+    }
 
-    this.bots = await this.$axios.$get('/bots', {
-      params: {
-        page: this.page,
-        tags: this.tags
-      }
-    })
+    this.$router.push({ query })
+
+    this.$nuxt.refresh()
   }
 }
 </script>

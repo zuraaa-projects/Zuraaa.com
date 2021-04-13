@@ -1,7 +1,7 @@
 <template>
-  <nuxt-link class="bottag" :to="{ query: { tags: tagInfo.value } }">
+  <div class="bottag" @click="click">
     {{ tagInfo.text }}
-  </nuxt-link>
+  </div>
 </template>
 
 <script lang="ts">
@@ -14,6 +14,10 @@ export default class extends Vue {
     required: true
   })
   tagInfo!: EnumInfo
+
+  click () {
+    this.$emit('click', this.tagInfo.value)
+  }
 }
 </script>
 
@@ -30,6 +34,7 @@ export default class extends Vue {
   font-size: 0.9rem;
   transition-property: color background-color;
   transition-duration: 400ms;
+  cursor: pointer;
 }
 
 .bottag:hover {
