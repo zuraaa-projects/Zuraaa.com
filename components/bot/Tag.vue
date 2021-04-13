@@ -1,18 +1,19 @@
 <template>
-  <nuxt-link class="bottag" to="/">
-    {{ name }}
+  <nuxt-link class="bottag" :to="{ query: { tags: tagInfo.value } }">
+    {{ tagInfo.text }}
   </nuxt-link>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import type { EnumInfo } from '~/models/info/enum-info'
 
 @Component
 export default class extends Vue {
   @Prop({
     required: true
   })
-  name!: string
+  tagInfo!: EnumInfo
 }
 </script>
 

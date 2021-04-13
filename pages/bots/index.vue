@@ -4,7 +4,7 @@
     <BotCards :bots="bots" />
     <div class="buttons">
       <nuxt-link
-        v-if="page >= 1"
+        v-if="page > 1"
         :to="`?page=${page + 1}`"
       >
         <font-awesome-icon
@@ -36,10 +36,10 @@ import type { Bot, BotCount } from '~/models/bots/bot'
   },
   async asyncData ({ $axios, route }: Context) {
     try {
-      const page = Number(route.query.page)
+      const page = parseInt(route.query.page as string)
       const tags = route.query.tags as string
 
-      const currentPage = isNaN(page) ? 0 : page
+      const currentPage = isNaN(page) ? 1 : page
 
       return {
         bots: await $axios.$get('/bots', {
@@ -62,6 +62,20 @@ export default class extends Vue {
   page!: number
   count!: BotCount
   tags!: string
+
+  async fetch () {
+    const page = parseInt(this.$route.query.page as string)
+    this.page = isNaN(page) ? 1 : page
+
+    this.tags = this.$route.query.tags as string
+
+    this.bots = await this.$axios.$get('/bots', {
+      params: {
+        page: this.page,
+        tags: this.tags
+      }
+    })
+  }
 }
 </script>
 

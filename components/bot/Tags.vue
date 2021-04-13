@@ -3,7 +3,7 @@
     <BotTag
       v-for="tag in tags"
       :key="tag.value"
-      :name="tag.text"
+      :tag-info="tag"
     />
   </div>
 </template>
@@ -11,10 +11,11 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { BotTag } from '~/models/bots/bot-enum'
+import type { EnumInfo } from '~/models/info/enum-info'
 
 @Component
 export default class BotTags extends Vue {
-  tags!: any
+  tags!: EnumInfo[]
 
   created () {
     this.tags = Object.entries(BotTag)
