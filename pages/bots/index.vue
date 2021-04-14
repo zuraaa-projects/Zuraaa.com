@@ -34,7 +34,12 @@ import type { Bot, BotCount } from '~/models/bots/bot'
           }
         }),
         page,
-        count: await $axios.$get('/bots?type=count'),
+        count: await $axios.$get('/bots', {
+          params: {
+            type: 'count',
+            tags
+          }
+        }),
         tags
       }
     } catch (error) {
