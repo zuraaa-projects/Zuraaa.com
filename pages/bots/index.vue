@@ -2,26 +2,13 @@
   <div class="bots">
     <BotTags class="bots__tags" @click="tagClick" />
     <BotCards :bots="bots" />
-    <div class="buttons">
-      <nuxt-link
-        v-if="page > 1"
-        :to="`?page=${page + 1}`"
-      >
-        <font-awesome-icon
-          class="buttons__icon"
-          icon="angle-left"
-        />
-      </nuxt-link>
-      <nuxt-link
-        v-if="page >= 0 && page * 18 < count.bots_count + 18"
-        :to="`?page=${page + 1}`"
-      >
-        <font-awesome-icon
-          class="buttons__icon"
-          icon="angle-right"
-        />
-      </nuxt-link>
-    </div>
+    <b-pagination-nav
+      v-model="page"
+      :number-of-pages="(count.bots_count / 18) + 1"
+      align="center"
+      :link-gen="linkGen"
+      use-router
+    />
   </div>
 </template>
 
@@ -36,44 +23,45 @@ import type { Bot, BotCount } from '~/models/bots/bot'
   },
   async asyncData ({ $axios, route }: Context) {
     try {
-      const page = parseInt(route.query.page as string)
+      const page = route.query.page as string ?? '1'
       const tags = route.query.tags as string
-
-      const currentPage = isNaN(page) ? 1 : page
 
       return {
         bots: await $axios.$get('/bots', {
           params: {
-            page: currentPage,
+            page,
             tags: route.query.tags
           }
         }),
-        page: currentPage,
+        page,
         count: await $axios.$get('/bots?type=count'),
         tags
       }
     } catch (error) {
       // pagina de erro
     }
-  }
+  },
+  watchQuery: ['page', 'tags']
 })
-export default class extends Vue {
+export default class PageBots extends Vue {
   bots!: Bot[]
-  page!: number
+  page!: string
   count!: BotCount
   tags!: string
 
-  tagClick (value: string) {
+  async tagClick (value: string) {
     this.tags = value
 
-    const query = {
-      tags: this.tags,
-      page: '1'
+    await this.$router.push(this.linkGen('1'))
+  }
+
+  linkGen (page: string) {
+    return {
+      query: {
+        tags: this.tags,
+        page
+      }
     }
-
-    this.$router.push({ query })
-
-    this.$nuxt.refresh()
   }
 }
 </script>
@@ -95,13 +83,6 @@ export default class extends Vue {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
-  }
-
-  .buttons {
-
-    &__icon {
-      color: var(--text-dark);
-    }
   }
 }
 </style>

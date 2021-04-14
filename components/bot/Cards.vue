@@ -27,7 +27,7 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { Bot } from '~/models/bots/bot'
 
 @Component
-export default class extends Vue {
+export default class BotCards extends Vue {
   @Prop({
     required: true
   })

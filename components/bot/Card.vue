@@ -49,7 +49,7 @@ import type { Bot } from '~/models/bots/bot'
     botStatus
   }
 })
-export default class extends Vue {
+export default class BotCard extends Vue {
   @Prop({
     required: true
   })

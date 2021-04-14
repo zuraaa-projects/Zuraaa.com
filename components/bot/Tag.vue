@@ -9,7 +9,7 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import type { EnumInfo } from '~/models/info/enum-info'
 
 @Component
-export default class extends Vue {
+export default class BotTag extends Vue {
   @Prop({
     required: true
   })

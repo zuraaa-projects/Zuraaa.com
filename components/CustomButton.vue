@@ -31,6 +31,7 @@ export default class extends Vue {
   border-left: 2px solid var(--primary-color);
   border-bottom: 2px solid var(--primary-color);
   font-size: 0.9rem;
+  text-decoration: none;
   transition-property: color background-color;
   transition-duration: 400ms;
 }
