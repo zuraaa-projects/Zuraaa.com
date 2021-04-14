@@ -42,8 +42,15 @@ import { User } from '~/models/users/user'
 export default class extends Vue {
   user!: User
   bots!: Bot[]
+
   get description () {
     return this.user.details.description ?? 'Esse usuário ainda não tem uma biografia definida.'
+  }
+
+  head () {
+    return {
+      title: this.user.username
+    }
   }
 }
 </script>

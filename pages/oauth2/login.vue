@@ -5,7 +5,11 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 
-@Component
+@Component({
+  head: {
+    title: 'Login'
+  }
+})
 export default class extends Vue {
   mounted () {
     this.setRedirect()

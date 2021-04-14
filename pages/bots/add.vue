@@ -248,7 +248,7 @@ import { BotAdd } from '~/models/bots/bot-add'
 import { BotLibrary, BotTag } from '~/models/bots/bot-enum'
 @Component({
   head: {
-    title: 'Zuraaa! | Adicionar bot'
+    title: 'Adicionar bot'
   }
 })
 export default class AddBot extends Vue {

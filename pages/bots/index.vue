@@ -19,7 +19,7 @@ import type { Bot, BotCount } from '~/models/bots/bot'
 
 @Component({
   head: {
-    title: 'Zuraaa! | Bots'
+    title: 'Bots'
   },
   async asyncData ({ $axios, route }: Context) {
     try {

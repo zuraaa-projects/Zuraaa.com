@@ -8,6 +8,9 @@ import type { Bot } from '~/models/bots/bot'
 import { genAddBot } from '~/utils/functions'
 
 @Component({
+  head: {
+    title: 'Adicionar'
+  },
   async asyncData ({ $axios, redirect, route }) {
     try {
       const bot: Bot = await $axios.$get(`/bots/${route.params.id}`)

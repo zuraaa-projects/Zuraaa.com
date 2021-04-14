@@ -24,5 +24,11 @@ import { Bot } from '~/models/bots/bot'
 })
 export default class extends Vue {
   bot!: Bot
+
+  head () {
+    return {
+      title: this.bot.username
+    }
+  }
 }
 </script>

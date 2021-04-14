@@ -5,7 +5,11 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 
-@Component
+@Component({
+  head: {
+    title: 'Carregando'
+  }
+})
 export default class extends Vue {
   async mounted () {
     const code = this.$route.query.code as string

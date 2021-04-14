@@ -28,7 +28,7 @@ import { Bot } from '~/models/bots/bot'
 
 @Component({
   head: {
-    title: 'Zuraaa! | Início'
+    title: 'Início'
   },
   async asyncData ({ $axios }: Context) {
     try {

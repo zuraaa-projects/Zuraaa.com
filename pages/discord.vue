@@ -2,6 +2,9 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({
+  head: {
+    title: 'Discord'
+  },
   validate ({ redirect }) {
     redirect(process.env.invite as string)
     return true
