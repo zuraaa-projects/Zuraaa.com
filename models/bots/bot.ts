@@ -1,6 +1,7 @@
 export interface BotDetails {
   shortDescription: string
-  customInviteLink: string
+  customInviteLink: string,
+  htmlDescription: string
 }
 
 export interface Bot {
