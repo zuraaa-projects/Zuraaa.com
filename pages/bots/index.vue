@@ -25,22 +25,26 @@ import type { Bot, BotCount } from '~/models/bots/bot'
     try {
       const page = route.query.page as string ?? '1'
       const tags = route.query.tags as string
+      const search = route.query.search as string
 
       return {
         bots: await $axios.$get('/bots', {
           params: {
             page,
-            tags: route.query.tags
+            tags: route.query.tags,
+            search
           }
         }),
         page,
         count: await $axios.$get('/bots', {
           params: {
             type: 'count',
-            tags
+            tags,
+            search
           }
         }),
-        tags
+        tags,
+        search
       }
     } catch (error) {
       // pagina de erro
@@ -53,6 +57,7 @@ export default class PageBots extends Vue {
   page!: string
   count!: BotCount
   tags!: string
+  search!: string
 
   async tagClick (value: string) {
     this.tags = value
@@ -64,7 +69,8 @@ export default class PageBots extends Vue {
     return {
       query: {
         tags: this.tags,
-        page
+        page,
+        search: this.search
       }
     }
   }
