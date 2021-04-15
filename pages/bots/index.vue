@@ -50,7 +50,7 @@ import type { Bot, BotCount } from '~/models/bots/bot'
       // pagina de erro
     }
   },
-  watchQuery: ['page', 'tags']
+  watchQuery: ['page', 'tags', 'search']
 })
 export default class PageBots extends Vue {
   bots!: Bot[]
