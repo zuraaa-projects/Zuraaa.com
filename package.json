@@ -17,7 +17,7 @@
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.10.1",
-    "nuxt": "^2.14.12",
+    "nuxt": "^2.15.4",
     "nuxt-property-decorator": "^2.9.1",
     "valid-url": "^1.0.9"
   },
