@@ -38,7 +38,7 @@ updates:
 # hello-nuxt branch
 - package-ecosystem: npm
   directory: '/'
-  target_branch: hello-nuxt
+  target-branch: hello-nuxt
   schedule:
     interval: daily
     time: '00:00'
