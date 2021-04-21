@@ -1,4 +1,6 @@
 const express = require('express')
+const fetch = require('node-fetch')
+const timezone = require('moment-timezone')
 
 const router = express.Router()
 const validUrl = require('valid-url')
@@ -8,7 +10,6 @@ const { userToString, avatarFormat } = require('../utils/user')
 const { captchaIsValid } = require('../utils/captcha')
 const ImageCache = require('../utils/ImageCache').default
 const colors = require('../utils/colors')
-const fetch = require('node-fetch')
 const { partialBotObject, partialSelect } = require('../utils/bot')
 const { formatUrl } = require('../utils/avatar')
 const { AppLibrary, BotsTags } = require('../modules/api/types')
@@ -452,16 +453,17 @@ module.exports = (config, db, api) => {
         const next = user.dates.nextVote
         const now = new Date()
         if (next && next > now) {
-          let time = `${next.getHours().toString().padStart(2, 0)}h`
-          const minutes = next.getMinutes()
-          if (minutes) {
-            time += `${minutes.toString().padStart(2, 0)}min`
+          if (next && next > now) {
+            const time = timezone(next)
+              .tz('America/Sao_Paulo')
+              .locale('pt-br')
+              .calendar()
+              .toLowerCase()
+            res.render('message', {
+              message: `Você precisa esperar até ${time} (horário de Brasília) para poder votar novamente.`
+            })
+            return
           }
-          res.render('message', {
-            message: `Você precisa esperar até ás ${time} para poder votar novamente.`,
-            url: `/bots/${req.params.id}`
-          })
-          return
         }
         getBotBy(req.params.id).then(async (dot) => {
           if (!dot) {
