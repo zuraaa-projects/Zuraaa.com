@@ -20,7 +20,7 @@
     "form-data": "^4.0.0",
     "helmet": "^4.5.0",
     "http-errors": "~1.8.0",
-    "mongoose": "^5.12.4",
+    "mongoose": "^5.12.5",
     "morgan": "~1.10.0",
     "mquery": ">=3.2.5",
     "node-cache": "^5.1.2",
