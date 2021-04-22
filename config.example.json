@@ -24,10 +24,10 @@
             "secret": "secret da aplicação do discord"
         }
     },
-    "recaptcha": {
+    "hcaptcha": {
         "enabled": false,
-        "secret": "secret do recaptcha",
-        "public": "chave publica do captcha"
+        "secret": "secret do hcaptcha",
+        "public": "chave pública do hcaptcha"
     },
     "discord": {
         "bpdId": "guild da botlist",

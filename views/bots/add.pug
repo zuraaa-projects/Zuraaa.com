@@ -1,7 +1,7 @@
 extends ../layouts/layout
 
 block head
-    script(src="https://www.google.com/recaptcha/api.js" async defer)
+    script(src="https://hcaptcha.com/1/api.js?hl=pt" async defer)
     script(src="/js/add.js")
     link(rel="stylesheet", href="/css/add.css")
 
@@ -154,5 +154,7 @@ block content
                                     option(value=tag)=key
                         p.limitedetags.hidden#limite Você chegou no limite de tags.
                         p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.     
-            button.button.g-recaptcha(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar                        
+            button.button.h-captcha(data-sitekey=captcha data-callback="onSubmit") Enviar
+            div
+                include captchamsg
         p.limitedetags#sim

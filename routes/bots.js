@@ -34,7 +34,7 @@ module.exports = (config, db, api) => {
   }
 
   async function validateForm (body, botTags, owners) {
-    if (!(await captchaIsValid(config.recaptcha, body['g-recaptcha-response']))) {
+    if (!(await captchaIsValid(config.hcaptcha, body['h-captcha-response']))) {
       return 'O Captcha precisa ser validado.'
     }
     if (owners && owners.some((o) => Number.isNaN(o) || o.length !== 18)) {
@@ -168,7 +168,7 @@ module.exports = (config, db, api) => {
         return
       }
       res.render('bots/add', {
-        tags: BotsTags, title: 'Adicionar Bot', libraries: AppLibrary, captcha: config.recaptcha.public
+        tags: BotsTags, title: 'Adicionar Bot', libraries: AppLibrary, captcha: config.hcaptcha.public
       })
       return
     }
@@ -336,7 +336,7 @@ module.exports = (config, db, api) => {
       }
       res.render('bots/report',
         {
-          captcha: config.recaptcha.public,
+          captcha: config.hcaptcha.public,
           title: `Denunciar ${dbot.username}`,
           bot: { id: dbot.id, name: dbot.username },
           topics
@@ -351,7 +351,7 @@ module.exports = (config, db, api) => {
         res.redirect('/oauth2/login')
         return
       }
-      if (!(await captchaIsValid(config.recaptcha, req.body['g-recaptcha-response']))) {
+      if (!(await captchaIsValid(config.hcaptcha, req.body['h-captcha-response']))) {
         res.render('message', {
           message: 'O Captcha precisa ser validado.',
           url: req.originalUrl
@@ -414,7 +414,7 @@ module.exports = (config, db, api) => {
       }
       cache.saveCached(dbot).then(() => {
         res.render('bots/votar', {
-          captcha: config.recaptcha.public,
+          captcha: config.hcaptcha.public,
           title: `Vote em ${dbot.username}`,
           bot: {
             name: dbot.username,
@@ -431,7 +431,7 @@ module.exports = (config, db, api) => {
       res.redirect('/oauth2/login')
       return
     }
-    if (!(await captchaIsValid(config.recaptcha, req.body['g-recaptcha-response']))) {
+    if (!(await captchaIsValid(config.hcaptcha, req.body['h-captcha-response']))) {
       res.render('message', {
         message: 'O Captcha precisa ser validado.',
         url: req.originalUrl
@@ -576,7 +576,7 @@ module.exports = (config, db, api) => {
             return
           }
           res.render('bots/editar', {
-            bot: dbot, libraries: AppLibrary, tags: BotsTags, captcha: config.recaptcha.public
+            bot: dbot, libraries: AppLibrary, tags: BotsTags, captcha: config.hcaptcha.public
           })
         })
       })

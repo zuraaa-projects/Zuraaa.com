@@ -165,5 +165,7 @@ block content
                                 for tag, key in tags
                                     option(value=tag selected=bot.details.tags.some(x=>[tag, key].includes(x)))=key
                         p.help Limite de 6 tags. Selecione as que representam seu bot. Use CTRL para selecionar mais de uma.   
-            button.button.g-recaptcha(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar                        
+            button.button.h-captcha(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar          
+            div
+                include captchamsg              
         p.limitedetags#sim

@@ -45,4 +45,6 @@ block content
                                     span.file-name#name
                                         | Nenhum arquivo selecionado...
                                         
-            button.button.g-recaptcha(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar
+            button.button.h-captcha(data-sitekey=captcha data-callback="onSubmit" data-action="submit") Enviar
+            div
+                include captchamsg

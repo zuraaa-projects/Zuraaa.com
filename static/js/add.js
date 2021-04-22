@@ -65,30 +65,6 @@ $(function () {
   })
 })
 
-/*
-function nomeLegal(token) {
-  const form = $('#form');
-  $.post(
-    '/bots/testarwebsoco',
-    form.serialize().replace('&g-recaptcha-response=',
-    `&g-recaptcha-response=${token}`
-    ), (data) => {
-    const sim = $('#sim');
-    sim.css('display', 'block');
-    if (data.sucesso) {
-      sim.css('color', 'green');
-    } else {
-      sim.css('color', 'red');
-    }
-    sim.text(data.msg);
-  });
-}
-*/
-
-// function isId(st) {
-//   return !Number.isNaN(st) && st.length === 18;
-// }
-
 window.onSubmit = function onSubmit () {
   $('#form').submit()
 }

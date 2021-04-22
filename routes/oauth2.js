@@ -31,7 +31,7 @@ module.exports = (config, mongo, api) => {
     const { code } = req.query
     if (code) {
       res.render('login', {
-        captcha: config.recaptcha.public,
+        captcha: config.hcaptcha.public,
         code
       })
     } else {
@@ -41,7 +41,7 @@ module.exports = (config, mongo, api) => {
 
   router.post('/callback', (req, res) => {
     const { code, ...captcha } = req.body
-    if (code && captchaIsValid(config.recaptcha, captcha)) {
+    if (code && captchaIsValid(config.hcaptcha, captcha)) {
       try {
         api.login(code).then(({ access_token: token }) => {
           if (!token) {

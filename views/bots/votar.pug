@@ -13,4 +13,6 @@ block content
                 figure.image.is-128x128.container
                     img.is-rounded(src=bot.avatar)                
                 br
-                button.button.g-recaptcha(data-callback="onSubmit" data-sitekey=captcha) Votar
+                button.button.h-captcha(data-callback="onSubmit" data-sitekey=captcha) Votar
+                div
+                    include captchamsg

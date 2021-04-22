@@ -9,14 +9,13 @@ async function captchaIsValid (config, response) {
     secret: config.secret,
     response
   })
-  const res = await (await fetch('https://www.google.com/recaptcha/api/siteverify', {
+  const res = await (await fetch('https://hcaptcha.com/siteverify', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     body
   })).json()
-  // console.log(res);
   return res.success
 }
 
