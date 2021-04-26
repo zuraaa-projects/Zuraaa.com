@@ -8,6 +8,6 @@ block content
   .container.main-container
     .box.has-text-centered
       form#login(method="post")
-        h1.title.is-1 Clique no botão abaixo para o login.
+        h1.title.is-1 Valide o captcha para fazer o login.
         input(type="hidden", name="code" value=code)
-        div.h-captcha(data-callback="onSubmit" data-sitekey=captcha data-size="compact")
+        div.h-captcha(data-callback="onSubmit" data-sitekey=captcha)
