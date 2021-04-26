@@ -1,7 +1,7 @@
 extends ../layouts/layout
 
 block head
-    script(src="https://www.google.com/recaptcha/api.js" async defer)
+    script(src="https://hcaptcha.com/1/api.js?hl=pt" async defer)
     script(src="/js/vote.js")
     link(rel="stylesheet", href="/css/votar.css")
 
@@ -15,4 +15,4 @@ block content
                 br
                 button.button.h-captcha(data-callback="onSubmit" data-sitekey=captcha) Votar
                 div
-                    include captchamsg
+                    include ../captchamsg
