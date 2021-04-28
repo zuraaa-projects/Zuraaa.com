@@ -21,7 +21,7 @@
     "helmet": "^4.5.0",
     "http-errors": "~1.8.0",
     "moment-timezone": "^0.5.33",
-    "mongoose": "^5.12.5",
+    "mongoose": "^5.12.6",
     "morgan": "~1.10.0",
     "mquery": ">=3.2.5",
     "node-cache": "^5.1.2",
