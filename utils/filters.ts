@@ -16,3 +16,11 @@ export function botStatus (bot: Bot) {
 export function myPage (user: User) {
   return `/users/${user._id}`
 }
+
+export function botGitHub (bot: Bot) {
+  return `https://github.com/${bot.details.github}`
+}
+
+export function botSuportServer (bot: Bot) {
+  return `https://discord.gg/${bot.details.supportServer}`
+}

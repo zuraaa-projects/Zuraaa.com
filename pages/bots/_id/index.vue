@@ -10,8 +10,71 @@
           />
         </b-row>
         <b-row align-h="center" class="hero__buttons">
-          <b-button v-b-modal.vote variant="light" class="hero__buttons__button">
+          <b-button
+            variant="light"
+            class="hero__buttons__button"
+            :to="`/bots/${bot._id}/add`"
+          >
+            Adicionar
+          </b-button>
+          <b-button
+            v-b-modal.vote
+            variant="light"
+            class="hero__buttons__button"
+          >
             Votar
+          </b-button>
+          <b-button
+            variant="light"
+            class="hero__buttons__button"
+          >
+            Denunciar
+          </b-button>
+          <b-button
+            v-if="bot.details.website !== null"
+            variant="light"
+            class="hero__buttons__button"
+            :href="bot.details.website"
+          >
+            Site
+          </b-button>
+          <b-button
+            v-if="bot.details.donate !== null"
+            variant="light"
+            class="hero__buttons__button"
+            :href="bot.details.donate"
+          >
+            Doar
+          </b-button>
+          <b-button
+            v-if="bot.details.github !== null"
+            variant="light"
+            class="hero__buttons__button"
+            :href="bot | botGitHub"
+          >
+            GitHub
+          </b-button>
+          <b-button
+            v-if="bot.details.supportServer !== null"
+            variant="light"
+            class="hero__buttons__button"
+            :href="bot | botSuportServer"
+          >
+            Suporte
+          </b-button>
+          <b-button
+            variant="light"
+            class="hero__buttons__button"
+            :to="`/bots/${bot._id}/edit`"
+          >
+            Editar
+          </b-button>
+          <b-button
+            variant="light"
+            class="hero__buttons__button"
+            :to="`/bots/${bot._id}/remove`"
+          >
+            Remover
           </b-button>
         </b-row>
       </b-container>
@@ -41,8 +104,13 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { Bot } from '~/models/bots/bot'
+import { botGitHub, botSuportServer } from '~/utils/filters'
 
 @Component({
+  filters: {
+    botGitHub,
+    botSuportServer
+  },
   async asyncData ({ $axios, route }) {
     try {
       return {
@@ -53,7 +121,7 @@ import { Bot } from '~/models/bots/bot'
     }
   }
 })
-export default class extends Vue {
+export default class BotPage extends Vue {
   bot!: Bot
 
   head () {
@@ -68,6 +136,9 @@ export default class extends Vue {
 .hero {
   &__buttons {
     padding-top: 1rem;
+    &__button {
+      margin: 0 0.3rem;
+    }
   }
 }
 

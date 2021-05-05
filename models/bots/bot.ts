@@ -1,7 +1,11 @@
 export interface BotDetails {
   shortDescription: string
-  customInviteLink: string,
+  customInviteLink: string
   htmlDescription: string
+  website: string | null
+  github: string | null
+  supportServer: string | null
+  donate: string | null
 }
 
 export interface Bot {
