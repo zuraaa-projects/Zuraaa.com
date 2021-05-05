@@ -90,6 +90,7 @@ export default {
     apiUrlLocal: process.env.ZURAAACOM_API_URL_LOCAL ?? 'http://localhost:3000/api',
     apiSecret: process.env.ZURAAACOM_API_SECRET ?? '',
     invite: process.env.ZURAAACOM_INVITE ?? 'https://discord.com/invite/YrXysT2DHj',
-    oauth2UrlAuth: process.env.ZURAAACOM_OAUTH2_AUTH ?? 'https://discord.com/api/oauth2/authorize'
+    oauth2UrlAuth: process.env.ZURAAACOM_OAUTH2_AUTH ?? 'https://discord.com/api/oauth2/authorize',
+    captchaKey: process.env.ZURAAACOM_CAPTCHA_KEY ?? '10000000-ffff-ffff-ffff-000000000001'
   }
 }

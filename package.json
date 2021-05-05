@@ -12,6 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@hcaptcha/vue-hcaptcha": "^0.3.0",
     "@nuxt/typescript-runtime": "^2.0.1",
     "@nuxtjs/axios": "^5.12.5",
     "bootstrap": "^4.6.0",
