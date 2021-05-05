@@ -1,11 +1,20 @@
 <template>
   <div class="bot">
     <Hero class="hero">
-      <Profile
-        class="hero__profile"
-        :data="bot"
-        :description="bot.details.shortDescription"
-      />
+      <b-container fluid class="hero__container">
+        <b-row align-h="center" class="hero__profile">
+          <Profile
+            class="hero__profile__items"
+            :data="bot"
+            :description="bot.details.shortDescription"
+          />
+        </b-row>
+        <b-row align-h="center" class="hero__buttons">
+          <b-button v-b-modal.vote variant="light" class="hero__buttons__button">
+            Votar
+          </b-button>
+        </b-row>
+      </b-container>
     </Hero>
     <b-container class="longdesc">
       <b-card class="longdesc__card">
@@ -13,6 +22,19 @@
         <b-card-body class="longdesc__card__body" v-html="bot.details.htmlDescription" />
       </b-card>
     </b-container>
+
+    <b-modal id="vote" hide-header class="bot__vote">
+      <BotVote class="bot__vote__content" :bot="bot" />
+
+      <template #modal-footer="{ ok, cancel }">
+        <b-button variant="light" @click="cancel">
+          Cancelar
+        </b-button>
+        <b-button variant="light" @click="ok">
+          Votar
+        </b-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -43,6 +65,12 @@ export default class extends Vue {
 </script>
 
 <style lang="scss">
+.hero {
+  &__buttons {
+    padding-top: 1rem;
+  }
+}
+
 .longdesc {
   margin-bottom: 1rem;
 
