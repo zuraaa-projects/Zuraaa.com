@@ -15,6 +15,7 @@ export interface Bot {
   avatar: string
   details: BotDetails
   status: string
+  owner: number
 }
 
 export interface BotCount {

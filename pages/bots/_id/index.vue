@@ -63,6 +63,7 @@
             Suporte
           </b-button>
           <b-button
+            v-if="permision(1)"
             variant="light"
             class="hero__buttons__button"
             :to="`/bots/${bot._id}/edit`"
@@ -70,6 +71,7 @@
             Editar
           </b-button>
           <b-button
+            v-if="permision(1)"
             variant="light"
             class="hero__buttons__button"
             :to="`/bots/${bot._id}/remove`"
@@ -102,8 +104,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, getModule, Vue } from 'nuxt-property-decorator'
 import { Bot } from '~/models/bots/bot'
+import UserModule from '~/store/user'
 import { botGitHub, botSuportServer } from '~/utils/filters'
 
 @Component({
@@ -123,11 +126,16 @@ import { botGitHub, botSuportServer } from '~/utils/filters'
 })
 export default class BotPage extends Vue {
   bot!: Bot
+  me = getModule(UserModule, this.$store).data
 
   head () {
     return {
       title: this.bot.username
     }
+  }
+
+  permision (roleLevel: number) {
+    return (this.me !== null && (this.me._id === this.bot.owner || this.me.details.role > roleLevel))
   }
 }
 </script>

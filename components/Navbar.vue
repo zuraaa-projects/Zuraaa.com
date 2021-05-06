@@ -31,21 +31,21 @@
 
       <b-navbar-nav class="ml-auto">
         <img
-          v-if="user !== null"
-          :src="user | genAvatar"
-          :alt="user | altName"
+          v-if="me !== null"
+          :src="me | genAvatar"
+          :alt="me | altName"
           class="navbar__dropdown__image"
         >
-        <b-nav-item v-if="user === null" to="/oauth2/login">
+        <b-nav-item v-if="me === null" to="/oauth2/login">
           Login
         </b-nav-item>
         <b-nav-item-dropdown v-else class="navbar__dropdown" right>
           <template #button-content>
             <span class="navbar__dropdown__name">
-              {{ user.username }}
+              {{ me.username }}
             </span>
           </template>
-          <b-dropdown-item :to="user | myPage">
+          <b-dropdown-item :to="me | myPage">
             Meu perfil
           </b-dropdown-item>
           <b-dropdown-item to="/bots/add">
@@ -76,12 +76,12 @@ import UserModule from '~/store/user'
   }
 })
 export default class Navbar extends Vue {
-  get user () {
+  get me () {
     const userModule = getModule(UserModule, this.$store)
     return userModule.data
   }
 
-  set user (user: User | null) {
+  set me (user: User | null) {
     const userModule = getModule(UserModule, this.$store)
     userModule.setData(user)
   }
@@ -89,7 +89,7 @@ export default class Navbar extends Vue {
   async fetch () {
     try {
       if (localStorage.getItem('token') != null) {
-        this.user = await this.$axios.$get('/users/@me')
+        this.me = await this.$axios.$get('/users/@me')
       }
     } catch (error) {
       if (error.response == null || error.response.status >= 500) {

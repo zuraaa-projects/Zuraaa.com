@@ -8,7 +8,7 @@ import { User } from '~/models/users/user'
   stateFactory: true
 })
 export default class UserModule extends VuexModule {
-  _data: User | null = null
+  private _data: User | null = null
 
   get data () {
     return this._data
