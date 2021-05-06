@@ -9,6 +9,9 @@
             :description="bot.details.shortDescription"
           />
         </b-row>
+        <b-row align-h="center" class="hero__owners">
+          <BotOwners :owners="owners" />
+        </b-row>
         <b-row align-h="center" class="hero__buttons">
           <b-button
             variant="light"
@@ -106,6 +109,7 @@
 <script lang="ts">
 import { Component, getModule, Vue } from 'nuxt-property-decorator'
 import { Bot } from '~/models/bots/bot'
+import { User } from '~/models/users/user'
 import UserModule from '~/store/user'
 import { botGitHub, botSuportServer } from '~/utils/filters'
 
@@ -116,8 +120,18 @@ import { botGitHub, botSuportServer } from '~/utils/filters'
   },
   async asyncData ({ $axios, route }) {
     try {
+      const bot: Bot = await $axios.$get(`/bots/${route.params.id}`)
+      const userIds = [bot.owner, ...bot.details.otherOwners as number[]]
+      const owners: User[] = []
+
+      for (let i = 0; i < userIds.length; i++) {
+        const userId = userIds[i]
+        owners.push(await $axios.$get(`/users/${userId}`))
+      }
+
       return {
-        bot: await $axios.$get(`/bots/${route.params.id}`)
+        bot,
+        owners
       }
     } catch {
       // pagina de erro
@@ -127,6 +141,7 @@ import { botGitHub, botSuportServer } from '~/utils/filters'
 export default class BotPage extends Vue {
   bot!: Bot
   me = getModule(UserModule, this.$store).data
+  owners!: User[]
 
   head () {
     return {
@@ -142,6 +157,9 @@ export default class BotPage extends Vue {
 
 <style lang="scss">
 .hero {
+  &__owners {
+    padding-top: 0.5rem;
+  }
   &__buttons {
     padding-top: 1rem;
     &__button {

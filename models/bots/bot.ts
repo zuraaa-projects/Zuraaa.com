@@ -6,6 +6,7 @@ export interface BotDetails {
   github: string | null
   supportServer: string | null
   donate: string | null
+  otherOwners: number[] | null
 }
 
 export interface Bot {

@@ -1,11 +1,15 @@
 import { Bot } from '~/models/bots/bot'
 import { User } from '~/models/users/user'
 
-export function genAvatar (bot: User | Bot) {
-  return `${process.env.apiUrl}/avatars/${bot._id}/${bot.avatar}`
+export function genAvatar (user: User | Bot | null) {
+  if (user == null) { return '' }
+
+  return `${process.env.apiUrl}/avatars/${user._id}/${user.avatar}`
 }
 
-export function altName (user: User | Bot) {
+export function altName (user: User | Bot | null) {
+  if (user == null) { return '' }
+
   return `${user.username}#${user.discriminator} Image`
 }
 
