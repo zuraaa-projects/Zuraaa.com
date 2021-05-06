@@ -23,7 +23,7 @@ import type { User } from '~/models/users/user'
     genAvatar
   }
 })
-export default class extends Vue {
+export default class Profile extends Vue {
   @Prop()
   data!: Bot | User
 

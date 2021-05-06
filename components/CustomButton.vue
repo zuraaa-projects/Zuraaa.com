@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link class="custombutton" :to="url">
+  <nuxt-link prefetch class="custombutton" :to="url">
     {{ name }}
   </nuxt-link>
 </template>

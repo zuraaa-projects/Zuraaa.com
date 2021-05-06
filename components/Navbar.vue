@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="lg" type="dark">
-    <b-navbar-brand class="navbar__logo" to="/">
+    <b-navbar-brand prefetch class="navbar__logo" to="/">
       <img
         class="navbar__logo__image"
         src="~/assets/images/logo.png"
@@ -18,7 +18,7 @@
         <b-nav-item prefetch class="navbar__link" to="/bots">
           Bots
         </b-nav-item>
-        <b-nav-item class="navbar__link" to="/discord">
+        <b-nav-item prefetch class="navbar__link" to="/discord">
           Servidor
         </b-nav-item>
         <b-nav-item class="navbar__link" href="https://github.com/zuraaa-projects/Zuraaa.com/wiki">
@@ -31,21 +31,21 @@
 
       <b-navbar-nav class="ml-auto">
         <img
-          v-if="me !== null"
-          :src="me | genAvatar"
-          :alt="me | altName"
+          v-if="user !== null"
+          :src="user | genAvatar"
+          :alt="user | altName"
           class="navbar__dropdown__image"
         >
-        <b-nav-item v-if="me === null" to="/oauth2/login">
+        <b-nav-item v-if="user === null" to="/oauth2/login">
           Login
         </b-nav-item>
         <b-nav-item-dropdown v-else class="navbar__dropdown" right>
           <template #button-content>
             <span class="navbar__dropdown__name">
-              {{ me.username }}
+              {{ user.username }}
             </span>
           </template>
-          <b-dropdown-item :to="me | myPage">
+          <b-dropdown-item :to="user | myPage">
             Meu perfil
           </b-dropdown-item>
           <b-dropdown-item to="/bots/add">
@@ -62,9 +62,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, getModule, Vue } from 'nuxt-property-decorator'
 import { genAvatar, altName, myPage } from '~/utils/filters'
 import type { User } from '~/models/users/user'
+import UserModule from '~/store/user'
 
 @Component({
   fetchOnServer: false,
@@ -75,16 +76,26 @@ import type { User } from '~/models/users/user'
   }
 })
 export default class Navbar extends Vue {
-  me: User | null = null
+  get user () {
+    const userModule = getModule(UserModule, this.$store)
+    return userModule.data
+  }
+
+  set user (user: User | null) {
+    const userModule = getModule(UserModule, this.$store)
+    userModule.setData(user)
+  }
 
   async fetch () {
     try {
       if (localStorage.getItem('token') != null) {
-        this.me = await this.$axios.$get('/users/@me')
+        this.user = await this.$axios.$get('/users/@me')
       }
     } catch (error) {
       if (error.response == null || error.response.status >= 500) {
         throw error
+      } else {
+        localStorage.setItem('token', '')
       }
     }
   }
