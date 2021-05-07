@@ -10,23 +10,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { BotTag } from '~/models/bots/bot-enum'
 import type { EnumInfo } from '~/models/info/enum-info'
 
 @Component
 export default class BotTags extends Vue {
-  tags!: EnumInfo[]
-
-  created () {
-    this.tags = Object.entries(BotTag)
+  @Prop({
+    default: Object.entries(BotTag)
       .map(
         ([key, value]) => ({
           value,
           text: key
         })
-      )
-  }
+      ),
+    required: true
+  })
+  tags!: EnumInfo[]
 
   click (value: string) {
     this.$emit('click', value)

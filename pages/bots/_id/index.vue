@@ -9,6 +9,14 @@
             :description="bot.details.shortDescription"
           />
         </b-row>
+        <b-row align-h="center" class="hero__details">
+          <b-col>
+            <b-row align-h="center" align-v="center" class="hero__details__tags">
+              <span>Tags: </span>
+              <BotTags />
+            </b-row>
+          </b-col>
+        </b-row>
         <b-row align-h="center" class="hero__owners">
           <BotOwners :owners="owners" />
         </b-row>

@@ -7,6 +7,7 @@ export interface BotDetails {
   supportServer: string | null
   donate: string | null
   otherOwners: number[] | null
+  tags: string[]
 }
 
 export interface Bot {
