@@ -9,13 +9,13 @@
             :description="bot.details.shortDescription"
           />
         </b-row>
-        <b-row align-h="center" class="hero__details">
-          <b-col>
-            <b-row align-h="center" align-v="center" class="hero__details__tags">
-              <span>Tags: </span>
-              <BotTags :tags="tags" />
-            </b-row>
-          </b-col>
+        <b-row align-h="center" align-v="center" class="hero__details">
+          <span>Tags: </span>
+          <BotTags :tags="tags" />
+          <BotDetail name="Prefixo" :value="prefix" />
+          <BotDetail name="Biblioteca" :value="lib" />
+          <BotDetail name="Votos" :value="votos" />
+          <BotDetail name="Servidores" :value="`±${guilds}`" />
         </b-row>
         <b-row align-h="center" align-v="center" class="hero__owners">
           <span v-if="owners.length > 1">Donos: </span>
@@ -119,7 +119,7 @@
 <script lang="ts">
 import { Component, getModule, Vue } from 'nuxt-property-decorator'
 import { Bot } from '~/models/bots/bot'
-import { BotTag } from '~/models/bots/bot-enum'
+import { BotLibrary, BotTag } from '~/models/bots/bot-enum'
 import { EnumInfo } from '~/models/info/enum-info'
 import { User } from '~/models/users/user'
 import UserModule from '~/store/user'
@@ -177,13 +177,32 @@ export default class BotPage extends Vue {
   permision (roleLevel: number) {
     return (this.me !== null && (this.me._id === this.bot.owner || this.me.details.role > roleLevel))
   }
+
+  get lib () {
+    return BotLibrary[this.bot.details.library as keyof typeof BotLibrary]
+  }
+
+  get prefix () {
+    return this.bot.details.prefix
+  }
+
+  get votos () {
+    return this.bot.votes.current
+  }
+
+  get guilds () {
+    return this.bot.details.guilds
+  }
 }
 </script>
 
 <style lang="scss">
 .hero {
+  &__details {
+    padding-top: 0.3rem;
+  }
   &__owners {
-    padding-top: 0.5rem;
+    padding-top: 0.3rem;
   }
   &__buttons {
     padding-top: 1rem;

@@ -8,6 +8,13 @@ export interface BotDetails {
   donate: string | null
   otherOwners: number[] | null
   tags: string[]
+  prefix: string
+  library: string
+  guilds: number
+}
+
+export interface BotVotes {
+  current: number
 }
 
 export interface Bot {
@@ -18,6 +25,7 @@ export interface Bot {
   details: BotDetails
   status: string
   owner: number
+  votes: BotVotes
 }
 
 export interface BotCount {
