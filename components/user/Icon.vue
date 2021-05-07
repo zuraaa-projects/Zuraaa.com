@@ -36,13 +36,15 @@ export default class UserIcon extends Vue {
 
 <style lang="scss" scoped>
 .icon {
-  display: inline;
+  display: inline-block;
+  height: 2rem;
+  margin-left: 0.5rem;
   &__avatar {
-    display: inline;
     height: 2rem;
     border-radius: 50%;
   }
   &__name {
+    height: 2rem;
     text-decoration: none;
     color: var(--text-light);
   }

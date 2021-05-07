@@ -20,8 +20,8 @@ export default class BotTags extends Vue {
     default: Object.entries(BotTag)
       .map(
         ([key, value]) => ({
-          value,
-          text: key
+          value: key,
+          text: value
         })
       ),
     required: true

@@ -13,12 +13,14 @@
           <b-col>
             <b-row align-h="center" align-v="center" class="hero__details__tags">
               <span>Tags: </span>
-              <BotTags />
+              <BotTags :tags="tags" />
             </b-row>
           </b-col>
         </b-row>
-        <b-row align-h="center" class="hero__owners">
-          <BotOwners :owners="owners" />
+        <b-row align-h="center" align-v="center" class="hero__owners">
+          <span v-if="owners.length > 1">Donos: </span>
+          <span v-else>Dono: </span>
+          <BotOwners :owners="owners" class="hero__owners__icons" />
         </b-row>
         <b-row align-h="center" class="hero__buttons">
           <b-button
@@ -117,6 +119,8 @@
 <script lang="ts">
 import { Component, getModule, Vue } from 'nuxt-property-decorator'
 import { Bot } from '~/models/bots/bot'
+import { BotTag } from '~/models/bots/bot-enum'
+import { EnumInfo } from '~/models/info/enum-info'
 import { User } from '~/models/users/user'
 import UserModule from '~/store/user'
 import { botGitHub, botSuportServer } from '~/utils/filters'
@@ -137,9 +141,21 @@ import { botGitHub, botSuportServer } from '~/utils/filters'
         owners.push(await $axios.$get(`/users/${userId}`))
       }
 
+      const tags: EnumInfo[] = bot.details.tags
+        .map(
+          (x) => {
+            const tag = BotTag[x as keyof typeof BotTag]
+            return {
+              value: x,
+              text: tag
+            }
+          }
+        )
+
       return {
         bot,
-        owners
+        owners,
+        tags
       }
     } catch {
       // pagina de erro
@@ -150,6 +166,7 @@ export default class BotPage extends Vue {
   bot!: Bot
   me = getModule(UserModule, this.$store).data
   owners!: User[]
+  tags!: EnumInfo[]
 
   head () {
     return {

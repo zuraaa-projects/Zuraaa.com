@@ -7,7 +7,7 @@
     >
     <div class="botcard__details">
       <p class="botcard__details__datas">
-        {{ bot.details.tags[Math.floor(Math.random() * bot.details.tags.length)] }} |
+        {{ getTagName }} |
         ±{{ bot.details.guilds }} servidores |
         {{ bot.votes.current }} votos
       </p>
@@ -41,6 +41,7 @@
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { genAvatar, altName, botStatus } from '~/utils/filters'
 import type { Bot } from '~/models/bots/bot'
+import { BotTag } from '~/models/bots/bot-enum'
 
 @Component({
   filters: {
@@ -54,6 +55,11 @@ export default class BotCard extends Vue {
     required: true
   })
   bot!: Bot
+
+  get getTagName () {
+    const tagName = this.bot.details.tags[Math.floor(Math.random() * this.bot.details.tags.length)]
+    return BotTag[tagName as keyof typeof BotTag]
+  }
 }
 </script>
 

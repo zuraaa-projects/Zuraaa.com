@@ -1,15 +1,15 @@
 export enum BotTag {
-  'Anime' = 'anime',
-  'Dashboard' = 'dashboard',
-  'Diversão' = 'diversao',
-  'Utilidades' = 'utilidades',
-  'Social' = 'social',
-  'Jogos' = 'jogos',
-  'Música' = 'musica',
-  'Moderação' = 'moderacao',
-  'Economia' = 'economia',
-  'NSFW' = 'nsfw',
-  'Outros' = 'outros'
+  'anime' = 'Anime',
+  'dashboard' = 'Dashboard',
+  'diversao' = 'Diversão',
+  'utilidades' = 'Utilidades',
+  'social' = 'Social',
+  'jogos' = 'Jogos',
+  'musica' = 'Música',
+  'moderacao' = 'Moderação',
+  'economia' = 'Economia',
+  'nsfw' = 'NSFW',
+  'outros' = 'Outros'
 }
 
 export enum BotLibrary {

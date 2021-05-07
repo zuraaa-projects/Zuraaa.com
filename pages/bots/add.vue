@@ -294,8 +294,8 @@ export default class AddBot extends Vue {
       .entries(transformEnum)
       .map(
         ([key, value]) => ({
-          value,
-          text: key
+          value: key,
+          text: value
         })
       )
   }
