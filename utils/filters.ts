@@ -28,3 +28,7 @@ export function botGitHub (bot: Bot) {
 export function botSuportServer (bot: Bot) {
   return `https://discord.gg/${bot.details.supportServer}`
 }
+
+export function botGuilds (numero: number) {
+  return `±${numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`
+}

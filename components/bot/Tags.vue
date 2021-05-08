@@ -4,6 +4,7 @@
       v-for="tag in tags"
       :key="tag.value"
       :tag-info="tag"
+      :color="color"
       @click="click"
     />
   </div>
@@ -27,6 +28,11 @@ export default class BotTags extends Vue {
     required: true
   })
   tags!: EnumInfo[]
+
+  @Prop({
+    default: false
+  })
+  color!: boolean
 
   click (value: string) {
     this.$emit('click', value)

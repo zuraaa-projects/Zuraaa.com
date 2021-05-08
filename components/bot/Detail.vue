@@ -32,12 +32,20 @@ export default class BotDetail extends Vue {
 .botdetail {
   display: inline;
   margin-left: 0.5rem;
+  &__name {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
   &__value {
     background-color: var(--text-light);
     color: var(--text-dark);
-    padding: 0.1rem 0.5rem;
+    padding: 0.05rem 0.5rem;
     border-radius: 1rem;
     margin-left: 0.2rem;
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
   }
 }
 </style>

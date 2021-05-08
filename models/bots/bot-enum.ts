@@ -12,6 +12,20 @@ export enum BotTag {
   'outros' = 'Outros'
 }
 
+export enum BotTagColor {
+  'anime' = 'red',
+  'dashboard' = 'darkorange',
+  'diversao' = 'orange',
+  'utilidades' = 'yellow',
+  'social' = 'yellowgreen',
+  'jogos' = 'green',
+  'musica' = 'seagreen',
+  'moderacao' = 'dodgerblue',
+  'economia' = 'blue',
+  'nsfw' = 'indigo',
+  'outros' = 'purple'
+}
+
 export enum BotLibrary {
   'discord.js' = 'discord.js',
   'discord.py' = 'discord.py',

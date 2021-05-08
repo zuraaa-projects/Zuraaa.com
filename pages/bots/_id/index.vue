@@ -10,12 +10,12 @@
           />
         </b-row>
         <b-row align-h="center" align-v="center" class="hero__details">
-          <span>Tags: </span>
-          <BotTags :tags="tags" />
-          <BotDetail name="Prefixo" :value="prefix" />
-          <BotDetail name="Biblioteca" :value="lib" />
-          <BotDetail name="Votos" :value="votos" />
-          <BotDetail name="Servidores" :value="`±${guilds}`" />
+          <span class="hero__details__detail">Tags: </span>
+          <BotTags :tags="tags" class="hero__details__detail hero__details__detail__tags" :color="true" />
+          <BotDetail name="Prefixo" :value="prefix" class="hero__details__detail" />
+          <BotDetail name="Biblioteca" :value="lib" class="hero__details__detail" />
+          <BotDetail name="Votos" :value="votos" class="hero__details__detail" />
+          <BotDetail name="Servidores" :value="guilds | botGuilds" class="hero__details__detail" />
         </b-row>
         <b-row align-h="center" align-v="center" class="hero__owners">
           <span v-if="owners.length > 1">Donos: </span>
@@ -123,12 +123,13 @@ import { BotLibrary, BotTag } from '~/models/bots/bot-enum'
 import { EnumInfo } from '~/models/info/enum-info'
 import { User } from '~/models/users/user'
 import UserModule from '~/store/user'
-import { botGitHub, botSuportServer } from '~/utils/filters'
+import { botGitHub, botSuportServer, botGuilds } from '~/utils/filters'
 
 @Component({
   filters: {
     botGitHub,
-    botSuportServer
+    botSuportServer,
+    botGuilds
   },
   async asyncData ({ $axios, route }) {
     try {
@@ -199,15 +200,21 @@ export default class BotPage extends Vue {
 <style lang="scss">
 .hero {
   &__details {
-    padding-top: 0.3rem;
+    &__detail {
+      margin-top: 0.5rem;
+      &__tags {
+        margin-left: 0.3rem;
+      }
+    }
   }
   &__owners {
-    padding-top: 0.3rem;
+    padding-top: 0.5rem;
   }
   &__buttons {
-    padding-top: 1rem;
+    padding-top: 0.7rem;
     &__button {
       margin: 0 0.3rem;
+      margin-top: 0.3rem;
     }
   }
 }
