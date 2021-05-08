@@ -170,11 +170,11 @@
                       class="botform__tags__list__item list-inline-item"
                     >
                       <b-form-tag
-                        :title="tagsReverse[tag]"
+                        :title="botTags[tag]"
                         class="botform__tags__list__tag"
                         @remove="removeTag(tag)"
                       >
-                        {{ tagsReverse[tag] }}
+                        {{ botTags[tag] }}
                       </b-form-tag>
                     </li>
                   </ul>
@@ -258,7 +258,7 @@ export default class AddBot extends Vue {
 
   tags!: any
 
-  tagsReverse!: any
+  botTags = BotTag
 
   longDescriptionOptions!: any
 
@@ -269,13 +269,6 @@ export default class AddBot extends Vue {
     ]
 
     this.tags = this.enumToOptions(BotTag)
-
-    this.tagsReverse = Object
-      .fromEntries(
-        Object
-          .entries(BotTag)
-          .map(([k, v]) => [v, k])
-      )
 
     this.longDescriptionOptions = [
       {

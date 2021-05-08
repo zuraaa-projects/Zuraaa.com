@@ -41,6 +41,7 @@ export default class BotTag extends Vue {
   margin: 0.3rem;
   padding: 0 0.2rem;
   font-size: 0.9rem;
+  text-decoration: none;
   transition-property: color, background-color;
   transition-duration: 400ms;
   cursor: pointer;
