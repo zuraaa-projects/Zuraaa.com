@@ -1,14 +1,15 @@
 <template>
-  <div
+  <nuxt-link
     class="bottag"
     :class="{ 'color': color }"
-    @click="click"
+    :to="`/bots?tags=${tagInfo.value}`"
+    prefetch
   >
     <span v-if="color" class="bottag__color" :style="{ 'background-color': getColor }" />
     <span class="bottag__name">
       {{ tagInfo.text }}
     </span>
-  </div>
+  </nuxt-link>
 </template>
 
 <script lang="ts">
@@ -30,10 +31,6 @@ export default class BotTag extends Vue {
 
   get getColor () {
     return BotTagColor[this.tagInfo.value as keyof typeof BotTagColor]
-  }
-
-  click () {
-    this.$emit('click', this.tagInfo.value)
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="bots">
-    <BotTags class="bots__tags" @click="tagClick" />
+    <BotTags class="bots__tags" />
     <BotCards :bots="bots" />
     <b-pagination-nav
       v-model="page"
@@ -58,12 +58,6 @@ export default class PageBots extends Vue {
   count!: BotCount
   tags!: string
   search!: string
-
-  async tagClick (value: string) {
-    this.tags = value
-
-    await this.$router.push(this.linkGen('1'))
-  }
 
   linkGen (page: string) {
     return {

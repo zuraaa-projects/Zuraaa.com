@@ -5,7 +5,6 @@
       :key="tag.value"
       :tag-info="tag"
       :color="color"
-      @click="click"
     />
   </div>
 </template>
